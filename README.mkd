@@ -1,0 +1,38 @@
+% `../pycppskeleton`
+
+# Compile `gtest-1.7.0`
+
+This is used for testing the package. If you just want to use the package without running the test cases, you can skip this step
+
+# Compilation
+
+Set up an appropriate environment for compilation. 
+
+~~~
+source bashrc
+~~~
+
+The code can be compiled with [makepp](http://makepp.sourceforge.net/). makepp 2.0.98.5 has been tested. Note that an earlier version 2.0 does not work.
+
+To compile the library `lib/libpycppskeleton.a`, depending on the OS, run the following commands
+
+- on Linux
+
+~~~
+source bashrc
+makepp lib
+~~~
+
+- on Mac OS X
+
+~~~
+source bashrc
+CXX=g++-4.9 makepp lib
+~~~
+
+`CXX` should be explicitly set, because the default compiler clang on Mac OS X will cause problem when loading the R packing linked with the library.
+
+# Documentation
+
+Run `main.sh` to generate the document.
+
