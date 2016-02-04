@@ -12,3 +12,5 @@ tags
 *~
 .DS_Store
 *.txt
+gtest-1.7.0/
+cxx-prettyprint/
