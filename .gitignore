@@ -1,1 +1,16 @@
 .*.sw?
+*.exe
+*.o
+*.a
+.makepp
+html/
+callgrind.*
+*.out
+*.png
+tags
+**/.tag*
+*~
+.DS_Store
+*.txt
+gtest-1.7.0/
+cxx-prettyprint/
