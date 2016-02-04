@@ -1,7 +1,8 @@
 PACKAGE:=Tiancai
 INCLUDES:=-I$(abspath $(find_upwards include))
 SRC_DIR:=$(find_upwards src)
-ifeq ($(OSTYPE),linux-gnu)
+OS:=$(shell uname)
+ifeq ($(OS), Linux)
 	LDLIBS:=-lrt
 endif
 CXXFLAGS:=-std=c++11
