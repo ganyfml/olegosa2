@@ -1,1 +1,0 @@
-../src/spliced_search/GapAndMM/GapAndMM.hpp
