@@ -8,7 +8,8 @@ int main(int argc, char ** argv)
 	string ref_file = argv[1];
 	string index_file = argv[2];
 	Seq ref(ref_file, index_file);
-	ref.create_SA(0);
+	int chr_index = 0;
+	ref.create_SA(chr_index);
 	ref.load_SA();
 	SeqString query = "ACG";
 
