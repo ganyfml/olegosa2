@@ -10,6 +10,6 @@ int main(int argc, char** argv)
 {
 	string query ("ATGC");
 	SeqString query_seq {query};
-	int suffix_pos = 1;
-	cout << query_seq.get_suffix(suffix_pos) << endl;
+	query_seq.get_suffix(1);
+	cout << query_seq << endl;
 }

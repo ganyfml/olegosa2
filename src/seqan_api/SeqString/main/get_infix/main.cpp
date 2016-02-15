@@ -8,7 +8,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	string query ("ATGC");
+	string query ("ATGCACTAGCTAGC");
 	SeqString query_seq {query};
-	query_seq.get_suffix(1);
+	int pos_begin = 2;
+	int pos_end = 5;
+	cout << query_seq.get_infix(pos_begin, pos_end) << endl;
 }

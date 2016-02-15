@@ -11,6 +11,8 @@ class SeqFinder
 		SeqFinder(const SeqIndex& seq_index, const SeqString& seq);
 		SeqFinder(const void*);
 		~SeqFinder();
+		bool has_next();
+		unsigned long next();
 	private:
 		void* impl_;
 		SeqString seq_;

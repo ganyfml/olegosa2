@@ -15,6 +15,6 @@ class SeqIndex
 		void* impl_;
 };
 
-bool indexCreate(SeqIndex& seqIndex);
+bool createIndex(SeqIndex& seqIndex);
 bool openIndex(SeqIndex& seqIndex, const std::string& fileName);
 bool saveIndex(SeqIndex& seqIndex, const std::string& fileName);

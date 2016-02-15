@@ -1,1 +1,0 @@
-../src/spliced_search/WordChunkGroup/WordChunkGroup.hpp
