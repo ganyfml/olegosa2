@@ -8,20 +8,20 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanIndex;
 typedef seqan::Finder<SeqanIndex> T;
 
-inline SeqanString* stringPtr(const void* seq)
+inline SeqanString* voidPtr2TPtr(const void* seq)
 {
-	return constPointer_convert<SeqanString> (seq);
+	return constVoid2localType<SeqanString> (seq);
 }
 
 SeqFinder::SeqFinder(const SeqIndex& seq_index, const SeqString& seq)
 	: impl_ (new T(
-				*constPointer_convert<SeqanIndex>(seq_index.get_pointer()))
+				*constVoid2localType<SeqanIndex>(seq_index.get_pointer()))
 			)
 			, seq_ (SeqString(seq))
 {
 	has_next_ = seqan::find(
 			*static_cast<T*>(impl_)
-			, *stringPtr(seq.get_pointer())
+			, *voidPtr2TPtr(seq.get_pointer())
 			);
 }
 
@@ -40,7 +40,7 @@ unsigned long SeqFinder::next()
 	unsigned long ret = seqan::position(*static_cast<T*>(impl_)); 
 	has_next_ = seqan::find(
 			*static_cast<T*>(impl_)
-			, *stringPtr(seq_.get_pointer())
+			, *voidPtr2TPtr(seq_.get_pointer())
 			);
 	return ret;	
 }

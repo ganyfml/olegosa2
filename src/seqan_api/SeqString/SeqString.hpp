@@ -27,7 +27,7 @@ class SeqString
 std::ostream& operator<<(std::ostream& os, const SeqString& obj);
 
 	template <typename Type>
-Type* constPointer_convert(const void * ptr)
+Type* constVoid2localType(const void * ptr)
 {
 	return const_cast<Type*>(
 			static_cast<const Type*> (ptr)

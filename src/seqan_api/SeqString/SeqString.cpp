@@ -8,7 +8,7 @@ typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::PrefixSegment> PrefixSegment;
 typedef seqan::Dna5String T;
 
-inline T* seqanPtr(void* original_ptr)
+inline T* voidPtr2TPtr(void* original_ptr)
 {
 	return static_cast<T*>(original_ptr);
 }
@@ -18,27 +18,27 @@ SeqString::SeqString(const std::string& seq)
 {}
 
 SeqString::SeqString(const void* other)
-	: impl_ (new T(*constPointer_convert<T>(other)))
+	: impl_ (new T(*constVoid2localType<T>(other)))
 {}
 
 SeqString::SeqString(const SeqString& copy)
-	: impl_ (new T(*constPointer_convert<T>(copy.get_pointer())))
+	: impl_ (new T(*constVoid2localType<T>(copy.get_pointer())))
 {}
 
 SeqString::~SeqString()
 {
-	delete seqanPtr(impl_);
+	delete voidPtr2TPtr(impl_);
 }
 
 unsigned long SeqString::get_length() const
 {
-	return seqan::length(*seqanPtr(impl_));
+	return seqan::length(*voidPtr2TPtr(impl_));
 }
 
 SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
 {
 	SuffixSegment* seg = new SuffixSegment(
-			seqan::suffix(*seqanPtr(impl_), pos)
+			seqan::suffix(*voidPtr2TPtr(impl_), pos)
 			);
 	SeqSegmentSuffix ret (seg);
 	return ret;
@@ -47,7 +47,7 @@ SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
 SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_end) const
 {
 	InfixSegment* seg = new InfixSegment(
-			seqan::infix(*seqanPtr(impl_), pos_begin, pos_end)
+			seqan::infix(*voidPtr2TPtr(impl_), pos_begin, pos_end)
 			);
 	SeqSegmentInfix ret (seg);
 	return ret;
@@ -56,7 +56,7 @@ SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_
 SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
 {
 	PrefixSegment* seg = new PrefixSegment(
-			seqan::prefix(*seqanPtr(impl_), pos)
+			seqan::prefix(*voidPtr2TPtr(impl_), pos)
 			);
 	SeqSegmentPrefix ret (seg);
 	return ret;
@@ -64,12 +64,12 @@ SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
 
 void SeqString::erase_back()
 {
-	seqan::eraseBack(*seqanPtr(impl_));
+	seqan::eraseBack(*voidPtr2TPtr(impl_));
 }
 
 std::ostream& operator<<(std::ostream& os, const SeqString& obj)
 {
-	return os << *constPointer_convert<T>(
+	return os << *constVoid2localType<T>(
 			obj.get_pointer()
 			);
 }

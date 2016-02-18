@@ -9,7 +9,7 @@ typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 SeqIndex::SeqIndex(const SeqString& seq)
 {
-	impl_ = new T (*constPointer_convert<SeqanString>(seq.get_pointer()));
+	impl_ = new T (*constVoid2localType<SeqanString>(seq.get_pointer()));
 }
 
 SeqIndex::~SeqIndex()
@@ -20,7 +20,7 @@ SeqIndex::~SeqIndex()
 bool createIndex(SeqIndex& seqIndex)
 {
 	return seqan::indexCreate(
-			*constPointer_convert<T>(seqIndex.get_pointer())	
+			*constVoid2localType<T>(seqIndex.get_pointer())	
 			, seqan::FibreSA()
 			);
 }
@@ -28,7 +28,7 @@ bool createIndex(SeqIndex& seqIndex)
 bool openIndex(SeqIndex& seqIndex, const std::string& fileName)
 {
 	return seqan::open(
-			*constPointer_convert<T>(seqIndex.get_pointer())
+			*constVoid2localType<T>(seqIndex.get_pointer())
 			, seqan::toCString(fileName)
 			);
 }	
@@ -36,7 +36,7 @@ bool openIndex(SeqIndex& seqIndex, const std::string& fileName)
 bool saveIndex(SeqIndex& seqIndex, const std::string& fileName)
 {
 	return seqan::save(
-			*constPointer_convert<T>(seqIndex.get_pointer())
+			*constVoid2localType<T>(seqIndex.get_pointer())
 			, seqan::toCString(fileName)
 			);
 }	

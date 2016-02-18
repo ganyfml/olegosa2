@@ -11,7 +11,7 @@ typedef seqan::Dna5String seqanString;
 
 SeqSegmentInfix::SeqSegmentInfix(const void * other)
 	: impl_ (
-			constPointer_convert<T>(other)
+			constVoid2localType<T>(other)
 			)
 {}
 
@@ -22,6 +22,6 @@ SeqSegmentInfix::~SeqSegmentInfix()
 
 std::ostream& operator<<(std::ostream& os, const SeqSegmentInfix& obj)
 {
-	seqanString to_display = *constPointer_convert<T>(obj.get_pointer());
+	seqanString to_display = *constVoid2localType<T>(obj.get_pointer());
 	return os << to_display;
 }
