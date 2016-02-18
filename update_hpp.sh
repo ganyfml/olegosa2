@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+mkdir -p include
 cd ./include
 rm -rf *
 while read -r f
