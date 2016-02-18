@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include <SeqString.hpp>
 #include <string>
+#include "seqan_api/SeqString.hpp"
 
 class SeqIndex
 {

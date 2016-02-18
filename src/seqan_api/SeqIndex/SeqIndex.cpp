@@ -1,15 +1,15 @@
 // vim: set noexpandtab tabstop=2:
-#include "SeqIndex.hpp"
 #include <seqan/seq_io.h>
 #include <seqan/index.h>
 #include <iostream>
+#include "seqan_api/SeqIndex.hpp"
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 SeqIndex::SeqIndex(const SeqString& seq)
 {
-	impl_ = new T (*const_cast<SeqanString*>(static_cast<const SeqanString*>(seq.get_pointer())));
+	impl_ = new T (*constPointer_convert<SeqanString>(seq.get_pointer()));
 }
 
 SeqIndex::~SeqIndex()
@@ -20,9 +20,7 @@ SeqIndex::~SeqIndex()
 bool createIndex(SeqIndex& seqIndex)
 {
 	return seqan::indexCreate(
-			*const_cast<T*>(
-				static_cast<const T*>(seqIndex.get_pointer())
-				)
+			*constPointer_convert<T>(seqIndex.get_pointer())	
 			, seqan::FibreSA()
 			);
 }
@@ -30,9 +28,7 @@ bool createIndex(SeqIndex& seqIndex)
 bool openIndex(SeqIndex& seqIndex, const std::string& fileName)
 {
 	return seqan::open(
-			*const_cast<T*>(
-				static_cast<const T*>(seqIndex.get_pointer())
-				)
+			*constPointer_convert<T>(seqIndex.get_pointer())
 			, seqan::toCString(fileName)
 			);
 }	
@@ -40,9 +36,7 @@ bool openIndex(SeqIndex& seqIndex, const std::string& fileName)
 bool saveIndex(SeqIndex& seqIndex, const std::string& fileName)
 {
 	return seqan::save(
-			*const_cast<T*>(
-				static_cast<const T*>(seqIndex.get_pointer())
-				)
+			*constPointer_convert<T>(seqIndex.get_pointer())
 			, seqan::toCString(fileName)
 			);
 }	

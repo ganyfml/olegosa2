@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include <SeqSegmentInfix.hpp>
-#include <SeqSegmentPrefix.hpp>
-#include <SeqSegmentSuffix.hpp>
 #include <string>
+#include "seqan_api/SeqSegmentInfix.hpp"
+#include "seqan_api/SeqSegmentPrefix.hpp"
+#include "seqan_api/SeqSegmentSuffix.hpp"
 
 class SeqString
 {
@@ -25,3 +25,11 @@ class SeqString
 };
 
 std::ostream& operator<<(std::ostream& os, const SeqString& obj);
+
+	template <typename Type>
+Type* constPointer_convert(const void * ptr)
+{
+	return const_cast<Type*>(
+			static_cast<const Type*> (ptr)
+			);
+}

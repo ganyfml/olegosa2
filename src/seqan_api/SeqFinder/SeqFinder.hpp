@@ -3,7 +3,8 @@
 #pragma once
 
 #include <string>
-#include <SeqString.hpp>
+#include "seqan_api/SeqString.hpp"
+#include "seqan_api/SeqIndex.hpp"
 
 class SeqFinder
 {

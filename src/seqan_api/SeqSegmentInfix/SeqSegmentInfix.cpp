@@ -2,7 +2,8 @@
 
 #include <seqan/sequence.h>
 #include <seqan/seq_io.h>
-#include "SeqSegmentInfix.hpp"
+#include "seqan_api/SeqSegmentInfix.hpp"
+#include "seqan_api/SeqString.hpp"
 
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::InfixSegment> T;
 
@@ -10,9 +11,7 @@ typedef seqan::Dna5String seqanString;
 
 SeqSegmentInfix::SeqSegmentInfix(const void * other)
 	: impl_ (
-			const_cast<T*>(
-				static_cast<const T*>(other)
-				)
+			constPointer_convert<T>(other)
 			)
 {}
 
@@ -23,10 +22,6 @@ SeqSegmentInfix::~SeqSegmentInfix()
 
 std::ostream& operator<<(std::ostream& os, const SeqSegmentInfix& obj)
 {
-	seqanString to_display = *const_cast<T*>(
-			static_cast<const T*>(
-				obj.get_pointer()
-				)
-			);
+	seqanString to_display = *constPointer_convert<T>(obj.get_pointer());
 	return os << to_display;
 }

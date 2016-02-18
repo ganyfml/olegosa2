@@ -1,8 +1,8 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <iostream>
-#include <SeqString.hpp>
 #include <string>
+#include "seqan_api/SeqString.hpp"
 
 using namespace std;
 

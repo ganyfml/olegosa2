@@ -1,5 +1,5 @@
 // vim: set noexpandtab tabstop=2:
-#include "SeqString.hpp"
+#include "seqan_api/SeqString.hpp"
 #include <seqan/seq_io.h>
 #include <iostream>
 
@@ -18,21 +18,11 @@ SeqString::SeqString(const std::string& seq)
 {}
 
 SeqString::SeqString(const void* other)
-	: impl_ (
-			const_cast<T*>(
-				static_cast<const T*>(other)
-				)
-			)
+	: impl_ (new T(*constPointer_convert<T>(other)))
 {}
 
 SeqString::SeqString(const SeqString& copy)
-	: impl_ (
-			const_cast<T*>(
-				static_cast<const T*>(
-					copy.get_pointer()
-					)
-				)
-			)
+	: impl_ (new T(*constPointer_convert<T>(copy.get_pointer())))
 {}
 
 SeqString::~SeqString()
@@ -79,9 +69,7 @@ void SeqString::erase_back()
 
 std::ostream& operator<<(std::ostream& os, const SeqString& obj)
 {
-	return os << *const_cast<T*>(
-			static_cast<const T*>(
-				obj.get_pointer())
+	return os << *constPointer_convert<T>(
+			obj.get_pointer()
 			);
 }
-

@@ -2,8 +2,7 @@
 #include <seqan/seq_io.h>
 #include <seqan/index.h>
 #include <iostream>
-#include "SeqIndex.hpp"
-#include "SeqFinder.hpp"
+#include "seqan_api/SeqFinder.hpp"
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanIndex;
@@ -11,18 +10,12 @@ typedef seqan::Finder<SeqanIndex> T;
 
 inline SeqanString* stringPtr(const void* seq)
 {
-	return const_cast<SeqanString*>(
-			static_cast<const SeqanString*>(seq)
-			);
+	return constPointer_convert<SeqanString> (seq);
 }
 
 SeqFinder::SeqFinder(const SeqIndex& seq_index, const SeqString& seq)
-	: impl_ (
-			new T(
-				*const_cast<SeqanIndex*>(
-					static_cast<const SeqanIndex*>(seq_index.get_pointer())
-					)
-				)
+	: impl_ (new T(
+				*constPointer_convert<SeqanIndex>(seq_index.get_pointer()))
 			)
 			, seq_ (SeqString(seq))
 {
@@ -30,6 +23,11 @@ SeqFinder::SeqFinder(const SeqIndex& seq_index, const SeqString& seq)
 			*static_cast<T*>(impl_)
 			, *stringPtr(seq.get_pointer())
 			);
+}
+
+SeqFinder::~SeqFinder()
+{
+	delete static_cast<T*>(impl_);
 }
 
 bool SeqFinder::has_next()
