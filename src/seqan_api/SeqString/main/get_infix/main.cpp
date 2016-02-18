@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <string>
-#include "seqan_api/SeqString.hpp"
+#include <seqan_api/SeqString.hpp>
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-	string query ("ATGCACTAGCTAGC");
+	string query("ATGCACTAGCTAGC");
 	SeqString query_seq {query};
 	int pos_begin = 2;
 	int pos_end = 5;

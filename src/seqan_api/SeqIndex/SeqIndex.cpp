@@ -2,14 +2,14 @@
 #include <seqan/seq_io.h>
 #include <seqan/index.h>
 #include <iostream>
-#include "seqan_api/SeqIndex.hpp"
+#include <seqan_api/SeqIndex.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 SeqIndex::SeqIndex(const SeqString& seq)
 {
-	impl_ = new T (*constVoid2localType<SeqanString>(seq.get_pointer()));
+	impl_ = new T(*constVoid2localType<SeqanString>(seq.get_pointer()));
 }
 
 SeqIndex::~SeqIndex()

@@ -1,5 +1,5 @@
 // vim: set noexpandtab tabstop=2:
-#include "seqan_api/SeqString.hpp"
+#include <seqan_api/SeqString.hpp>
 #include <seqan/seq_io.h>
 #include <iostream>
 
@@ -14,15 +14,15 @@ inline T* voidPtr2TPtr(void* original_ptr)
 }
 
 SeqString::SeqString(const std::string& seq)
-	: impl_ (new T(seq))
+	: impl_(new T(seq))
 {}
 
 SeqString::SeqString(const void* other)
-	: impl_ (new T(*constVoid2localType<T>(other)))
+	: impl_(new T(*constVoid2localType<T>(other)))
 {}
 
-SeqString::SeqString(const SeqString& copy)
-	: impl_ (new T(*constVoid2localType<T>(copy.get_pointer())))
+SeqString::SeqString(const SeqString& that)
+	: impl_(new T(*constVoid2localType<T>(that.get_pointer())))
 {}
 
 SeqString::~SeqString()
@@ -40,7 +40,7 @@ SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
 	SuffixSegment* seg = new SuffixSegment(
 			seqan::suffix(*voidPtr2TPtr(impl_), pos)
 			);
-	SeqSegmentSuffix ret (seg);
+	SeqSegmentSuffix ret(seg);
 	return ret;
 }
 
@@ -49,7 +49,7 @@ SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_
 	InfixSegment* seg = new InfixSegment(
 			seqan::infix(*voidPtr2TPtr(impl_), pos_begin, pos_end)
 			);
-	SeqSegmentInfix ret (seg);
+	SeqSegmentInfix ret(seg);
 	return ret;
 }
 
@@ -58,7 +58,7 @@ SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
 	PrefixSegment* seg = new PrefixSegment(
 			seqan::prefix(*voidPtr2TPtr(impl_), pos)
 			);
-	SeqSegmentPrefix ret (seg);
+	SeqSegmentPrefix ret(seg);
 	return ret;
 }
 

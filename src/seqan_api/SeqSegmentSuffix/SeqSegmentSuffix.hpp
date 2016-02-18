@@ -9,7 +9,7 @@ class SeqSegmentSuffix
 	public:
 		SeqSegmentSuffix(const void *);
 		~SeqSegmentSuffix();
-		const void* get_pointer() const {return impl_;}
+		const void* get_pointer() const { return impl_; }
 	private:
 		void * impl_; 
 };

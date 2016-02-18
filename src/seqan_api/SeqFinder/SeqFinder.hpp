@@ -3,15 +3,13 @@
 #pragma once
 
 #include <string>
-#include "seqan_api/SeqString.hpp"
-#include "seqan_api/SeqIndex.hpp"
+#include <seqan_api/SeqString.hpp>
+#include <seqan_api/SeqIndex.hpp>
 
 class SeqFinder
 {
 	public:
 		SeqFinder(const SeqIndex& seq_index, const SeqString& seq);
-		SeqFinder(const void*);
-		~SeqFinder();
 		bool has_next();
 		unsigned long next();
 	private:

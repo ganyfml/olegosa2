@@ -3,14 +3,14 @@
 #pragma once
 
 #include <string>
-#include "seqan_api/SeqString.hpp"
+#include <seqan_api/SeqString.hpp>
 
 class SeqIndex
 {
 	public:
 		SeqIndex(const SeqString& seq);
 		~SeqIndex();
-		const void* get_pointer() const {return impl_;}
+		const void* get_pointer() const { return impl_; }
 	private:
 		void* impl_;
 };

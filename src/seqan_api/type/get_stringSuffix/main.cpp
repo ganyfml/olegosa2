@@ -1,6 +1,6 @@
 // vim: set noexpandtab tabstop=2:
 
-#include <seqan_api.hpp>
+#include <seqan/seq_io.h>
 
 using namespace std;
 

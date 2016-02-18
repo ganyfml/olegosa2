@@ -9,7 +9,7 @@ class SeqSegmentPrefix
   public:
     SeqSegmentPrefix(const void *);
     ~SeqSegmentPrefix();
-		void* get_pointer() const {return impl_;}
+		void* get_pointer() const { return impl_; }
   private:
     void * impl_; 
 };

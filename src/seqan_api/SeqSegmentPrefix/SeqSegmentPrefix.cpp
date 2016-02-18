@@ -2,17 +2,15 @@
 
 #include <seqan/sequence.h>
 #include <seqan/seq_io.h>
-#include "seqan_api/SeqSegmentPrefix.hpp"
-#include "seqan_api/SeqString.hpp"
+#include <seqan_api/SeqSegmentPrefix.hpp>
+#include <seqan_api/SeqString.hpp>
 
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::PrefixSegment> T;
 
 typedef seqan::Dna5String seqanString;
 
 SeqSegmentPrefix::SeqSegmentPrefix(const void * other)
-	: impl_ (
-			constVoid2localType<T>(other)
-			)
+	: impl_(constVoid2localType<T>(other))
 {}
 
 SeqSegmentPrefix::~SeqSegmentPrefix()
@@ -22,6 +20,5 @@ SeqSegmentPrefix::~SeqSegmentPrefix()
 
 std::ostream& operator<<(std::ostream& os, const SeqSegmentPrefix& obj)
 {
-	seqanString to_display = *constVoid2localType<T>(obj.get_pointer());
-	return os << to_display;
+	return os << *constVoid2localType<T>(obj.get_pointer());
 }

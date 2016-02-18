@@ -1,1 +1,0 @@
-../../src/seqan_api/SeqSegmentInfix/SeqSegmentInfix.hpp
