@@ -1,1 +1,0 @@
-../src/spliced_search/SplicedAln/SplicedAln.hpp
