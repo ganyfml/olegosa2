@@ -3,10 +3,10 @@
 #pragma once
 
 //FIXME indentation
-	template <typename Type>
-Type* constVoid2localType(const void * ptr)
+	template <typename T>
+T* constVoid2localType(const void * ptr)
 {
-	return const_cast<Type*>(
-			static_cast<const Type*>(ptr)
+	return const_cast<T*>(
+			static_cast<const T*>(ptr)
 			);
 }
