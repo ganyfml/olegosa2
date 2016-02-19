@@ -3,9 +3,12 @@
 #include <seqan/seq_io.h>
 #include <iostream>
 
+/* Seems not useful for now
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::SuffixSegment> SuffixSegment;
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::InfixSegment> InfixSegment;
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::PrefixSegment> PrefixSegment;
+*/
+
 typedef seqan::Dna5String T;
 
 inline T* voidPtr2TPtr(void* original_ptr)
@@ -35,6 +38,8 @@ unsigned long SeqString::get_length() const
 	return seqan::length(*voidPtr2TPtr(impl_));
 }
 
+/*
+ * Seems not useful for now
 SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
 {
 	SuffixSegment* seg = new SuffixSegment(
@@ -61,6 +66,7 @@ SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
 	SeqSegmentPrefix ret(seg);
 	return ret;
 }
+*/
 
 void SeqString::erase_back()
 {

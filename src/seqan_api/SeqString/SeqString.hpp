@@ -4,9 +4,12 @@
 
 #include <string>
 #include <seqan_api/SeqanAPIUtil.hpp>
+
+/* Seems not useful for now
 #include <seqan_api/SeqSegmentInfix.hpp>
 #include <seqan_api/SeqSegmentPrefix.hpp>
 #include <seqan_api/SeqSegmentSuffix.hpp>
+*/
 
 class SeqString
 {
@@ -16,9 +19,11 @@ class SeqString
 		SeqString(const SeqString& that);
 		~SeqString();
 		unsigned long get_length() const;
+		/* Seems not useful for now
 		SeqSegmentSuffix get_suffix(unsigned long pos) const;
 		SeqSegmentInfix get_infix(unsigned long pos_begin, unsigned long pos_end) const;
 		SeqSegmentPrefix get_prefix(unsigned long pos) const;
+		*/
 		const void* get_pointer() const { return impl_; }
 		void erase_back();
 	private:
