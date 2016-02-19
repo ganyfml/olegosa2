@@ -11,7 +11,7 @@ class SeqSegmentInfix
 		~SeqSegmentInfix();
 		const void* get_pointer() const { return impl_; }
 	private:
-		void * impl_; 
+		void* impl_; 
 };
 
 std::ostream& operator<<(std::ostream& os, const SeqSegmentInfix& obj);

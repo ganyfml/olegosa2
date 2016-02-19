@@ -10,9 +10,7 @@ typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna
 typedef seqan::Dna5String seqanString;
 
 SeqSegmentSuffix::SeqSegmentSuffix(const void* other)
-	: impl_(
-			constVoid2localType<T>(other)
-			)
+	: impl_(constVoid2localType<T>(other))
 {}
 
 SeqSegmentSuffix::~SeqSegmentSuffix()
