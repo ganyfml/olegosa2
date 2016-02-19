@@ -2,6 +2,7 @@
 
 #pragma once
 
+//FIXME indentation
 	template <typename Type>
 Type* constVoid2localType(const void * ptr)
 {

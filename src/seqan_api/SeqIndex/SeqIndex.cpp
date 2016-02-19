@@ -17,26 +17,26 @@ SeqIndex::~SeqIndex()
 	delete static_cast<T*>(impl_);
 }
 
-bool createIndex(SeqIndex& seqIndex)
+bool createIndex(SeqIndex& seq_index)
 {
 	return seqan::indexCreate(
-			*constVoid2localType<T>(seqIndex.get_pointer())	
+			*constVoid2localType<T>(seq_index.get_pointer())	
 			, seqan::FibreSA()
 			);
 }
 
-bool openIndex(SeqIndex& seqIndex, const std::string& fileName)
+bool openIndex(SeqIndex& seq_index, const std::string& file_name)
 {
 	return seqan::open(
-			*constVoid2localType<T>(seqIndex.get_pointer())
-			, seqan::toCString(fileName)
+			*constVoid2localType<T>(seq_index.get_pointer())
+			, seqan::toCString(file_name)
 			);
 }	
 
-bool saveIndex(SeqIndex& seqIndex, const std::string& fileName)
+bool saveIndex(SeqIndex& seq_index, const std::string& file_name)
 {
 	return seqan::save(
-			*constVoid2localType<T>(seqIndex.get_pointer())
-			, seqan::toCString(fileName)
+			*constVoid2localType<T>(seq_index.get_pointer())
+			, seqan::toCString(file_name)
 			);
 }	
