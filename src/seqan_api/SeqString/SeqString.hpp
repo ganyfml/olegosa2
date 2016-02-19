@@ -22,12 +22,15 @@ class SeqString
 		unsigned long get_length() const;
 		/* FIXME
 		 * Seems not useful for now
-		SeqSegmentSuffix get_suffix(unsigned long pos) const;
-		SeqSegmentInfix get_infix(unsigned long pos_begin, unsigned long pos_end) const;
-		SeqSegmentPrefix get_prefix(unsigned long pos) const;
-		*/
+		 SeqSegmentSuffix get_suffix(unsigned long pos) const;
+		 SeqSegmentInfix get_infix(unsigned long pos_begin, unsigned long pos_end) const;
+		 SeqSegmentPrefix get_prefix(unsigned long pos) const;
+		 */
 		const void* get_pointer() const { return impl_; }
 		void erase_back();
+		SeqString& operator+=(const char rhs);
+		const char operator[](long idx) const;
+
 	private:
 		void* impl_;
 };

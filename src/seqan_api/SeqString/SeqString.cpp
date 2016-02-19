@@ -5,10 +5,10 @@
 
 /* FIXME
  * Seems not useful for now
-typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::SuffixSegment> SuffixSegment;
-typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::InfixSegment> InfixSegment;
-typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::PrefixSegment> PrefixSegment;
-*/
+ typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::SuffixSegment> SuffixSegment;
+ typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::InfixSegment> InfixSegment;
+ typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void>>, seqan::PrefixSegment> PrefixSegment;
+ */
 
 typedef seqan::Dna5String T;
 
@@ -41,37 +41,48 @@ unsigned long SeqString::get_length() const
 
 /* FIXME
  * Seems not useful for now
-SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
-{
-	SuffixSegment* seg = new SuffixSegment(
-			seqan::suffix(*voidPtr2TPtr(impl_), pos)
-			);
-	SeqSegmentSuffix ret(seg);
-	return ret;
-}
+ SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
+ {
+ SuffixSegment* seg = new SuffixSegment(
+ seqan::suffix(*voidPtr2TPtr(impl_), pos)
+ );
+ SeqSegmentSuffix ret(seg);
+ return ret;
+ }
 
-SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_end) const
-{
-	InfixSegment* seg = new InfixSegment(
-			seqan::infix(*voidPtr2TPtr(impl_), pos_begin, pos_end)
-			);
-	SeqSegmentInfix ret(seg);
-	return ret;
-}
+ SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_end) const
+ {
+ InfixSegment* seg = new InfixSegment(
+ seqan::infix(*voidPtr2TPtr(impl_), pos_begin, pos_end)
+ );
+ SeqSegmentInfix ret(seg);
+ return ret;
+ }
 
-SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
-{
-	PrefixSegment* seg = new PrefixSegment(
-			seqan::prefix(*voidPtr2TPtr(impl_), pos)
-			);
-	SeqSegmentPrefix ret(seg);
-	return ret;
-}
-*/
+ SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
+ {
+ PrefixSegment* seg = new PrefixSegment(
+ seqan::prefix(*voidPtr2TPtr(impl_), pos)
+ );
+ SeqSegmentPrefix ret(seg);
+ return ret;
+ }
+ */
 
 void SeqString::erase_back()
 {
 	seqan::eraseBack(*voidPtr2TPtr(impl_));
+}
+
+SeqString& SeqString::operator+=(const char rhs)
+{
+	*voidPtr2TPtr(impl_) += rhs;
+	return *this;
+}
+
+const char SeqString::operator[](long idx) const
+{
+	return (*voidPtr2TPtr(impl_))[idx];
 }
 
 std::ostream& operator<<(std::ostream& os, const SeqString& obj)
