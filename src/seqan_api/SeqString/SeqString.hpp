@@ -36,3 +36,5 @@ class SeqString
 };
 
 std::ostream& operator<<(std::ostream& os, const SeqString& obj);
+
+typedef std::shared_ptr<SeqString> SeqStringPtr;

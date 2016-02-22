@@ -9,11 +9,13 @@
 class SeqFinder
 {
 	public:
-		SeqFinder(const SeqIndex& seq_index, const SeqString& seq);
-		bool has_next();
-		unsigned long next();
+		SeqFinder(const SeqIndex& seq_index);
+		bool find(const SeqString& seq);
+		unsigned long location();
+		void clear();
 	private:
 		void* impl_;
-		SeqString seq_;
 		bool has_next_;
 };
+
+typedef std::shared_ptr<SeqFinder> SeqFinderPtr;

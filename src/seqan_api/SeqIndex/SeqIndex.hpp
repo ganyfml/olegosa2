@@ -9,6 +9,7 @@ class SeqIndex
 {
 	public:
 		SeqIndex(const SeqString& seq);
+		SeqIndex() : impl_(nullptr) {}
 		~SeqIndex();
 		const void* get_pointer() const { return impl_; }
 	private:
