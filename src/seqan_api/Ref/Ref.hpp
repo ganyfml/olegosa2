@@ -9,14 +9,14 @@
 class Ref
 {
 	public:
-		Ref(const SeqStringPtr ref) : ref_(ref)
-	{}
-		bool load_SAFinder(const std::string& index_file);
+		Ref(const SeqStringPtr ref) : ref_(ref) {}
+		bool loadIndex(const std::string& index_file);
+		void loadIndex(const SeqIndex& index);
 		bool contains(const SeqString& query);
-		bool find(const SeqString& query);
-		unsigned long location();
-		void reset_finder();
-		//char operator[](unsigned long idx) const { return rawtextAt(idx, *search_index_); }
+		bool find(const SeqString& query) { return search_finder_->find(query); }
+		unsigned long location() const { return search_finder_->location(); }
+		void reset_finder() { search_finder_->clear(); }
+		char operator[](unsigned long idx) const { return (*ref_)[idx]; }
 
 	private:
 		SeqStringPtr ref_;

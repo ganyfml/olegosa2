@@ -9,3 +9,5 @@ T* constVoid2localType(const void* ptr)
 			static_cast<const T*>(ptr)
 			);
 }
+
+

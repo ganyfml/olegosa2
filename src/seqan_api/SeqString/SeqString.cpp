@@ -18,16 +18,13 @@ inline T* voidPtr2TPtr(void* original_ptr)
 }
 
 SeqString::SeqString(const std::string& seq)
-	: impl_(new T(seq))
-{}
+	: impl_(new T(seq)) {}
 
 SeqString::SeqString(const void* other)
-	: impl_(new T(*constVoid2localType<T>(other)))
-{}
+	: impl_(new T(*constVoid2localType<T>(other))) {}
 
 SeqString::SeqString(const SeqString& that)
-	: impl_(new T(*constVoid2localType<T>(that.get_pointer())))
-{}
+	: impl_(new T(*constVoid2localType<T>(that.get_pointer()))) {}
 
 SeqString::~SeqString()
 {

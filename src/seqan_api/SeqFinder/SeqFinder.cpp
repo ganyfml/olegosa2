@@ -17,8 +17,7 @@ SeqFinder::SeqFinder(const SeqIndex& seq_index)
 : impl_ (
 		new T(
 			*constVoid2localType<SeqanIndex>(seq_index.get_pointer()))
-		)
-{}
+		) {}
 
 void SeqFinder::clear()
 {

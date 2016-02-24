@@ -15,7 +15,6 @@ class SeqFinder
 		void clear();
 	private:
 		void* impl_;
-		bool has_next_;
 };
 
 typedef std::shared_ptr<SeqFinder> SeqFinderPtr;
