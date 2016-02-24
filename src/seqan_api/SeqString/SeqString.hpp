@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <seqan_api/SeqanAPIUtil.hpp>
 

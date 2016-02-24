@@ -1,3 +1,4 @@
+#CXX = g++-5
 PACKAGE:=Tiancai
 INCLUDES:=-I$(abspath $(find_upwards include))
 SRC_DIR:=$(find_upwards src)
