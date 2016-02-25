@@ -31,7 +31,6 @@ void Ref::loadIndex(const SeqIndex& index)
 
 bool Ref::contains(const SeqString& query)
 {
-	search_finder_->clear();
 	bool ret = search_finder_->find(query);
 	search_finder_->clear();
 	return ret;
