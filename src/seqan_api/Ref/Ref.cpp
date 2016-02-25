@@ -19,14 +19,14 @@ bool Ref::loadIndex(const std::string& index_file)
 	}
 	else
 	{
-		search_finder_ = make_shared<SeqFinder>(SeqFinder(search_index));
+		search_finder_ = make_shared<SeqFinder>(search_index);
 		return true;
 	}
 }
 
 void Ref::loadIndex(const SeqIndex& index)
 {
-	search_finder_ = make_shared<SeqFinder>(SeqFinder(index));
+	search_finder_ = make_shared<SeqFinder>(index);
 }
 
 bool Ref::contains(const SeqString& query)

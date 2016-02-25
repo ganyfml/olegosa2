@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	//Create SeqIndex
-	SeqString ref_query(string(argv[1]));
+	SeqString ref_query((string(argv[1])));
 	SeqIndex ref_index(ref_query);
 
 	//Create Ref
@@ -15,7 +15,6 @@ int main(int argc, char* argv[])
 	Ref ref(ref_query_ptr);
 	ref.loadIndex(ref_index);
 
-	std::string query_seq = argv[2];
-	ref.find(query_seq);
+	ref.find((string(argv[2])));
 	cout << ref.location() << endl;
 }
