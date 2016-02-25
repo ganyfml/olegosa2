@@ -19,7 +19,6 @@ bool Ref::loadIndex(const std::string& index_file)
 	}
 	else
 	{
-		cout << "Index loading complete" << endl;
 		search_finder_ = make_shared<SeqFinder>(SeqFinder(search_index));
 		return true;
 	}
