@@ -6,13 +6,12 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	//Create SeqString
-	std::string ref_seq = argv[1];
-	SeqString ref_query(ref_seq);
-	SeqStringPtr ref_query_ptr = std::make_shared<SeqString>(ref_query);
 	//Create SeqIndex
+	SeqString ref_query(string(argv[1]));
 	SeqIndex ref_index(ref_query);
+
 	//Create Ref
+	SeqStringPtr ref_query_ptr = std::make_shared<SeqString>(ref_query);
 	Ref ref(ref_query_ptr);
 	ref.loadIndex(ref_index);
 

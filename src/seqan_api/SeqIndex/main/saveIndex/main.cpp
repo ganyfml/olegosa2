@@ -5,10 +5,10 @@ using namespace std;
 
 int main(int argc, char ** argv)
 {
-	string ref_seq = "ACG";
-	SeqString ref(ref_seq);
+	//SeqIndex ref_index(SeqString(string("ACG")));
 
-	SeqIndex ref_index(ref);
+	SeqString ref_seq(string("ACG"));
+	SeqIndex ref_index(ref_seq);
 	createIndex(ref_index);
 
 	saveIndex(ref_index, argv[1]);

@@ -8,7 +8,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	string query("ATGC");
-	SeqString query_seq {query};
+	SeqString query_seq(string("ATGC"));
 	std::cout << query_seq << std::endl;
 }
