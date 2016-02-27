@@ -4,8 +4,8 @@
 
 #include <string>
 #include <memory>
-#include <seqan_api/SeqString.hpp>
-#include <seqan_api/SeqIndex.hpp>
+#include "seqan_api/SeqString.hpp"
+#include "seqan_api/SeqIndex.hpp"
 
 class SeqFinder
 {

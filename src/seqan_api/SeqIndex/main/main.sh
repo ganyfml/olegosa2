@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -v
-
-ref=AGTGTCAGTAGCATG
-./main.exe "$ref"
+tmpdir=$(mktemp -d)
+./main.exe "$tmpdir/Index"

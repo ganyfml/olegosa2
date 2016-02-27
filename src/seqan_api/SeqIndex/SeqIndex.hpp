@@ -3,7 +3,7 @@
 #pragma once
 
 #include <string>
-#include <seqan_api/SeqString.hpp>
+#include "seqan_api/SeqString.hpp"
 
 class SeqIndex
 {

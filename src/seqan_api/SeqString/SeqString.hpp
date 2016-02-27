@@ -4,13 +4,13 @@
 
 #include <memory>
 #include <string>
-#include <seqan_api/SeqanAPIUtil.hpp>
+#include "seqan_api/SeqanAPIUtil.hpp"
 
 /* FIXME
  * Seems not useful for now
-#include <seqan_api/SeqSegmentInfix.hpp>
-#include <seqan_api/SeqSegmentPrefix.hpp>
-#include <seqan_api/SeqSegmentSuffix.hpp>
+#include "seqan_api/SeqSegmentInfix.hpp"
+#include "seqan_api/SeqSegmentPrefix.hpp"
+#include "seqan_api/SeqSegmentSuffix.hpp"
 */
 
 class SeqString

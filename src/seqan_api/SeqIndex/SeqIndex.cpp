@@ -2,7 +2,7 @@
 #include <seqan/seq_io.h>
 #include <seqan/index.h>
 #include <iostream>
-#include <seqan_api/SeqIndex.hpp>
+#include "seqan_api/SeqIndex.hpp"
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;

@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <seqan_api/SeqString.hpp>
-#include <seqan_api/SeqIndex.hpp>
-#include <seqan_api/SeqFinder.hpp>
+#include "seqan_api/SeqString.hpp"
+#include "seqan_api/SeqIndex.hpp"
+#include "seqan_api/SeqFinder.hpp"
 
 class Ref
 {

@@ -6,10 +6,12 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	SeqIndex seq_index((string(argv[1])));
+	SeqString seq((string(argv[1])));
+	SeqIndex seq_index(seq);
 	createIndex(seq_index);
 	SeqFinder finder(seq_index);
-	std::string query_seq = argv[2];
+	SeqString query((string(argv[2])));
 
-	cout << finder.find(query_seq) << endl;
+	cout << finder.find(query) << endl;
+	cout << finder.location() << endl;
 }

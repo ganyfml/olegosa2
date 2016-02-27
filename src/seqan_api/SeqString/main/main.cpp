@@ -13,4 +13,8 @@ int main(int argc, char** argv)
 	char to_add = 'A';
 	query_seq += to_add;
 	std::cout << query_seq << std::endl;
+	int index = 1;
+	std::cout << query_seq[index] << std::endl;
+	query_seq.erase_back();
+	std::cout << query_seq << std::endl;
 }

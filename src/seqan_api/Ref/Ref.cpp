@@ -3,7 +3,7 @@
 #include <iostream>
 #include <seqan/find.h>
 #include <seqan/index.h>
-#include <seqan_api/Ref.hpp>
+#include "seqan_api/Ref.hpp"
 
 using namespace std;
 
