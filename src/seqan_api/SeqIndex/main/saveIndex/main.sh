@@ -3,4 +3,4 @@
 
 tmpdir=$(mktemp -d)
 ./main.exe "$tmpdir/Index"
-ls $tmpdir
+ls "$tmpdir"

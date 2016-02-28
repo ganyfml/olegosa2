@@ -4,7 +4,6 @@
 
 #include <memory>
 #include <string>
-#include "seqan_api/SeqanAPIUtil.hpp"
 
 /* FIXME
  * Seems not useful for now

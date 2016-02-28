@@ -1,5 +1,5 @@
 // vim: set noexpandtab tabstop=2:
-#include "seqan_api/Ref.hpp"
+#include "../../Ref/Ref.hpp"
 #include <iostream>
 
 using namespace std;

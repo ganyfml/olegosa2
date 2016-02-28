@@ -1,5 +1,5 @@
 // vim: set noexpandtab tabstop=2:
-#include "seqan_api/Ref.hpp"
+#include "../Ref.hpp"
 #include <iostream>
 
 using namespace std;
@@ -13,13 +13,14 @@ int main(int argc, char* argv[])
 	Ref ref(ref_query_ptr);
 	ref.loadIndex(ref_index);
 
-	std::string query_seq = argv[2];
-	cout << ref.contains(SeqString(string("ACG"))) << endl;
+	SeqString query_seq((string(argv[2])));
+	cout << "Reference seq contains query: " << ref.contains(query_seq) << endl;
 
-	while(ref.find(string(argv[2])))
+	ref.reset_finder();
+	while(ref.find(query_seq))
 	{
-		cout << ref.location() << endl;
+		cout << "Find in position: " << ref.location() << endl;
 	}
 
-	cout << ref[2] << endl;
+	cout << "Third base of reference seq: "<< ref[2] << endl;
 }

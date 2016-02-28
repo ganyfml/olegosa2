@@ -2,7 +2,8 @@
 #include <seqan/index.h>
 #include <seqan/find.h>
 #include <iostream>
-#include "seqan_api/SeqFinder.hpp"
+#include <seqan_api/SeqanAPIUtil.hpp>
+#include <seqan_api/SeqFinder.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanIndex;

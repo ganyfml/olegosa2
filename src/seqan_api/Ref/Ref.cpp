@@ -3,25 +3,15 @@
 #include <iostream>
 #include <seqan/find.h>
 #include <seqan/index.h>
-#include "seqan_api/Ref.hpp"
+#include <seqan_api/Ref.hpp>
 
 using namespace std;
 
 typedef seqan::Finder<seqan::Index<seqan::Dna5String, seqan::IndexEsa<>>> T;
 
-bool Ref::loadIndex(const std::string& index_file)
+void Ref::loadIndex(const std::string& index_file)
 {
-	SeqIndex search_index;
-	if(!openIndex(search_index, index_file))
-	{
-		cerr << "Index load failed!" << endl;
-		return false;
-	}
-	else
-	{
-		search_finder_ = make_shared<SeqFinder>(search_index);
-		return true;
-	}
+	search_finder_ = make_shared<SeqFinder>(index_file);
 }
 
 void Ref::loadIndex(const SeqIndex& index)

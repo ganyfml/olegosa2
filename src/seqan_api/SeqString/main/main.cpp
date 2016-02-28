@@ -2,7 +2,8 @@
 
 #include <iostream>
 #include <string>
-#include "seqan_api/SeqString.hpp"
+#include "../SeqString.hpp"
+#include "../../SeqanAPIUtil/SeqanAPIUtil.hpp"
 
 using namespace std;
 

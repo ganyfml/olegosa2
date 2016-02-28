@@ -3,7 +3,7 @@
 #include <seqan/sequence.h>
 #include <seqan/seq_io.h>
 #include "seqan_api/SeqSegmentInfix.hpp"
-#include "seqan_api/SeqString.hpp"
+#include <seqan_api/SeqString.hpp>
 
 typedef seqan::Segment<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::InfixSegment> T;
 
