@@ -12,12 +12,7 @@ typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 SeqIndex::SeqIndex(const SeqString& seq)
 {
 	impl_ = new T(*constVoid2localType<SeqanString>(seq.get_pointer()));
-	bool create_successfully = seqan::indexCreate(
-			*constVoid2localType<T>(impl_)
-			, seqan::FibreSA()
-			);
-
-	if(!create_successfully)
+	if(!seqan::indexCreate(*constVoid2localType<T>(impl_), seqan::FibreSA())) 
 	{
 		THROW_RUNTIME_ERROR_MSG("Index Create Failed");
 	}
@@ -26,14 +21,9 @@ SeqIndex::SeqIndex(const SeqString& seq)
 SeqIndex::SeqIndex(const std::string& index_file_name)
 {
 	impl_ = new T();
-	bool open_successfully = seqan::open(
-			*constVoid2localType<T>(impl_)
-			, seqan::toCString(index_file_name)
-			);
-
-	if(!open_successfully)
+	if(!seqan::open(*constVoid2localType<T>(impl_), seqan::toCString(index_file_name)))
 	{
-		THROW_RUNTIME_ERROR_MSG("Index Open Failed");
+		THROW_RUNTIME_ERROR_MSG("Index Open Failed for " + index_file_name);
 	}
 }
 
@@ -44,13 +34,8 @@ SeqIndex::~SeqIndex()
 
 void SeqIndex::saveIndex(const std::string& file_name)
 {
-	bool save_successfully = seqan::save(
-			*constVoid2localType<T>(impl_)
-			, seqan::toCString(file_name)
-			);
-
-	if(!save_successfully)
+	if(!seqan::save(*constVoid2localType<T>(impl_), seqan::toCString(file_name)))
 	{
-		THROW_RUNTIME_ERROR_MSG("Index Saved Failed");
+		THROW_RUNTIME_ERROR_MSG("Index Saved Failed for " + file_name);
 	}
 }	
