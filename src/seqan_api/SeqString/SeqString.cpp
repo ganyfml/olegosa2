@@ -37,35 +37,37 @@ unsigned long SeqString::get_length() const
 	return seqan::length(*voidPtr2TPtr(impl_));
 }
 
-/* FIXME
- * Seems not useful for now
- SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
- {
- SuffixSegment* seg = new SuffixSegment(
- seqan::suffix(*voidPtr2TPtr(impl_), pos)
- );
- SeqSegmentSuffix ret(seg);
- return ret;
- }
+#if 0
+// FIXME
+// Seems not useful for now
+SeqSegmentSuffix SeqString::get_suffix(unsigned long pos) const
+{
+	SuffixSegment* seg = new SuffixSegment(
+			seqan::suffix(*voidPtr2TPtr(impl_), pos)
+			);
+	SeqSegmentSuffix ret(seg);
+	return ret;
+}
 
- SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_end) const
- {
- InfixSegment* seg = new InfixSegment(
- seqan::infix(*voidPtr2TPtr(impl_), pos_begin, pos_end)
- );
- SeqSegmentInfix ret(seg);
- return ret;
- }
+SeqSegmentInfix SeqString::get_infix(unsigned long pos_begin, unsigned long pos_end) const
+{
+	InfixSegment* seg = new InfixSegment(
+			seqan::infix(*voidPtr2TPtr(impl_), pos_begin, pos_end)
+			);
+	SeqSegmentInfix ret(seg);
+	return ret;
+}
 
- SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
- {
- PrefixSegment* seg = new PrefixSegment(
- seqan::prefix(*voidPtr2TPtr(impl_), pos)
- );
- SeqSegmentPrefix ret(seg);
- return ret;
- }
- */
+SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
+{
+	PrefixSegment* seg = new PrefixSegment(
+			seqan::prefix(*voidPtr2TPtr(impl_), pos)
+			);
+	SeqSegmentPrefix ret(seg);
+	return ret;
+}
+//
+#endif
 
 void SeqString::erase_back()
 {
@@ -78,7 +80,7 @@ SeqString& SeqString::operator+=(const char rhs)
 	return *this;
 }
 
-const char SeqString::operator[](long idx) const
+char SeqString::operator[](long idx) const
 {
 	return (*voidPtr2TPtr(impl_))[idx];
 }

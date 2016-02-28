@@ -14,13 +14,13 @@ int main(int argc, char* argv[])
 	ref.loadIndex(index);
 
 	SeqString query_seq((string(argv[2])));
-	cout << "Reference seq contains query: " << ref.contains(query_seq) << endl;
+	printf("Reference seq contains query: %d\n", ref.contains(query_seq));
 
 	ref.reset_finder();
 	while(ref.find(query_seq))
 	{
-		cout << "Find in position: " << ref.location() << endl;
+		printf("Find in position: %ld\n", ref.location());
 	}
 
-	cout << "Third base of reference seq: "<< ref[2] << endl;
+	printf("Third base of reference seq: %c\n", ref[2]);
 }

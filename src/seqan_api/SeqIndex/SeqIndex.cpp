@@ -4,7 +4,7 @@
 #include <iostream>
 #include <seqan_api/SeqIndex.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
-#include <seqan_api/Exception.hpp>
+#include <throw_runtime_error/throw_runtime_error.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
@@ -19,13 +19,13 @@ SeqIndex::SeqIndex(const SeqString& seq)
 
 	if(!create_successfully)
 	{
-		throw IndexCreateException();
+		THROW_RUNTIME_ERROR_MSG("Index Create Failed");
 	}
 }
 
 SeqIndex::SeqIndex(const std::string& index_file_name)
 {
-	//impl_ = nullptr;
+	impl_ = new T();
 	bool open_successfully = seqan::open(
 			*constVoid2localType<T>(impl_)
 			, seqan::toCString(index_file_name)
@@ -33,7 +33,7 @@ SeqIndex::SeqIndex(const std::string& index_file_name)
 
 	if(!open_successfully)
 	{
-		throw IndexOpenException();
+		THROW_RUNTIME_ERROR_MSG("Index Open Failed");
 	}
 }
 
@@ -42,10 +42,15 @@ SeqIndex::~SeqIndex()
 	delete static_cast<T*>(impl_);
 }
 
-bool SeqIndex::saveIndex(const std::string& file_name)
+void SeqIndex::saveIndex(const std::string& file_name)
 {
-	return seqan::save(
+	bool save_successfully = seqan::save(
 			*constVoid2localType<T>(impl_)
 			, seqan::toCString(file_name)
 			);
+
+	if(!save_successfully)
+	{
+		THROW_RUNTIME_ERROR_MSG("Index Saved Failed");
+	}
 }	

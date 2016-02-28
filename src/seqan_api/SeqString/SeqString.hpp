@@ -29,7 +29,7 @@ class SeqString
 		const void* get_pointer() const { return impl_; }
 		void erase_back();
 		SeqString& operator+=(const char rhs);
-		const char operator[](long idx) const;
+		char operator[](long idx) const;
 
 	private:
 		void* impl_;

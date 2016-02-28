@@ -7,9 +7,8 @@ int main(int argc, char ** argv)
 {
 	SeqString ref_seq(string("ACG"));
 	SeqIndex ref_index(ref_seq);
-	createIndex(ref_index);
-	saveIndex(ref_index, argv[1]);
-
-	SeqIndex ref_load;
-	openIndex(ref_load, argv[1]);
+	ref_index.saveIndex((string(argv[1])));
+	
+	string file_name = string(argv[1]);
+	SeqIndex ref_load(file_name);
 }
