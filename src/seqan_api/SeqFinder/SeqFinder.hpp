@@ -12,7 +12,7 @@ class SeqFinder
 	public:
 		SeqFinder(const SeqIndex& seq_index);
 		bool find(const SeqString& seq);
-		unsigned long location();
+		unsigned long location() const;
 		void clear();
 	private:
 		void* impl_;

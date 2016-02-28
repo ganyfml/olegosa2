@@ -4,7 +4,7 @@
 #include <iostream>
 #include <seqan_api/SeqIndex.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
-#include <throw_runtime_error/throw_runtime_error.hpp>
+#include <seqan_api/throwRuntimeError.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
