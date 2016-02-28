@@ -2,5 +2,5 @@
 #vim: set noexpandtab tabstop=2:
 
 tmpdir=$(mktemp -d)
-./main.exe "$tmpdir/Index"
+./main.exe "$tmpdir/index"
 ls "$tmpdir"

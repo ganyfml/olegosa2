@@ -74,7 +74,7 @@ void SeqString::erase_back()
 	seqan::eraseBack(*voidPtr2TPtr(impl_));
 }
 
-SeqString& SeqString::operator+=(const char rhs)
+SeqString& SeqString::operator+=(char rhs)
 {
 	*voidPtr2TPtr(impl_) += rhs;
 	return *this;

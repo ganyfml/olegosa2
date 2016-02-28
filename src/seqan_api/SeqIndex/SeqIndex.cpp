@@ -6,15 +6,15 @@
 #include <seqan_api/SeqanAPIUtil.hpp>
 #include <seqan_api/throwRuntimeError.hpp>
 
-using namespace seqan;
+using seqan::toCString;
 
-typedef Dna5String SeqanString;
-typedef Index<SeqanString, IndexEsa<>> T;
+typedef seqan::Dna5String SeqanString;
+typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 SeqIndex::SeqIndex(const SeqString& seq)
 {
 	impl_ = new T(*constVoid2localType<SeqanString>(seq.get_pointer()));
-	if(!indexCreate(*constVoid2localType<T>(impl_), FibreSA())) 
+	if(!indexCreate(*constVoid2localType<T>(impl_), seqan::FibreSA())) 
 	{
 		THROW_RUNTIME_ERROR_MSG("Index Create Failed");
 	}

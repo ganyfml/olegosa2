@@ -33,7 +33,7 @@ bool SeqFinder::find(const SeqString& seq)
 			);
 }
 
-unsigned long SeqFinder::location() const
+unsigned long SeqFinder::position() const
 {
 	return seqan::position(*static_cast<T*>(impl_));	
 }

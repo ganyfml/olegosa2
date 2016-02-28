@@ -6,11 +6,10 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
 	SeqString query_seq(string("ATGC"));
 	
-	char to_add = 'A';
-	query_seq += to_add;
+	query_seq += 'A';
 	std::cout << query_seq << std::endl;
 }

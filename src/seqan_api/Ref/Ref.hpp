@@ -14,7 +14,7 @@ class Ref
 		void loadIndex(const SeqIndex& index);
 		bool contains(const SeqString& query);
 		bool find(const SeqString& query) { return search_finder_->find(query); }
-		unsigned long location() const { return search_finder_->location(); }
+		unsigned long position() const { return search_finder_->position(); }
 		void reset_finder() { search_finder_->clear(); }
 		char operator[](unsigned long idx) const { return (*ref_)[idx]; }
 

@@ -13,5 +13,5 @@ int main(int argc, char* argv[])
 	SeqString query((string(argv[2])));
 
 	cout << finder.find(query) << endl;
-	cout << finder.location() << endl;
+	cout << finder.position() << endl;
 }

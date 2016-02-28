@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
 	seqan::Dna5String query_seq = "ATGC";
 	int prefix_index = 1;

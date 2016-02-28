@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	ref.reset_finder();
 	while(ref.find(query_seq))
 	{
-		printf("Find in position: %ld\n", ref.location());
+		printf("Find in position: %ld\n", ref.position());
 	}
 
 	printf("Third base of reference seq: %c\n", ref[2]);

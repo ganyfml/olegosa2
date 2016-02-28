@@ -13,9 +13,6 @@ int main(int argc, char* argv[])
 	Ref ref(ref_query_ptr);
 	ref.loadIndex(ref_index);
 
-	std::string query_seq = argv[2];
-	while(ref.find(string(argv[2])))
-	{
-		cout << ref.position() << endl;
-	}
+	ref.find((string(argv[2])));
+	cout << ref.position() << endl;
 }
