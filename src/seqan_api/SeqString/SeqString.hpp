@@ -28,7 +28,7 @@ class SeqString
 		 */
 		const void* get_pointer() const { return impl_; }
 		void erase_back();
-		SeqString& operator+=(char rhs);
+		SeqString& operator+=(const std::string& rhs);
 		char operator[](long idx) const;
 
 	private:

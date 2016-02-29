@@ -10,6 +10,6 @@ int main(int argc, char* argv[])
 {
 	SeqString query_seq(string("ATGC"));
 	
-	query_seq += 'A';
+	query_seq += "ATCG";
 	std::cout << query_seq << std::endl;
 }
