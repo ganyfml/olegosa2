@@ -7,11 +7,8 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	SeqString ref_query((string(argv[1])));
-	SeqStringPtr ref_query_ptr = std::make_shared<SeqString>(ref_query);
-	Ref ref(ref_query_ptr);
-
 	SeqIndex index(ref_query);
-	ref.loadIndex(index);
+	Ref ref(index);
 
 	SeqString query_seq((string(argv[2])));
 	printf("Does reference seq contains query? %d\n", ref.contains(query_seq));

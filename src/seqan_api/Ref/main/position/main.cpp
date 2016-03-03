@@ -6,13 +6,10 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	SeqString ref_query((string(argv[1])));
-	SeqIndex ref_index(ref_query);
+	SeqString ref_seq((string(argv[1])));
+	SeqIndex ref_index(ref_seq);
 
-	SeqStringPtr ref_query_ptr = std::make_shared<SeqString>(ref_query);
-	Ref ref(ref_query_ptr);
-	ref.loadIndex(ref_index);
-
-	ref.find((string(argv[2])));
+	Ref ref(ref_index);
+	ref.find(SeqString((string(argv[2]))));
 	cout << ref.position() << endl;
 }

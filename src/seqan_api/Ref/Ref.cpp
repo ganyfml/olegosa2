@@ -9,12 +9,12 @@ using namespace std;
 
 typedef seqan::Finder<seqan::Index<seqan::Dna5String, seqan::IndexEsa<>>> T;
 
-void Ref::loadIndex(const std::string& index_file)
+Ref::Ref(const std::string& index_file)
 {
 	search_finder_ = make_shared<SeqFinder>(index_file);
 }
 
-void Ref::loadIndex(const SeqIndex& index)
+Ref::Ref(const SeqIndex& index)
 {
 	search_finder_ = make_shared<SeqFinder>(index);
 }
