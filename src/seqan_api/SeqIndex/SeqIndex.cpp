@@ -4,7 +4,7 @@
 #include <iostream>
 #include <seqan_api/SeqIndex.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
-#include <seqan_api/throwRuntimeError.hpp>
+#include <seqan_api/ThrowRuntimeError.hpp>
 
 using seqan::toCString;
 

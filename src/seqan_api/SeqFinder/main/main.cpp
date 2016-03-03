@@ -8,7 +8,6 @@ int main(int argc, char* argv[])
 {
 	SeqString seq((string(argv[1])));
 	SeqIndex seq_index(seq);
-	createIndex(seq_index);
 	SeqFinder finder(seq_index);
 	SeqString query((string(argv[2])));
 

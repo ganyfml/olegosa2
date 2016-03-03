@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	ref.loadIndex(index);
 
 	SeqString query_seq((string(argv[2])));
-	printf("Reference seq contains query: %d\n", ref.contains(query_seq));
+	printf("Does reference seq contains query? %d\n", ref.contains(query_seq));
 
 	ref.reset_finder();
 	while(ref.find(query_seq))

@@ -1,4 +1,4 @@
-#include <seqan_api/throwRuntimeError.hpp>
+#include <seqan_api/ThrowRuntimeError.hpp>
 #include <sstream>
 
 // nonamespace {

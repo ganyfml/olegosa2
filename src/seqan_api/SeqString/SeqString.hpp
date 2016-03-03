@@ -16,7 +16,6 @@ class SeqString
 {
 	public:
 		SeqString(const std::string& seq);
-		SeqString(const void*);
 		SeqString(const SeqString& that);
 		~SeqString();
 		unsigned long get_length() const;
