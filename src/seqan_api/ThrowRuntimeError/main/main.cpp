@@ -4,7 +4,6 @@
 
 int main()
 {
-
   std::cout << throw_string(__PRETTY_FUNCTION__, __FILE__, __LINE__) << std::endl;
   std::cout << throw_string(__PRETTY_FUNCTION__, __FILE__, __LINE__, "some message") << std::endl;
 
@@ -26,5 +25,4 @@ int main()
   //throw valgrind_runtime_error(THROW_STRING_MSG("some message"));
 
   throw std::runtime_error(throw_string(__PRETTY_FUNCTION__, __FILE__, __LINE__, "some message").c_str());
-
 }

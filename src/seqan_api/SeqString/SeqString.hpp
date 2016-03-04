@@ -19,16 +19,16 @@ class SeqString
 		SeqString(const SeqString& that);
 		~SeqString();
 		unsigned long get_length() const;
+		const void* get_pointer() const { return impl_; }
+		void erase_back();
+		SeqString& operator+=(const std::string& rhs);
+		char operator[](long idx) const;
 		/* FIXME
 		 * Seems not useful for now
 		 SeqSegmentSuffix get_suffix(unsigned long pos) const;
 		 SeqSegmentInfix get_infix(unsigned long pos_begin, unsigned long pos_end) const;
 		 SeqSegmentPrefix get_prefix(unsigned long pos) const;
 		 */
-		const void* get_pointer() const { return impl_; }
-		void erase_back();
-		SeqString& operator+=(const std::string& rhs);
-		char operator[](long idx) const;
 
 	private:
 		void* impl_;

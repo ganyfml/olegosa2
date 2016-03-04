@@ -34,6 +34,27 @@ unsigned long SeqString::get_length() const
 	return seqan::length(*voidPtr2TPtr(impl_));
 }
 
+void SeqString::erase_back()
+{
+	seqan::eraseBack(*voidPtr2TPtr(impl_));
+}
+
+SeqString& SeqString::operator+=(const std::string& rhs)
+{
+	*voidPtr2TPtr(impl_) += rhs;
+	return *this;
+}
+
+char SeqString::operator[](long idx) const
+{
+	return (*voidPtr2TPtr(impl_))[idx];
+}
+
+std::ostream& operator<<(std::ostream& os, const SeqString& obj)
+{
+	return os << *constVoid2localType<T>(obj.get_pointer());
+}
+
 #if 0
 // FIXME
 // Seems not useful for now
@@ -65,26 +86,3 @@ SeqSegmentPrefix SeqString::get_prefix(unsigned long pos) const
 }
 //
 #endif
-
-void SeqString::erase_back()
-{
-	seqan::eraseBack(*voidPtr2TPtr(impl_));
-}
-
-SeqString& SeqString::operator+=(const std::string& rhs)
-{
-	*voidPtr2TPtr(impl_) += rhs;
-	return *this;
-}
-
-char SeqString::operator[](long idx) const
-{
-	return (*voidPtr2TPtr(impl_))[idx];
-}
-
-std::ostream& operator<<(std::ostream& os, const SeqString& obj)
-{
-	return os << *constVoid2localType<T>(
-			obj.get_pointer()
-			);
-}

@@ -11,7 +11,7 @@ class SeqIndex
 		SeqIndex(const SeqString& seq);
 		SeqIndex(const std::string& index_file_name);
 		~SeqIndex();
-		void saveIndex(const std::string& file_name);
+		void saveIndex(const std::string& index_file_name) const;
 		const void* get_pointer() const { return impl_; }
 	private:
 		void* impl_;
