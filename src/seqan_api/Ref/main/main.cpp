@@ -18,6 +18,4 @@ int main(int argc, char* argv[])
 	{
 		printf("Find in position: %ld\n", ref.position());
 	}
-
-	printf("Third base of reference seq: %c\n", ref[2]);
 }
