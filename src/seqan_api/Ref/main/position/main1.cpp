@@ -11,6 +11,8 @@ int main(int argc, char* argv[])
 
 	Ref ref(ref_index);
 	ref.reset_finder();
-	ref.find(SeqString((string("T"))));
-	cout << ref.position() << endl;
+	while(ref.find(SeqString((string("T")))))
+	{
+		cout << ref.position() << endl;
+	}
 }

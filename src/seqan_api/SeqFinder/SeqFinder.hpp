@@ -17,5 +17,3 @@ class SeqFinder
 	private:
 		void* impl_;
 };
-
-typedef std::shared_ptr<SeqFinder> SeqFinderPtr;

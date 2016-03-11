@@ -9,8 +9,11 @@ int main(int argc, char* argv[])
 	SeqString index(string("ATGCAT"));
 	SeqIndex seq_index(index);
 	SeqFinder finder(seq_index);
-	SeqString query_seq((string("AT")));
+	SeqString query_seq((string("A")));
 
 	finder.clear();
-	cout << finder.find(query_seq) << endl;
+	while(finder.find(query_seq))
+	{
+		cout << finder.position() << endl;	
+	}
 }

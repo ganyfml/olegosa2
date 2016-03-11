@@ -7,19 +7,11 @@
 
 using namespace std;
 
-Ref::Ref(const std::string& index_file)
-{
-	search_finder_ = make_shared<SeqFinder>(index_file);
-}
-
 Ref::Ref(const SeqIndex& index)
-{
-	search_finder_ = make_shared<SeqFinder>(index);
-}
+	:	search_finder_(SeqFinder(index)) {}
 
 bool Ref::contains(const SeqString& query)
 {
-	bool ret = search_finder_->find(query);
-	search_finder_->clear();
-	return ret;
+	search_finder_.clear();
+	return search_finder_.find(query);
 }

@@ -12,7 +12,7 @@ typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 inline T* voidPtr2TPtr(void* original_ptr)
 {
-	  return static_cast<T*>(original_ptr);
+	return static_cast<T*>(original_ptr);
 }
 
 SeqIndex::SeqIndex(const SeqString& seq)

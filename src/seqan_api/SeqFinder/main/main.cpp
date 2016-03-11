@@ -1,5 +1,5 @@
 // vim: set noexpandtab tabstop=2:
-#include "../../Ref/Ref.hpp"
+#include "../SeqFinder.hpp"
 #include <iostream>
 
 using namespace std;
@@ -11,6 +11,9 @@ int main(int argc, char* argv[])
 	SeqFinder finder(seq_index);
 	SeqString query((string(argv[2])));
 
-	cout << finder.find(query) << endl;
-	cout << finder.position() << endl;
+	finder.clear();
+	while(finder.find(query))
+	{
+		cout << finder.position() << endl;
+	}
 }

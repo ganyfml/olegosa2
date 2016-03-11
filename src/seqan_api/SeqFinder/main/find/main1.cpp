@@ -12,5 +12,8 @@ int main(int argc, char* argv[])
 	SeqString query_seq((string("AT")));
 
 	finder.clear();
-	cout << finder.find(query_seq) << endl;
+	while(finder.find(query_seq))
+	{
+		cout << finder.position() << endl;	
+	}
 }

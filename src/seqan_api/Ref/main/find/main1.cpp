@@ -6,11 +6,15 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	SeqString ref_seq((string("ATCTTCA")));
-	SeqIndex ref_index(ref_seq);
+	SeqString ref_query((string("ATGCAT")));
+	SeqIndex ref_index(ref_query);
 
 	Ref ref(ref_index);
+	SeqString query_seq(string("A"));
+
 	ref.reset_finder();
-	ref.find(SeqString((string("T"))));
-	cout << ref.position() << endl;
+	while(ref.find(query_seq))
+	{
+		cout << ref.position() << endl;
+	}
 }
