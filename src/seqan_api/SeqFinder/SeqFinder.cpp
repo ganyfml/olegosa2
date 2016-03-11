@@ -1,42 +1,40 @@
 // vim: set noexpandtab tabstop=2:
-#include <seqan/seq_io.h>
 #include <seqan/index.h>
+#include <seqan/find.h>
 #include <iostream>
+#include <seqan_api/SeqanAPIUtil.hpp>
 #include <seqan_api/SeqFinder.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanIndex;
 typedef seqan::Finder<SeqanIndex> T;
 
-inline SeqanString* voidPtr2TPtr(const void* seq)
+inline T* voidPtr2TPtr(void* original_ptr)
 {
-	return constVoid2localType<SeqanString>(seq);
+	return static_cast<T*>(original_ptr);
 }
 
-SeqFinder::SeqFinder(const SeqIndex& seq_index, const SeqString& seq)
-	: impl_ (
-			new T(
-				*constVoid2localType<SeqanIndex>(seq_index.get_pointer()))
+SeqFinder::SeqFinder(const SeqIndex& seq_index)
+: impl_ (
+		new T(
+			*constVoid2localType<SeqanIndex>(seq_index.get_pointer())
 			)
-			, seq_(SeqString(seq))
+		) {}
+
+void SeqFinder::clear()
 {
-	has_next_ = seqan::find(
-			*static_cast<T*>(impl_)
-			, *voidPtr2TPtr(seq.get_pointer())
+	seqan::clear(*voidPtr2TPtr(impl_));
+}
+
+bool SeqFinder::find(const SeqString& seq)
+{
+	return seqan::find(
+			*voidPtr2TPtr(impl_)
+			, *constVoid2localType<SeqanString>(seq.get_pointer())
 			);
 }
 
-bool SeqFinder::has_next()
+unsigned long SeqFinder::position() const
 {
-	return has_next_;
-}
-
-unsigned long SeqFinder::next()
-{
-	unsigned long ret = seqan::position(*static_cast<T*>(impl_));
-	has_next_ = seqan::find(
-			*static_cast<T*>(impl_)
-			, *voidPtr2TPtr(seq_.get_pointer())
-			);
-	return ret;	
+	return seqan::position(*voidPtr2TPtr(impl_));	
 }

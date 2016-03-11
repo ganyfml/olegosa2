@@ -2,14 +2,13 @@
 
 #include <iostream>
 #include <string>
-#include <seqan_api/SeqString.hpp>
+#include "../../SeqString.hpp"
 
 using namespace std;
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
-	string query("ATGC");
-	SeqString query_seq(query);
+	SeqString query_seq(string("ATGC"));
 	cout << query_seq << endl;
 	query_seq.erase_back();
 	cout << query_seq << endl;

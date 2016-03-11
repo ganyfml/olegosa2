@@ -1,20 +1,19 @@
 // vim: set noexpandtab tabstop=2:
-#include <seqan_api/SeqFinder.hpp>
+#include "../SeqFinder.hpp"
+#include <iostream>
 
 using namespace std;
 
-int main(int argc, char ** argv)
+int main(int argc, char* argv[])
 {
-	string query_str = "ACG";
-	string ref_str = "ACGAGCTACGATCGATCGACTGACTGACAGCTCGACTGACTGACTGCTACGCTAGACTACGACTAGCTACGAACG"; 
-	SeqString query(query_str);
-	SeqString ref(ref_str);
+	SeqString seq((string(argv[1])));
+	SeqIndex seq_index(seq);
+	SeqFinder finder(seq_index);
+	SeqString query((string(argv[2])));
 
-
-	SeqIndex ref_index(ref);
-	SeqFinder finder(ref_index, query);
-	while(finder.has_next())
+	finder.clear();
+	while(finder.find(query))
 	{
-		cout << finder.next() << endl;
+		cout << finder.position() << endl;
 	}
 }
