@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	SeqString ref_query((string(argv[1])));
-	SeqIndex index(ref_query);
+	SeqSuffixArray index(ref_query);
 	Ref ref(index);
 
 	SeqString query_seq((string(argv[2])));

@@ -5,7 +5,7 @@
 #include <string>
 #include <seqan_api/SeqString.hpp>
 
-class SeqIndex
+class SeqSuffixArray
 {
 	public:
 		SeqIndex(const SeqString& seq);

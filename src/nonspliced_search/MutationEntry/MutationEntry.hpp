@@ -2,66 +2,61 @@
 
 #pragma once;
 
+#include <seqan_api/SeqString.hpp>
+#include <seqan_api/Ref.hpp>
+#include <set>
+
 namespace MutationState
 {
 	enum Value { STATE_M = 0, STATE_I = 1, STATE_D = 2} ;
 }
 
+
 struct MutationGapAndMismatch
 {
-	int num_mismatch = 0;
-	int num_ref_gapOpen = 0;
-	int num_ref_gapExt = 0;
-	int num_query_gapOpen = 0;
-	int num_query_gapExt = 0;
+	private:
+	int num_mismatch_ = 0;
+	int num_ref_gapOpen_ = 0;
+	int num_ref_gapExt_ = 0;
+	int num_query_gapOpen_ = 0;
+	int num_query_gapExt_ = 0;
 
-	int get_numGapOpen() const { return (num_ref_gapOpen + num_query_gapOpen); }
-	int get_numGapExt() const { return (num_ref_gapExt + num_query_gapExt); }
-	int get_numDiff() const { return (this->get_numGapOpen() + this->get_numGapExt()); }
-
+	public:
+	int get_numGapOpen() const { return (num_ref_gapOpen_ + num_query_gapOpen_); }
+	int get_numGapExt() const { return (num_ref_gapExt_ + num_query_gapExt_); }
+	int get_numDiff() const { return (get_numGapOpen() + get_numGapExt()); }
 	int cal_alnScore(int score_mismatch, int score_gapOpen, int score_gapExtension) const
 	{
-		return num_mismatch * score_mismatch + this->get_numGapOpen() * score_gapOpen + this->get_numGapExt() * score_gapExtension;
+		return num_mismatch_ * score_mismatch + get_numGapOpen() * score_gapOpen + get_numGapExt() * score_gapExtension;
 	}
 };
 
+typedef std::set<MutationEntry> MutationSet;
+
 class MutationEntry
 {
-	int index_;
+	int query_index_;
 	int score_;
 	MutationState::Value state_;
+	MutationGapAndMismatch gap_mm_;
+	SeqString seq_;
 
 	public:
-	MutationGapAndMismatch gap_mm;
-	SeqString seq;
-
 	MutationEntry(SeqString seq)
-		: index_(0)
-			 , state_(MutationState::STATE_M)
-			 , seq(seq)
-			 , score_(0)
-	{}
+		: query_index_(0)
+			, state_(MutationState::STATE_M)
+			 , seq_(seq)
+			 , score_(0) {}
 
-	int get_index() const { return index_; }
+	void produce_insertion(const SeqString& original, const Ref& ref, MutationSet& set);
+	void produce_deletion(const SeqString& original, const Ref& ref, MutationSet& set);
+	void produce_mismatch(const SeqString& original, const Ref& ref, MutationSet& set);
 
-	int get_state() const { return state_; }
-
-	int get_score() const { return score_; }
-
-	int get_seqLength() const { return ::get_seqLength(seq); }
-
+	private:
 	void set_score(int score_mismatch, int score_gapOpen, int score_gapExtension)
 	{
 		score_ = gap_mm.cal_alnScore(score_mismatch, score_gapOpen, score_gapExtension);
 	}
-
-	void change_state(MutationState::Value state) { state_ = state; }
-
-	void change_score(int score) { score_ = score; }
-
-	void increase_index() { ++index_; }
-
-	bool exist_inRef(const Seq& ref) const { return ref.find_exist(seq); }
 
 	bool allow_gapOpen(int max_gapOpen) const
 	{
@@ -89,11 +84,4 @@ class MutationEntry
 			return this->score_ >= second.score_;
 		}
 	}
-
-	void produce_insertion();
-
-	void produce_deletion();
-
-	void produce_mismatch();
 };
-
