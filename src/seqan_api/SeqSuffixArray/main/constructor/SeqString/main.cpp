@@ -6,5 +6,5 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	SeqString ref_seq(string("ACG"));
-	SeqIndex ref_index(ref_seq);
+	SeqSuffixArray ref_index(ref_seq);
 }
