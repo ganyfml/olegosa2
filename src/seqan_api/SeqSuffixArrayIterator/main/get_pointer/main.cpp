@@ -1,5 +1,5 @@
 // vim: set noexpandtab tabstop=2:
-#include "../../SeqIndex.hpp"
+#include "../../SeqSuffixArrayIterator.hpp"
 #include "seqan_api/SeqanAPIUtil.hpp"
 #include <seqan/index.h>
 #include <seqan/seq_io.h>
@@ -11,7 +11,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	SeqString ref_seq(string("ACG"));
-	SeqIndex ref_index(ref_seq);
-	constVoid2localType<T>(ref_index.get_pointer());
+	SeqSuffixArray ref_sa(SeqString(string("ACG")));
+	SeqSuffixArrayIterator ref_SA(ref_sa);
+	constVoid2localType<T>(ref_SA.get_pointer());
 }

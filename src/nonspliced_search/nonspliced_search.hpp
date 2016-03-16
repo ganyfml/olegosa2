@@ -41,7 +41,7 @@ class MutationEntry
 
 	MutationEntry(SeqString seq)
 		: index_(0)
-			 , state_(MutationState::STATE_M)
+			, state_(MutationState::STATE_M)
 			 , seq(seq)
 			 , score_(0)
 	{}

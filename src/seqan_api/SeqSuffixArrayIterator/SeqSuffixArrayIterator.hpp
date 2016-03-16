@@ -3,17 +3,16 @@
 #pragma once
 
 #include <string>
+#include <seqan_api/SeqSuffixArray.hpp>
 #include <seqan_api/SeqString.hpp>
 
-class SeqSuffixArray
+class SeqSuffixArrayIterator
 {
 	public:
-		SeqSuffixArray(const SeqString& seq);
-		SeqSuffixArray(const std::string& index_file_name);
-		~SeqSuffixArray();
-		void saveSA(const std::string& index_file_name) const;
+		SeqSuffixArrayIterator(const SeqSuffixArray& sa);
+		~SeqSuffixArrayIterator();
 		const void* get_pointer() const { return impl_; }
+		bool goDown(const SeqString& query);
 	private:
 		void* impl_;
 };
-

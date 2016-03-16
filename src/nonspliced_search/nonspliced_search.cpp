@@ -141,9 +141,9 @@ int aln_nonsplice(const Ref& reference, const SeqString& query, const regularSea
 		if(temp != nullptr)
 		{
 			result_set.insert((*temp));
-			#ifdef DEBUG
-					cout << (*temp).seq << endl;
-			#endif
+#ifdef DEBUG
+			cout << (*temp).seq << endl;
+#endif
 		}
 	}
 	return result_set.size();

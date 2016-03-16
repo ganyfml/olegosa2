@@ -5,12 +5,12 @@
 #include <string>
 #include <memory>
 #include <seqan_api/SeqString.hpp>
-#include <seqan_api/SeqIndex.hpp>
+#include <seqan_api/SeqSuffixArray.hpp>
 
 class SeqFinder
 {
 	public:
-		SeqFinder(const SeqIndex& seq_index);
+		SeqFinder(const SeqSuffixArray& seq_SA);
 		bool find(const SeqString& seq);
 		unsigned long position() const;
 		void clear();
