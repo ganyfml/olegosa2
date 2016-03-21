@@ -6,9 +6,9 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	SeqString index(string("ATGCAT"));
-	SeqIndex seq_index(index);
-	SeqFinder finder(seq_index);
+	SeqString ref(string("ATGCAT"));
+	SeqSuffixArray seq_SA(ref);
+	SeqFinder finder(seq_SA);
 	SeqString query_seq((string("A")));
 
 	finder.clear();
