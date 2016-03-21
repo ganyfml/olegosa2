@@ -1,4 +1,5 @@
 // vim: set noexpandtab tabstop=2:
+
 #include <seqan/index.h>
 #include <seqan_api/SeqanAPIUtil.hpp>
 #include <SeqSuffixArrayIterator.hpp>
@@ -13,10 +14,7 @@ inline T* voidPtr2TPtr(void* original_ptr)
 }
 
 SeqSuffixArrayIterator::SeqSuffixArrayIterator(const SeqSuffixArray& sa)
-{
-	Dna5SuffixArray* test = constVoid2localType<Dna5SuffixArray>(sa.get_pointer());
-	impl_ = new T(*test);
-}
+	: impl_(new T(*constVoid2localType<Dna5SuffixArray>(sa.get_pointer()))) {}
 
 SeqSuffixArrayIterator::~SeqSuffixArrayIterator()
 {
