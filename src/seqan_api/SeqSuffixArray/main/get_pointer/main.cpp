@@ -1,4 +1,5 @@
 // vim: set noexpandtab tabstop=2:
+
 #include "../../SeqSuffixArray.hpp"
 #include "seqan_api/SeqanAPIUtil.hpp"
 #include <seqan/index.h>
