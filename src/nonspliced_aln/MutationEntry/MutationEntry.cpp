@@ -32,7 +32,6 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 	}
 }
 
-
 void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt)
 {
 	if(state == State::STATE_I)
@@ -47,11 +46,11 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, a
 	if(state == State::STATE_M)
 	{
 		state = State::STATE_D;
-		++entry_with_insert.gap_mm.num_gapOpenRef;
+		++entry_with_insert.gap_mm.num_gapOpenQuery;
 	}
 	else
 	{
-		++entry_with_insert.gap_mm.num_gapExtRef;
+		++entry_with_insert.gap_mm.num_gapExtQuery;
 	}
 	mutation_queue.emplace(entry_with_insert);
 }
@@ -68,6 +67,7 @@ void MutationEntry::produceMismatch(std::queue<MutationEntry>& mutation_queue, a
 			MutationEntry entry_with_insert(*this);
 			entry_with_insert.state = State::STATE_M;
 			++entry_with_insert.gap_mm.num_mismatch;
+			++entry_with_insert.ref_pos;
 			mutation_queue.emplace(entry_with_insert);
 			seqan::goUp(ref_iter);
 		}
@@ -80,6 +80,7 @@ void MutationEntry::produceMatch(std::queue<MutationEntry>& mutation_queue, aln_
 	{
 		MutationEntry entry_with_insert(*this);
 		entry_with_insert.state = State::STATE_M;
+		++entry_with_insert.ref_pos;
 		mutation_queue.emplace(entry_with_insert);
 		seqan::goUp(ref_iter);
 	}
