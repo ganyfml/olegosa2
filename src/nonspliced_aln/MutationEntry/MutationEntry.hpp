@@ -29,8 +29,8 @@ class MutationEntry
 
 		void produceInsertion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
 		void produceDeletion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
-		void produceMismatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
-		void produceMatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
+		void produceMismatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt, char next_char);
+		void produceMatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt, char next_char);
 
 		//Public due to test purpose
 		State state;
