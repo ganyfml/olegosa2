@@ -15,10 +15,10 @@ inline T* voidPtr2TPtr(void* original_ptr)
 }
 
 SeqFinder::SeqFinder(const SeqSuffixArray& seq_SA)
-: impl_ (
-		new T(
-			*constVoid2localType<SeqanIndex>(seq_SA.get_pointer())
-			)
+	: impl_ (
+			new T(
+				*constVoid2localType<SeqanIndex>(seq_SA.get_pointer())
+			     )
 		) {}
 
 void SeqFinder::clear()

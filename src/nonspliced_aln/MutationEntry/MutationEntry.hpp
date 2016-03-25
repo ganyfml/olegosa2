@@ -25,7 +25,7 @@ class MutationEntry
 
 		MutationEntry(const MutationEntry& that)
 			: ref_pos(that.ref_pos), ref_iter(that.ref_iter), gap_mm(that.gap_mm)
-				, score(that.score), state(that.state) {}
+			  , score(that.score), state(that.state) {}
 
 		void produceInsertion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
 		void produceDeletion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);

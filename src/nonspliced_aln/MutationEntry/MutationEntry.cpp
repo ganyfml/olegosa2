@@ -38,7 +38,7 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, a
 		return;
 	if((state == State::STATE_D && gap_mm.num_gapExt() >= opt.max_gapExt)
 			||	(state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen)
-		)
+	  )
 		return;
 
 	MutationEntry entry_with_insert(*this);

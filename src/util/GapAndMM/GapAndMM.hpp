@@ -41,7 +41,7 @@ struct GapAndMM
 
 	int num_gapExt()
 	{
-	 return num_gapExtRef + num_gapExtQuery;	
+		return num_gapExtRef + num_gapExtQuery;	
 	}
 
 	int total_diff()

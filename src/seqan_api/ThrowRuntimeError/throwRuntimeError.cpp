@@ -5,13 +5,13 @@
 
 std::string throw_string(const char *pretty_function, const char *file, int line, const std::string &message)
 {
-  std::ostringstream oss;
-  oss << file << ": " << line << ": " << pretty_function;
-  if(message != "")
-  {
-    oss << ": " << message;
-  }
-  return oss.str();
+	std::ostringstream oss;
+	oss << file << ": " << line << ": " << pretty_function;
+	if(message != "")
+	{
+		oss << ": " << message;
+	}
+	return oss.str();
 }
 
 //}
