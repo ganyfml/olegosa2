@@ -8,7 +8,7 @@
 using namespace std;
 
 Ref::Ref(const SeqIndex& index)
-	:	search_finder_(SeqFinder(index)) {}
+	: search_finder_(SeqFinder(index)) {}
 
 bool Ref::contains(const SeqString& query)
 {
