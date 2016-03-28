@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#vim: set noexpandtab tabstop=2:
 
 while read -r f
 do

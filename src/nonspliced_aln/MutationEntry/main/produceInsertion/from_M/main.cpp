@@ -1,7 +1,8 @@
 // vim: set noexpandtab tabstop=2:
 
-#include "../../../../MutationEntry.hpp"
+#include <iostream>
 #include <queue>
+#include "../../../MutationEntry.hpp"
 
 using namespace seqan;
 using namespace std;
@@ -13,9 +14,17 @@ int main(int argc, char* argv[])
 	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
 
 	MutationEntry test(it);
-	test.state = MutationEntry::STATE_I;
+	test.state = MutationEntry::STATE_M;
 	std::queue<MutationEntry> mutation_queue;
-	aln_nonspliceOpt opt;
+	alnNonspliceOpt opt;
 	test.produceInsertion(mutation_queue, opt);
-	cout << mutation_queue.size() << endl;
+
+	int queue_size = mutation_queue.size();
+	cout << queue_size << endl;
+	for(int i = 0; i < queue_size; ++i)
+	{
+		mutation_queue.front().display();	
+		mutation_queue.pop();
+		printf("\n\n");
+	}
 }

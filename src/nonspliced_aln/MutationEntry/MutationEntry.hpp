@@ -3,6 +3,7 @@
 #pragma once
 
 #include <queue>
+#include <iostream>
 #include <seqan/index.h>
 #include <seqan_api/SeqString.hpp>
 #include <util/GapAndMM.hpp>
@@ -27,10 +28,17 @@ class MutationEntry
 			: ref_pos(that.ref_pos), ref_iter(that.ref_iter), gap_mm(that.gap_mm)
 			  , score(that.score), state(that.state) {}
 
-		void produceInsertion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
-		void produceDeletion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt);
-		void produceMismatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt, char next_char);
-		void produceMatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt, char next_char);
+		unsigned long get_ref_pos() const { return ref_pos; }
+		void produceInsertion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt);
+		void produceDeletion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt);
+		void produceMismatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char);
+		void produceMatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char);
+		void display()
+		{
+			printf("Mutation Entry state: %d with ref_pos %ld\n", state, ref_pos);
+			std::cout << "Seq: " << representative(ref_iter) << std::endl;
+			gap_mm.display();
+		}
 
 		//Public due to test purpose
 		State state;

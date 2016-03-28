@@ -1,3 +1,5 @@
+// vim: set noexpandtab tabstop=2:
+
 struct alnNonspliceOpt
 {
 	int score_mismatch = 1;

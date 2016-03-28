@@ -1,10 +1,9 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <MutationEntry.hpp>
-
 using namespace seqan;
 
-void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt)
+void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
 	if(state == State::STATE_D)
 		return;
@@ -19,7 +18,7 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 			MutationEntry entry_with_insert(*this);
 			if(state == State::STATE_M)
 			{
-				state = State::STATE_I;
+				entry_with_insert.state = State::STATE_I;
 				++entry_with_insert.gap_mm.num_gapOpenRef;
 			}
 			else
@@ -32,7 +31,7 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 	}
 }
 
-void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt)
+void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
 	if(state == State::STATE_I)
 		return;
@@ -45,7 +44,7 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, a
 	++entry_with_insert.ref_pos;
 	if(state == State::STATE_M)
 	{
-		state = State::STATE_D;
+		entry_with_insert.state = State::STATE_D;
 		++entry_with_insert.gap_mm.num_gapOpenQuery;
 	}
 	else
@@ -55,7 +54,7 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, a
 	mutation_queue.emplace(entry_with_insert);
 }
 
-void MutationEntry::produceMismatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt, char next_char)
+void MutationEntry::produceMismatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
 {
 	if(gap_mm.num_mismatch >= opt.max_mismatch)
 		return;
@@ -74,7 +73,7 @@ void MutationEntry::produceMismatch(std::queue<MutationEntry>& mutation_queue, a
 	}
 }
 
-void MutationEntry::produceMatch(std::queue<MutationEntry>& mutation_queue, aln_nonspliceOpt opt, char next_char)
+void MutationEntry::produceMatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
 {
 	if(seqan::goDown(ref_iter, next_char))
 	{

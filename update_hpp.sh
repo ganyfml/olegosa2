@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# vim: set noexpandtab tabstop=2:
 
 target_dir=include
 rm -rf "$target_dir"
