@@ -6,7 +6,7 @@
 #include <seqan/index.h>
 #include <seqan_api/SeqString.hpp>
 #include <util/GapAndMM.hpp>
-#include <nonspliced_aln/aln_nonspliceOpt.hpp>
+#include <nonspliced_aln/alnNonspliceOpt.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
@@ -41,4 +41,3 @@ class MutationEntry
 		int score;
 		GapAndMM gap_mm;
 };
-

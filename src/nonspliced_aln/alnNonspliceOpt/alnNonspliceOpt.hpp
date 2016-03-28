@@ -1,4 +1,4 @@
-struct aln_nonspliceOpt
+struct alnNonspliceOpt
 {
 	int score_mismatch = 1;
 	int score_gapOpen = 1;

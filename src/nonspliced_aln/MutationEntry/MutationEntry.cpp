@@ -9,7 +9,7 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 	if(state == State::STATE_D)
 		return;
 	if((state == State::STATE_I && gap_mm.num_gapExt() >= opt.max_gapExt)
-			||	(state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen))
+			|| (state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen))
 		return;
 
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
@@ -37,7 +37,7 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, a
 	if(state == State::STATE_I)
 		return;
 	if((state == State::STATE_D && gap_mm.num_gapExt() >= opt.max_gapExt)
-			||	(state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen)
+			|| (state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen)
 	  )
 		return;
 
