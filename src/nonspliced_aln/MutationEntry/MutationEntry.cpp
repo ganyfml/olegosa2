@@ -29,8 +29,8 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 				{
 					++entry_with_insert.gap_mm.num_gapExtRef;
 				}
-				printf("offset: %lu\n", entry_with_insert.pos_offset);
 				mutation_queue.emplace(entry_with_insert);
+
 				seqan::goUp(ref_iter);
 			}
 		}
