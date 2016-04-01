@@ -35,7 +35,8 @@ class MutationEntry
 		void produceMatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char);
 		void display()
 		{
-			printf("Mutation Entry state: %d with ref_pos %ld\n", state, ref_pos);
+			const char stateName[] = {'M', 'I', 'D'};
+			printf("Mutation Entry state: %c with ref_pos %lu, pos_offset %lu\n", stateName[state], ref_pos, pos_offset);
 			std::cout << "Seq: " << representative(ref_iter) << std::endl;
 			gap_mm.display();
 		}
@@ -46,6 +47,7 @@ class MutationEntry
 	private:
 		SeqanSAIter ref_iter;
 		unsigned long ref_pos;
+		unsigned long pos_offset;
 		int score;
 		GapAndMM gap_mm;
 };
