@@ -22,11 +22,11 @@ class MutationEntry
 		};
 
 		MutationEntry(const SeqanSAIter& init_iter)
-			: ref_pos(0), ref_iter(init_iter), score(0), state(State::STATE_M) {}
+			: ref_pos(0), pos_offset(0), ref_iter(init_iter), score(0), state(State::STATE_M) {}
 
 		MutationEntry(const MutationEntry& that)
 			: ref_pos(that.ref_pos), ref_iter(that.ref_iter), gap_mm(that.gap_mm)
-			  , score(that.score), state(that.state) {}
+			  , score(that.score), state(that.state), pos_offset(that.pos_offset) {}
 
 		unsigned long get_ref_pos() const { return ref_pos; }
 		void produceInsertion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt);
@@ -35,7 +35,8 @@ class MutationEntry
 		void produceMatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char);
 		void display()
 		{
-			printf("Mutation Entry state: %d with ref_pos %ld\n", state, ref_pos);
+			const char stateName[] = {'M', 'I', 'D'};
+			printf("Mutation Entry state: %c with ref_pos %lu, pos_offset %lu\n", stateName[state], ref_pos, pos_offset);
 			std::cout << "Seq: " << representative(ref_iter) << std::endl;
 			gap_mm.display();
 		}
@@ -46,6 +47,7 @@ class MutationEntry
 	private:
 		SeqanSAIter ref_iter;
 		unsigned long ref_pos;
+		unsigned long pos_offset;
 		int score;
 		GapAndMM gap_mm;
 };
