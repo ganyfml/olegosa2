@@ -1,12 +1,13 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <MutationEntry.hpp>
+
 using namespace seqan;
 
 void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
-	if(state == State::STATE_D)
-		return;
+	if(state == State::STATE_D) return;
+
 	if((state == State::STATE_I && gap_mm.num_gapExt() >= opt.max_gapExt)
 			|| (state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen))
 		return;
@@ -57,8 +58,7 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 
 void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
-	if(state == State::STATE_I)
-		return;
+	if(state == State::STATE_I) return;
 	if((state == State::STATE_D && gap_mm.num_gapExt() >= opt.max_gapExt)
 			|| (state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen)
 		)
@@ -80,8 +80,7 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, c
 
 void MutationEntry::produceMismatch(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
 {
-	if(gap_mm.num_mismatch >= opt.max_mismatch)
-		return;
+	if(gap_mm.num_mismatch >= opt.max_mismatch) return;
 
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
 	{
