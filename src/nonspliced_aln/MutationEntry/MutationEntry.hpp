@@ -12,7 +12,7 @@
 class MutationEntry
 {
 	typedef seqan::Dna5String SeqanString;
-	typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
+	typedef seqan::Index<SeqanString, seqan::IndexWotd<>> SeqanSA;
 	typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 	public:
@@ -25,8 +25,7 @@ class MutationEntry
 		: ref_pos(0), pos_offset(0), ref_iter(init_iter), score(0), state(State::STATE_M) {}
 
 	MutationEntry(const MutationEntry& that)
-		: ref_pos(that.ref_pos), ref_iter(that.ref_iter), gap_mm(that.gap_mm)
-			, score(that.score), state(that.state), pos_offset(that.pos_offset) {}
+		: ref_pos(that.ref_pos), pos_offset(that.pos_offset), ref_iter(that.ref_iter), score(that.score), state(that.state) {}
 
 	unsigned long get_ref_pos() const { return ref_pos; }
 	void produceInsertion(std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt);
@@ -41,7 +40,6 @@ class MutationEntry
 		std::cout << "Seq: " << representative(ref_iter) << std::endl;
 		gap_mm.display();
 	}
-
 
 	//Public due to test purpose
 	State state;

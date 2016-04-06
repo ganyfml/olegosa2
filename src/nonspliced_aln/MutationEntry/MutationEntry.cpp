@@ -1,6 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <MutationEntry.hpp>
+#include <iostream>
 
 using namespace seqan;
 
@@ -17,6 +18,12 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 		unsigned long ref_iter_seq_length = length(representative(ref_iter));
 		if(pos_offset == 0)
 		{
+
+			std::cout << range(ref_iter).i1 << ", " << range(ref_iter).i2 << std::endl;
+			std::cout << "Get here!" << std::endl;
+			seqan::goDown(ref_iter, 'C');
+			std::cout << "Get here!" << std::endl;
+
 			if(seqan::goDown(ref_iter, char_to_insert))
 			{
 				MutationEntry entry_with_insert(*this);

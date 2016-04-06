@@ -16,4 +16,3 @@ class SeqSuffixArray
 	private:
 		void* impl_;
 };
-

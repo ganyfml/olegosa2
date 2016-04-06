@@ -6,7 +6,7 @@
 #include <seqan/seq_io.h>
 
 typedef seqan::Dna5String SeqanString;
-typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
+typedef seqan::Index<SeqanString, seqan::IndexWotd<>> T;
 
 using namespace std;
 
