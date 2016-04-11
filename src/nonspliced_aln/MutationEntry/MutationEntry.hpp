@@ -19,15 +19,12 @@ struct MutationEntry
 	typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 	typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-	public:
 	MutationEntry(const SeqanSAIter& init_iter)
 		: ref_pos(0), pos_offset(0), ref_iter(init_iter), score(0), state(State::STATE_M) {}
 
 	MutationEntry(const MutationEntry& that)
 		: ref_pos(that.ref_pos), pos_offset(that.pos_offset), ref_iter(that.ref_iter), score(that.score), state(that.state), gap_mm(that.gap_mm) {}
 
-	unsigned long get_ref_pos() const { return ref_pos; }
-	unsigned long get_pos_offset() const { return pos_offset; }
 	SeqanString get_seq() const { return seqan::representative(ref_iter); }
 	void display()
 	{
@@ -37,10 +34,7 @@ struct MutationEntry
 		gap_mm.display();
 	}
 
-	//Public due to test purpose
 	State state;
-
-	private:
 	SeqanSAIter ref_iter;
 	unsigned long ref_pos;
 	unsigned long pos_offset;

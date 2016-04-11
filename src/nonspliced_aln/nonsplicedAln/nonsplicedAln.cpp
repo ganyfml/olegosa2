@@ -9,11 +9,6 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-enum State
-{
-	STATE_M = 0, STATE_I = 1, STATE_D = 2
-};
-
 void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
 	if(origin.state == State::STATE_D) return;
@@ -48,9 +43,9 @@ void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mu
 		}
 		else
 		{
-			if(representative(origin.ref_iter)[ref_iter_seq_length - pos_offset] == char_to_insert)
+			if(representative(origin.ref_iter)[ref_iter_seq_length - origin.pos_offset] == char_to_insert)
 			{
-				MutationEntry entry_with_insert(*this);
+				MutationEntry entry_with_insert(origin);
 				--entry_with_insert.pos_offset;
 				if(origin.state == State::STATE_M)
 				{
@@ -70,12 +65,12 @@ void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mu
 void produceDeletion(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
 	if(origin.state == State::STATE_I) return;
-	if((origin.state == State::STATE_D && gap_mm.num_gapExt() >= opt.max_gapExt)
-			|| (origin.state == State::STATE_M && gap_mm.num_gapOpen() >= opt.max_gapOpen)
+	if((origin.state == State::STATE_D && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
+			|| (origin.state == State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen)
 		)
 		return;
 
-	MutationEntry entry_with_del(*this);
+	MutationEntry entry_with_del(origin);
 	++entry_with_del.ref_pos;
 	if(origin.state == State::STATE_M)
 	{
@@ -114,7 +109,7 @@ void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mut
 			}
 			else
 			{
-				if(representative(ref_iter)[ref_iter_seq_length - pos_offset] == char_to_insert)
+				if(representative(ref_iter)[ref_iter_seq_length - origin.pos_offset] == char_to_insert)
 				{
 					MutationEntry entry_with_insert(origin);
 					--entry_with_insert.pos_offset;
@@ -146,7 +141,7 @@ void produceMatch(const MutationEntry& origin, std::queue<MutationEntry>& mutati
 	}
 	else
 	{
-		if(representative(ref_iter)[ref_iter_seq_length - pos_offset] == next_char)
+		if(representative(ref_iter)[ref_iter_seq_length - origin.pos_offset] == next_char)
 		{
 			MutationEntry entry_with_insert(origin);
 			--entry_with_insert.pos_offset;
@@ -174,27 +169,27 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 		MutationEntry entry = mutation_queue.front();
 		mutation_queue.pop();
 		//If the potential has been found
-		if(entry.get_ref_pos() == query.get_length())
+		if(entry.ref_pos == query.get_length())
 		{
 			//Debug
 			using namespace std;
 			auto result = entry.get_seq();
-			cout << prefix(result, length(result) - entry.get_pos_offset()) << endl;
+			cout << prefix(result, length(result) - entry.pos_offset) << endl;
 			//End
 		}
 		else
 		{
 			//deal with inseration, deletion, mismatch, and match
-			if(entry.get_ref_pos() != 0)
+			if(entry.ref_pos != 0)
 			{
-				entry.produceInsertion(mutation_queue, opt);
+				produceInsertion(entry, mutation_queue, opt);
 			}
 
-			entry.produceDeletion(mutation_queue, opt);
+			produceDeletion(entry, mutation_queue, opt);
 
-			entry.produceMismatch(mutation_queue, opt, query[entry.get_ref_pos()]);
+			produceMismatch(entry, mutation_queue, opt, query[entry.ref_pos]);
 
-			entry.produceMatch(mutation_queue, opt, query[entry.get_ref_pos()]);
+			produceMatch(entry, mutation_queue, opt, query[entry.ref_pos]);
 		}
 	}
 }

@@ -34,22 +34,22 @@ struct GapAndMM
 		return *this;
 	}
 
-	int num_gapOpen()
+	int num_gapOpen() const
 	{
 		return num_gapOpenRef + num_gapOpenQuery;
 	}
 
-	int num_gapExt()
+	int num_gapExt() const
 	{
 		return num_gapExtRef + num_gapExtQuery;	
 	}
 
-	int total_diff()
+	int total_diff() const
 	{
 		return num_mismatch + num_gapExtRef + num_gapOpenRef + num_gapExtQuery + num_gapOpenQuery;
 	}
 
-	void display()
+	void display() const
 	{
 		std::cout << "Mismatch: " << num_mismatch << std::endl;
 		std::cout << " Ref  Open: " << num_gapOpenRef   << ", Ext: " << num_gapExtRef << std::endl;
