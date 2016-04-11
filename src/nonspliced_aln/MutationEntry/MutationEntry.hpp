@@ -16,11 +16,6 @@ class MutationEntry
 	typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 	public:
-	enum State
-	{
-		STATE_M = 0, STATE_I = 1, STATE_D = 2
-	};
-
 	MutationEntry(const SeqanSAIter& init_iter)
 		: ref_pos(0), pos_offset(0), ref_iter(init_iter), score(0), state(State::STATE_M) {}
 
