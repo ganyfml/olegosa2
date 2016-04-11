@@ -5,7 +5,7 @@
 #include <SeqSuffixArrayIterator.hpp>
 
 typedef seqan::Dna5String SeqanString;
-typedef seqan::Index<SeqanString, seqan::IndexWotd<>> Dna5SuffixArray;
+typedef seqan::Index<SeqanString, seqan::IndexEsa<>> Dna5SuffixArray;
 typedef seqan::Iterator<Dna5SuffixArray, seqan::TopDown<>>::Type T;
 
 inline T* voidPtr2TPtr(void* original_ptr)

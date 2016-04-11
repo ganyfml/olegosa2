@@ -8,7 +8,7 @@
 using seqan::toCString;
 
 typedef seqan::Dna5String SeqanString;
-typedef seqan::Index<SeqanString, seqan::IndexWotd<>> T;
+typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 inline T* voidPtr2TPtr(void* original_ptr)
 {
@@ -18,7 +18,7 @@ inline T* voidPtr2TPtr(void* original_ptr)
 SeqSuffixArray::SeqSuffixArray(const SeqString& seq)
 {
 	impl_ = new T(*constVoid2localType<SeqanString>(seq.get_pointer()));
-	if(!indexCreate(*voidPtr2TPtr(impl_), seqan::WotdDir())) 
+	if(!indexCreate((*voidPtr2TPtr(impl_)), seqan::EsaChildtab())) 
 	{
 		THROW_RUNTIME_ERROR_MSG("Index Create Failed");
 	}

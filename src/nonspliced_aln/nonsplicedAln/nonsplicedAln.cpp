@@ -5,10 +5,12 @@
 #include <nonspliced_aln/MutationEntry.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
 
+//Debug
 #include <iostream>
+//End
 
 typedef seqan::Dna5String SeqanString;
-typedef seqan::Index<SeqanString, seqan::IndexWotd<>> SeqanSA;
+typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
@@ -30,7 +32,11 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 		//If the potential has been found
 		if(entry.get_ref_pos() == query.get_length())
 		{
-			std::cout << entry.get_seq() << std::endl;
+			//Debug
+			using namespace std;
+			auto result = entry.get_seq();
+			cout << prefix(result, length(result) - entry.get_pos_offset()) << endl;
+			//End
 		}
 		else
 		{

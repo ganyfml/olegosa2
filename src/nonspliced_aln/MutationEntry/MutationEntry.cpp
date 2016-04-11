@@ -18,12 +18,6 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 		unsigned long ref_iter_seq_length = length(representative(ref_iter));
 		if(pos_offset == 0)
 		{
-
-			std::cout << range(ref_iter).i1 << ", " << range(ref_iter).i2 << std::endl;
-			std::cout << "Get here!" << std::endl;
-			seqan::goDown(ref_iter, 'C');
-			std::cout << "Get here!" << std::endl;
-
 			if(seqan::goDown(ref_iter, char_to_insert))
 			{
 				MutationEntry entry_with_insert(*this);
@@ -37,6 +31,7 @@ void MutationEntry::produceInsertion(std::queue<MutationEntry>& mutation_queue, 
 				{
 					++entry_with_insert.gap_mm.num_gapExtRef;
 				}
+
 				mutation_queue.emplace(entry_with_insert);
 
 				seqan::goUp(ref_iter);
@@ -82,6 +77,7 @@ void MutationEntry::produceDeletion(std::queue<MutationEntry>& mutation_queue, c
 	{
 		++entry_with_del.gap_mm.num_gapExtQuery;
 	}
+
 	mutation_queue.emplace(entry_with_del);
 }
 
@@ -103,6 +99,7 @@ void MutationEntry::produceMismatch(std::queue<MutationEntry>& mutation_queue, c
 					entry_with_insert.state = State::STATE_M;
 					++entry_with_insert.gap_mm.num_mismatch;
 					++entry_with_insert.ref_pos;
+
 					mutation_queue.emplace(entry_with_insert);
 					seqan::goUp(ref_iter);
 				}
