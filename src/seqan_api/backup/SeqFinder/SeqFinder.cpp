@@ -6,7 +6,7 @@
 #include <seqan_api/SeqFinder.hpp>
 
 typedef seqan::Dna5String SeqanString;
-typedef seqan::Index<SeqanString, seqan::IndexWotd<>> SeqanIndex;
+typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanIndex;
 typedef seqan::Finder<SeqanIndex> T;
 
 inline T* voidPtr2TPtr(void* original_ptr)

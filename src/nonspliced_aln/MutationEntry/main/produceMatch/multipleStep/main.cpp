@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	typedef Index<Dna5String, seqan::IndexWotd<>> Dna5Index;
+	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index index((Dna5String(argv[1])));
 	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
 
