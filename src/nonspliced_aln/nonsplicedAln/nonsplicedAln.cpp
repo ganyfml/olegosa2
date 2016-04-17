@@ -11,33 +11,34 @@ typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type Seq
 
 void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
-	if(origin.state == State::STATE_D) return;
+	if(origin.state == MutationEntry::State::STATE_D) return;
 
-	if((origin.state == State::STATE_I && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
-			|| (origin.state == State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen))
+	if((origin.state == MutationEntry::State::STATE_I && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
+			|| (origin.state == MutationEntry::State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen))
 		return;
 
 	SeqanSAIter ref_iter = origin.ref_iter;	
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
 	{
+		MutationEntry entry_with_insert(origin);
+		if(origin.state == MutationEntry::State::STATE_M)
+		{
+			entry_with_insert.state = MutationEntry::State::STATE_I;
+			++entry_with_insert.gap_mm.num_gapOpenRef;
+		}
+		else
+		{
+			++entry_with_insert.gap_mm.num_gapExtRef;
+		}
+
 		unsigned long ref_iter_seq_length = length(representative(ref_iter));
 		if(origin.pos_offset == 0)
 		{
 			if(seqan::goDown(ref_iter, char_to_insert))
 			{
-				MutationEntry entry_with_insert(origin);
 				entry_with_insert.pos_offset = length(representative(ref_iter)) - ref_iter_seq_length - 1;
-				if(origin.state == State::STATE_M)
-				{
-					entry_with_insert.state = State::STATE_I;
-					++entry_with_insert.gap_mm.num_gapOpenRef;
-				}
-				else
-				{
-					++entry_with_insert.gap_mm.num_gapExtRef;
-				}
+				entry_with_insert.ref_iter = ref_iter;
 				mutation_queue.emplace(entry_with_insert);
-
 				seqan::goUp(ref_iter);
 			}
 		}
@@ -45,17 +46,8 @@ void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mu
 		{
 			if(representative(origin.ref_iter)[ref_iter_seq_length - origin.pos_offset] == char_to_insert)
 			{
-				MutationEntry entry_with_insert(origin);
+				entry_with_insert.ref_iter = ref_iter;
 				--entry_with_insert.pos_offset;
-				if(origin.state == State::STATE_M)
-				{
-					entry_with_insert.state = State::STATE_I;
-					++entry_with_insert.gap_mm.num_gapOpenRef;
-				}
-				else
-				{
-					++entry_with_insert.gap_mm.num_gapExtRef;
-				}
 				mutation_queue.emplace(entry_with_insert);
 			}
 		}
@@ -64,17 +56,17 @@ void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mu
 
 void produceDeletion(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
-	if(origin.state == State::STATE_I) return;
-	if((origin.state == State::STATE_D && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
-			|| (origin.state == State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen)
+	if(origin.state == MutationEntry::State::STATE_I) return;
+	if((origin.state == MutationEntry::State::STATE_D && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
+			|| (origin.state == MutationEntry::State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen)
 		)
 		return;
 
 	MutationEntry entry_with_del(origin);
 	++entry_with_del.ref_pos;
-	if(origin.state == State::STATE_M)
+	if(origin.state == MutationEntry::State::STATE_M)
 	{
-		entry_with_del.state = State::STATE_D;
+		entry_with_del.state = MutationEntry::State::STATE_D;
 		++entry_with_del.gap_mm.num_gapOpenQuery;
 	}
 	else
@@ -89,20 +81,23 @@ void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mut
 	if(origin.gap_mm.num_mismatch >= opt.max_mismatch) return;
 
 	SeqanSAIter ref_iter = origin.ref_iter;	
+
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
 	{
 		unsigned long ref_iter_seq_length = length(representative(ref_iter));
 		if(char_to_insert != next_char)
 		{
+			MutationEntry entry_with_insert(origin);
+			entry_with_insert.state = MutationEntry::State::STATE_M;
+			++entry_with_insert.gap_mm.num_mismatch;
+			++entry_with_insert.ref_pos;
+
 			if(origin.pos_offset == 0)
 			{
 				if(seqan::goDown(ref_iter, char_to_insert))
 				{
-					MutationEntry entry_with_insert(origin);
+					entry_with_insert.ref_iter = ref_iter;
 					entry_with_insert.pos_offset = length(representative(ref_iter)) - ref_iter_seq_length - 1;
-					entry_with_insert.state = State::STATE_M;
-					++entry_with_insert.gap_mm.num_mismatch;
-					++entry_with_insert.ref_pos;
 					mutation_queue.emplace(entry_with_insert);
 					seqan::goUp(ref_iter);
 				}
@@ -111,11 +106,8 @@ void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mut
 			{
 				if(representative(ref_iter)[ref_iter_seq_length - origin.pos_offset] == char_to_insert)
 				{
-					MutationEntry entry_with_insert(origin);
+					entry_with_insert.ref_iter = ref_iter;
 					--entry_with_insert.pos_offset;
-					entry_with_insert.state = State::STATE_M;
-					++entry_with_insert.gap_mm.num_mismatch;
-					++entry_with_insert.ref_pos;
 					mutation_queue.emplace(entry_with_insert);
 				}
 			}
@@ -127,14 +119,15 @@ void produceMatch(const MutationEntry& origin, std::queue<MutationEntry>& mutati
 {
 	SeqanSAIter ref_iter = origin.ref_iter;
 	unsigned long ref_iter_seq_length = length(representative(ref_iter));
+
+	MutationEntry entry_with_insert(origin);
+	++entry_with_insert.ref_pos;
 	if(origin.pos_offset == 0)
 	{
 		if(seqan::goDown(ref_iter, next_char))
 		{
-			MutationEntry entry_with_insert(origin);
 			entry_with_insert.pos_offset = length(representative(ref_iter)) - ref_iter_seq_length - 1;
-			entry_with_insert.state = State::STATE_M;
-			++entry_with_insert.ref_pos;
+			entry_with_insert.state = MutationEntry::State::STATE_M;
 			mutation_queue.emplace(entry_with_insert);
 			seqan::goUp(ref_iter);
 		}
@@ -143,10 +136,8 @@ void produceMatch(const MutationEntry& origin, std::queue<MutationEntry>& mutati
 	{
 		if(representative(ref_iter)[ref_iter_seq_length - origin.pos_offset] == next_char)
 		{
-			MutationEntry entry_with_insert(origin);
 			--entry_with_insert.pos_offset;
-			entry_with_insert.state = State::STATE_M;
-			++entry_with_insert.ref_pos;
+			entry_with_insert.state = MutationEntry::State::STATE_M;
 			mutation_queue.emplace(entry_with_insert);	
 		}
 	}
@@ -173,7 +164,7 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 		{
 			//Debug
 			using namespace std;
-			auto result = entry.get_seq();
+			auto result = seqan::representative(entry);
 			cout << prefix(result, length(result) - entry.pos_offset) << endl;
 			//End
 		}

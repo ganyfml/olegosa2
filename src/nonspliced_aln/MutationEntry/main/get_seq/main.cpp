@@ -14,10 +14,8 @@ int main(int argc, char* argv[])
 	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
 
 	MutationEntry test(it);
-	test.state = MutationEntry::STATE_M;
-	std::queue<MutationEntry> mutation_queue;
-	alnNonspliceOpt opt;
-	test.produceInsertion(mutation_queue, opt);
 
-	cout << mutation_queue.front().get_seq() << endl;
+	cout << "empty seq: " << test.get_seq() << endl;
+	goDown(test.ref_iter, 'A');
+	cout << "nonEmpty seq: "<< test.get_seq() << endl;
 }
