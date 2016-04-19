@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	produceDeletion(test, mutation_queue, opt);
 
 	int queue_size = mutation_queue.size();
-	cout << "Num of new Entry: " << queue_size << endl;
+	cout << "\n\n\nNum of new Entry: " << queue_size << endl;
 	for(int i = 0; i < queue_size; ++i)
 	{
 		mutation_queue.front().display();	

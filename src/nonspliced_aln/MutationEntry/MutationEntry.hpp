@@ -20,25 +20,24 @@ struct MutationEntry
 	typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 	MutationEntry(const SeqanSAIter& init_iter)
-		: ref_pos(0), pos_offset(0), ref_iter(init_iter), score(0), state(State::STATE_M) {}
+		: query_pos(0), extra_step(0), ref_iter(init_iter), state(State::STATE_M) {}
 
 	MutationEntry(const MutationEntry& that)
-		: ref_pos(that.ref_pos), pos_offset(that.pos_offset), ref_iter(that.ref_iter), score(that.score), state(that.state), gap_mm(that.gap_mm) {}
+		: query_pos(that.query_pos), extra_step(that.extra_step), ref_iter(that.ref_iter), state(that.state), gap_mm(that.gap_mm) {}
 
 	SeqanString get_seq() const { return seqan::representative(ref_iter); }
 
 	void display()
 	{
 		const char stateName[] = {'M', 'I', 'D'};
-		printf("Mutation Entry state: %c with ref_pos %lu, pos_offset %lu\n", stateName[state], ref_pos, pos_offset);
+		printf("Mutation Entry state: %c with query_pos %lu, extra_step %lu\n", stateName[state], query_pos, extra_step);
 		std::cout << "Seq: " << representative(ref_iter) << std::endl;
 		gap_mm.display();
 	}
 
 	State state;
 	SeqanSAIter ref_iter;
-	unsigned long ref_pos;
-	unsigned long pos_offset;
-	int score;
+	unsigned long query_pos;
+	unsigned long extra_step;
 	GapAndMM gap_mm;
 };

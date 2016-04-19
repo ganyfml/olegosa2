@@ -2,5 +2,5 @@
 #vim: set noexpandtab tabstop=2:
 
 set -v
-ref=ATGC
+ref=ATCG
 ./main.exe "$ref"

@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	std::queue<MutationEntry> mutation_queue;
 	alnNonspliceOpt opt;
 
-	produceInsertion(test, mutation_queue, opt);
+	produceDeletion(test, mutation_queue, opt);
 
 	int queue_size = mutation_queue.size();
 	cout << "Num of new Entry: " << queue_size << endl;
