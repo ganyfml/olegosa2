@@ -4,7 +4,7 @@
 #include <iostream>
 #include <queue>
 #include <cstdlib>
-#include "../nonsplicedAln.hpp"
+#include "../../nonsplicedAln.hpp"
 
 using namespace std;
 
