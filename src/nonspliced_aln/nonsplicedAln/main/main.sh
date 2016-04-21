@@ -6,10 +6,11 @@ gap_open=0
 gap_ext=0
 gap_mm=0
 ref=AG
-query=AT
+query=AG
 ./main.exe "$ref" "$query" "$gap_ext" "$gap_open" "$gap_mm"
 
 gap_mm=1
+query=AT
 ./main.exe "$ref" "$query" "$gap_ext" "$gap_open" "$gap_mm"
 
 gap_open=1

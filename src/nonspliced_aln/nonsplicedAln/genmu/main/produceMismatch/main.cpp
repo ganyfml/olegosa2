@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	std::queue<MutationEntry> mutation_queue;
 	alnNonspliceOpt opt;
 	opt.max_mismatch = 1;
-	SeqString query_seq(string("ATGC"));
+	SeqString query_seq(argv[2]);
 	char next_char = query_seq[test.query_pos];
 	produceMismatch(test, mutation_queue, opt, next_char);
 

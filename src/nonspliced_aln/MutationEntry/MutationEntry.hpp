@@ -29,8 +29,8 @@ struct MutationEntry
 
 	void display()
 	{
-		const char stateName[] = {'M', 'I', 'D'};
-		printf("Mutation Entry state: %c with query_pos %lu, extra_step %lu\n", stateName[state], query_pos, extra_step);
+		const char* stateName[] = {"STATE_M", "STATE_I", "STATE_D"};
+		printf("Mutation Entry state: %s with query_pos %lu, extra_step %lu\n", stateName[state], query_pos, extra_step);
 		std::cout << "Seq: " << representative(ref_iter) << std::endl;
 		gap_mm.display();
 	}

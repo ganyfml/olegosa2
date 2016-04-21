@@ -59,7 +59,7 @@ void produceDeletion(const MutationEntry& origin, std::queue<MutationEntry>& mut
 	if(origin.state == MutationEntry::State::STATE_I) return;
 	if((origin.state == MutationEntry::State::STATE_D && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
 			|| (origin.state == MutationEntry::State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen)
-		)
+	  )
 		return;
 
 	MutationEntry entry_with_del(origin);

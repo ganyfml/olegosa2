@@ -5,6 +5,7 @@
 #include <nonspliced_aln/MutationEntry.hpp>
 #include <nonspliced_aln/genmu.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
+#include <seqan_api/SeqSuffixArray_conv.hpp>
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
@@ -13,7 +14,7 @@ typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type Seq
 void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
 {
 	//Change query and ref_SAIndex back to seqan type
-	SeqanSA sa_ref = *constVoid2localType<SeqanSA>(ref_SAIndex.get_pointer());
+	SeqanSA sa_ref = *conv_back(ref_SAIndex);
 	SeqanSAIter init_iter(sa_ref);
 
 	//Init start
