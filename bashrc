@@ -12,5 +12,3 @@ then
 else
   export LIBRARY_PATH="$(dirname $(readlink -f -e "${BASH_SOURCE[0]}"))/gtestbuild"
 fi
-
-
