@@ -20,10 +20,10 @@ struct MutationEntry
 	typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 	MutationEntry(const SeqanSAIter& init_iter)
-		: query_pos(0), extra_step(0), ref_iter(init_iter), state(State::STATE_M) {}
+		: query_pos(0), extra_step(0), ref_iter(init_iter), state(State::STATE_M), gap_mm(GapAndMM()) {}
 
 	MutationEntry()
-		: query_pos(0), extra_step(0), ref_iter(SeqanSAIter()), state(State::STATE_M) {}
+		: query_pos(0), extra_step(0), ref_iter(SeqanSAIter()), state(State::STATE_M), gap_mm(GapAndMM()) {}
 
 	MutationEntry(const MutationEntry& that)
 		: query_pos(that.query_pos), extra_step(that.extra_step), ref_iter(that.ref_iter), state(that.state), gap_mm(that.gap_mm) {}
@@ -39,6 +39,7 @@ struct MutationEntry
 	}
 
 	bool produceMatchEntry(MutationEntry& new_entry, char match_char) const;
+	bool produceDeletionEntry(MutationEntry& new_entry, const alnNonspliceOpt& opt) const;
 
 	State state;
 	SeqanSAIter ref_iter;

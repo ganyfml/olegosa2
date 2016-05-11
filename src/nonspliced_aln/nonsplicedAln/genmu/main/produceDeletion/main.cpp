@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
 
 	std::queue<MutationEntry> mutation_queue;
 	alnNonspliceOpt opt;
+	opt.max_gapOpen = 1;
 
 	produceDeletion(test, mutation_queue, opt);
 

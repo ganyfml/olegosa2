@@ -56,24 +56,9 @@ void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mu
 
 void produceDeletion(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
-	if(origin.state == MutationEntry::State::STATE_I) return;
-	if((origin.state == MutationEntry::State::STATE_D && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
-			|| (origin.state == MutationEntry::State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen)
-		)
-		return;
-
-	MutationEntry entry_with_del(origin);
-	++entry_with_del.query_pos;
-	if(origin.state == MutationEntry::State::STATE_M)
-	{
-		entry_with_del.state = MutationEntry::State::STATE_D;
-		++entry_with_del.gap_mm.num_gapOpenQuery;
-	}
-	else
-	{
-		++entry_with_del.gap_mm.num_gapExtQuery;
-	}
-	mutation_queue.emplace(entry_with_del);
+	MutationEntry entry_with_del;
+	if(origin.produceDeletionEntry(entry_with_del, opt))
+		mutation_queue.emplace(entry_with_del);
 }
 
 void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
