@@ -15,10 +15,9 @@ int main(int argc, char* argv[])
 
 	MutationEntry test(it);
 	std::queue<MutationEntry> mutation_queue;
-	alnNonspliceOpt opt;
 	SeqString query_seq(string("ATGC"));
 	char next_char = query_seq[test.query_pos];
-	produceMatch(test, mutation_queue, opt, next_char);
+	produceMatch(test, mutation_queue, next_char);
 
 	int queue_size = mutation_queue.size();
 	cout << queue_size << endl;

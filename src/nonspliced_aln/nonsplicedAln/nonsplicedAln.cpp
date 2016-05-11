@@ -47,7 +47,7 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 
 			produceMismatch(entry, mutation_queue, opt, query[entry.query_pos]);
 
-			produceMatch(entry, mutation_queue, opt, query[entry.query_pos]);
+			produceMatch(entry, mutation_queue, query[entry.query_pos]);
 		}
 	}
 }

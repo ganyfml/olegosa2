@@ -14,14 +14,18 @@ int main(int argc, char* argv[])
 	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
 
 	MutationEntry test(it);
-	test.state = MutationEntry::STATE_M;
+	test.state = MutationEntry::STATE_D;
+	printf("Original entry: \n");
+	test.display();
+	printf("\n");
+
 	std::queue<MutationEntry> mutation_queue;
-	SeqString query_seq(string("ATGC"));
-	char next_char = query_seq[test.query_pos];
-	produceMatch(test, mutation_queue, next_char);
+	alnNonspliceOpt opt;
+
+	produceInsertion(test, mutation_queue, opt);
 
 	int queue_size = mutation_queue.size();
-	cout << queue_size << endl;
+	cout << "\n\n\nNum of new Entry: " << queue_size << endl;
 	for(int i = 0; i < queue_size; ++i)
 	{
 		mutation_queue.front().display();	

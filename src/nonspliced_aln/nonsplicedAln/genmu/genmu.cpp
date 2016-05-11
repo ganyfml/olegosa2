@@ -59,7 +59,7 @@ void produceDeletion(const MutationEntry& origin, std::queue<MutationEntry>& mut
 	if(origin.state == MutationEntry::State::STATE_I) return;
 	if((origin.state == MutationEntry::State::STATE_D && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
 			|| (origin.state == MutationEntry::State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen)
-	  )
+		)
 		return;
 
 	MutationEntry entry_with_del(origin);
@@ -82,9 +82,9 @@ void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mut
 
 	SeqanSAIter ref_iter = origin.ref_iter;	
 
+	unsigned long ref_iter_seq_length = length(representative(ref_iter));
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
 	{
-		unsigned long ref_iter_seq_length = length(representative(ref_iter));
 		if(char_to_insert != next_char)
 		{
 			MutationEntry entry_with_insert(origin);
@@ -115,31 +115,9 @@ void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mut
 	}
 }
 
-void produceMatch(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
+void produceMatch(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, char next_char)
 {
-	SeqanSAIter ref_iter = origin.ref_iter;
-	unsigned long ref_iter_seq_length = length(representative(ref_iter));
-
-	MutationEntry entry_with_insert(origin);
-	++entry_with_insert.query_pos;
-	if(origin.extra_step == 0)
-	{
-		if(seqan::goDown(ref_iter, next_char))
-		{
-			entry_with_insert.extra_step = length(representative(ref_iter)) - ref_iter_seq_length - 1;
-			entry_with_insert.state = MutationEntry::State::STATE_M;
-			entry_with_insert.ref_iter = ref_iter;
-			mutation_queue.emplace(entry_with_insert);
-			seqan::goUp(ref_iter);
-		}
-	}
-	else
-	{
-		if(representative(ref_iter)[ref_iter_seq_length - origin.extra_step] == next_char)
-		{
-			--entry_with_insert.extra_step;
-			entry_with_insert.state = MutationEntry::State::STATE_M;
-			mutation_queue.emplace(entry_with_insert);	
-		}
-	}
+	MutationEntry new_entry;
+	if(origin.produceMatchEntry(new_entry, next_char))
+		mutation_queue.emplace(new_entry);
 }

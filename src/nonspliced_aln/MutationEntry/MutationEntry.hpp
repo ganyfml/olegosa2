@@ -22,6 +22,9 @@ struct MutationEntry
 	MutationEntry(const SeqanSAIter& init_iter)
 		: query_pos(0), extra_step(0), ref_iter(init_iter), state(State::STATE_M) {}
 
+	MutationEntry()
+		: query_pos(0), extra_step(0), ref_iter(SeqanSAIter()), state(State::STATE_M) {}
+
 	MutationEntry(const MutationEntry& that)
 		: query_pos(that.query_pos), extra_step(that.extra_step), ref_iter(that.ref_iter), state(that.state), gap_mm(that.gap_mm) {}
 
@@ -34,6 +37,8 @@ struct MutationEntry
 		std::cout << "Seq: " << representative(ref_iter) << std::endl;
 		gap_mm.display();
 	}
+
+	bool produceMatchEntry(MutationEntry& new_entry, char match_char) const;
 
 	State state;
 	SeqanSAIter ref_iter;
