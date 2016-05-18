@@ -9,47 +9,84 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-void produceInsertion(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, const alnNonspliceOpt& opt)
+void produceInsertionFromI(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt)
 {
-	for(char char_to_insert : {'A', 'T', 'C', 'G'})
+	for(char insert_char: {'A', 'T', 'C', 'G'})
 	{
-		StateEntry entry_with_insert;
-		if(origin.produceInsertionEntry(entry_with_insert, opt, char_to_insert))
+		StateEntry se = origin;
+		if(origin.gap_mm.num_gapExt() < opt.max_gapExt)
 		{
-			mutation_queue.emplace(entry_with_insert);
-		}
-	}
-}
-
-void produceDeletion(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, const alnNonspliceOpt& opt)
-{
-	StateEntry entry_with_del;
-	if(origin.produceDeletionEntry(entry_with_del, opt))
-	{
-		mutation_queue.emplace(entry_with_del);
-	}
-}
-
-void produceMismatch(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
-{
-	for(char char_to_insert : {'A', 'T', 'C', 'G'})
-	{
-		if(char_to_insert != next_char)
-		{
-			StateEntry entry_with_mismatch;
-			if(origin.produceMismatchEntry(entry_with_mismatch, opt, char_to_insert))
+			++se.gap_mm.num_gapExtRef;
+			if(se.appendChar(insert_char))
 			{
-				mutation_queue.emplace(entry_with_mismatch);
+				se_queue.emplace(se);
 			}
 		}
 	}
 }
 
-void produceMatch(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, char next_char)
+void produceInsertionFromM(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt)
 {
-	StateEntry new_entry;
-	if(origin.produceMatchEntry(new_entry, next_char))
+	for(char insert_char: {'A', 'T', 'C', 'G'})
 	{
-		mutation_queue.emplace(new_entry);
+		StateEntry se = origin;
+		se.state = StateEntry::State::STATE_I;
+		if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen)
+		{
+			++se.gap_mm.num_gapOpenRef;
+			if(se.appendChar(insert_char))
+			{
+				se_queue.emplace(se);
+			}
+		}
+	}
+}
+
+void produceDeletionFromD(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt)
+{
+	if(origin.gap_mm.num_gapExt() < opt.max_gapExt)
+	{
+		StateEntry se = origin;
+		++se.query_pos;
+		++se.gap_mm.num_gapExtQuery;
+		se_queue.emplace(se);
+	}
+}
+
+void produceDeletionFromM(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt)
+{
+	if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen)
+	{
+		StateEntry se = origin;
+		++se.query_pos;
+		++se.gap_mm.num_gapOpenQuery;
+		se_queue.emplace(se);
+	}
+}
+
+void produceMatchAndMismatch(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt, char next_char)
+{
+	for(char insert_char: {'A', 'T', 'C', 'G'})
+	{
+		StateEntry se;
+		if(insert_char!= next_char)
+		{
+			if(origin.gap_mm.num_mismatch < opt.max_mismatch)
+			{
+				origin.produceMismatchEntry(se);
+				if(se.appendChar(insert_char))
+				{
+					se_queue.emplace(se);
+				}
+			}
+		}
+		else
+		{
+			origin.produceMatchEntry(se);
+			if(se.appendChar(insert_char))
+			{
+				se_queue.emplace(se);
+			}
+		}
 	}
 }

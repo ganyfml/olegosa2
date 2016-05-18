@@ -15,10 +15,7 @@ int main(int argc, char* argv[])
 
 	StateEntry test(it);
 	SeqString query(argv[2]);
-	char match_char = query[test.query_pos];
 	StateEntry new_entry;
-	bool produce_succ = test.produceMatchEntry(new_entry, match_char);
-	printf("Produces successfully? %d\n", produce_succ);
-	if(produce_succ)
-		new_entry.display();
+	test.produceMatchEntry(new_entry);
+	new_entry.display();
 }

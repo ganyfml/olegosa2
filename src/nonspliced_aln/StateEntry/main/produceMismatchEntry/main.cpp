@@ -11,23 +11,11 @@ int main(int argc, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index ref((Dna5String(argv[1])));
-	SeqSAIter ref_it(ref);
+	SeqSAIter it(ref);
 
-	char exist_part = argv[2][0];
-	if(exist_part != '\0')
-	{
-		ref_it.godown_char(exist_part);
-	}
-
-	StateEntry test(ref_it);
+	StateEntry test(it);
+	SeqString query(argv[2]);
 	StateEntry new_entry;
-	alnNonspliceOpt opt;
-	opt.max_mismatch = 1;
-	char mismatch_char = argv[3][0];
-	bool produce_succ = test.produceMismatchEntry(new_entry, opt, mismatch_char);
-	printf("Produces successfully? %d\n", produce_succ);
-	if(produce_succ)
-	{
-		new_entry.display();
-	}
+	test.produceMismatchEntry(new_entry);
+	new_entry.display();
 }

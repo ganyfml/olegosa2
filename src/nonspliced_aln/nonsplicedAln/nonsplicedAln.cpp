@@ -19,14 +19,14 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 	SeqSAIter init_iter(sa_ref);
 
 	//Init start
-	StateEntry init_mutation_entry(init_iter);
-	std::queue<StateEntry> mutation_queue;
-	mutation_queue.emplace(init_mutation_entry);
+	StateEntry init_state_entry(init_iter);
+	std::queue<StateEntry> se_queue;
+	se_queue.emplace(init_state_entry);
 
-	while(!mutation_queue.empty())
+	while(!se_queue.empty())
 	{
-		StateEntry entry = mutation_queue.front();
-		mutation_queue.pop();
+		StateEntry entry = se_queue.front();
+		se_queue.pop();
 		//If the potential has been found
 		if(entry.query_pos == query.get_length())
 		{
@@ -39,16 +39,25 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 		else
 		{
 			//deal with inseration, deletion, mismatch, and match
-			if(entry.query_pos != 0)
+			if(entry.state == StateEntry::State::STATE_I)
 			{
-				produceInsertion(entry, mutation_queue, opt);
+				if(entry.query_pos != 0)
+				{
+					produceMatchAndMismatch(entry, se_queue, opt, query[entry.query_pos]);
+					produceInsertionFromI(entry, se_queue, opt);
+				}
 			}
-
-			produceDeletion(entry, mutation_queue, opt);
-
-			produceMismatch(entry, mutation_queue, opt, query[entry.query_pos]);
-
-			produceMatch(entry, mutation_queue, query[entry.query_pos]);
+			else if(entry.state == StateEntry::State::STATE_D)
+			{
+				produceMatchAndMismatch(entry, se_queue, opt, query[entry.query_pos]);
+				produceDeletionFromD(entry, se_queue, opt);
+			}
+			else
+			{
+				produceMatchAndMismatch(entry, se_queue, opt, query[entry.query_pos]);
+				produceInsertionFromM(entry, se_queue, opt);
+				produceDeletionFromM(entry, se_queue, opt);
+			}
 		}
 	}
 }

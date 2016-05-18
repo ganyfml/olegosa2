@@ -31,6 +31,8 @@ struct StateEntry
 
 	SeqanString get_seq() const { return ref_iter.get_prefix(); }
 
+	bool appendChar(char x) { return ref_iter.godown_char(x); }
+
 	void display()
 	{
 		const char* stateName[] = {"STATE_M", "STATE_I", "STATE_D"};
@@ -39,10 +41,8 @@ struct StateEntry
 		gap_mm.display();
 	}
 
-	bool produceMatchEntry(StateEntry& new_entry, char match_char) const;
-	bool produceDeletionEntry(StateEntry& new_entry, const alnNonspliceOpt& opt) const;
-	bool produceInsertionEntry(StateEntry& new_entry, const alnNonspliceOpt& opt, char insert_char) const;
-	bool produceMismatchEntry(StateEntry& new_entry, const alnNonspliceOpt& opt, char mismatch_char) const;
+	void produceMatchEntry(StateEntry& new_entry) const;
+	void produceMismatchEntry(StateEntry& new_entry) const;
 
 	State state;
 	SeqSAIter ref_iter;

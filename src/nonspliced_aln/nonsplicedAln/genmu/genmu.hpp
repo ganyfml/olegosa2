@@ -4,7 +4,13 @@
 
 #include <nonspliced_aln/StateEntry.hpp>
 
-void produceInsertion(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, const alnNonspliceOpt& opt);
-void produceDeletion(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, const alnNonspliceOpt& opt);
-void produceMismatch(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char);
-void produceMatch(const StateEntry& origin, std::queue<StateEntry>& mutation_queue, char next_char);
+
+void produceInsertionFromI(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt);
+
+void produceInsertionFromM(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt);
+
+void produceDeletionFromD(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt);
+
+void produceDeletionFromM(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt);
+
+void produceMatchAndMismatch(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt, char next_char);
