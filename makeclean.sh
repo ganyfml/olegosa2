@@ -3,3 +3,4 @@
 
 find -name "*.o" -delete
 find -name "*.exe" -delete
+rm -rf $(find -name ".makepp")

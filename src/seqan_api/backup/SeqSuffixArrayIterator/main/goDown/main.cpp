@@ -11,6 +11,6 @@ int main(int argc, char* argv[])
 	SeqSuffixArray ref_sa(seq);
 
 	SeqSuffixArrayIterator ref_SA_iter(ref_sa);
-	SeqString query((string(argv[2])));
-	cout << "Contain query? " << ref_SA_iter.goDown(query) << endl;
+	char godown_char = argv[2][0];
+	cout << "Contain char? " << ref_SA_iter.godown_char(godown_char) << endl;
 }

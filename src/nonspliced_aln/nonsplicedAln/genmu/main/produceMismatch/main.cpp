@@ -10,10 +10,10 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
-	Dna5Index index((Dna5String(argv[1])));
-	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
+	Dna5Index ref((Dna5String(argv[1])));
+	SeqSAIter it_ref(ref);
 
-	MutationEntry test(it);
+	MutationEntry test(it_ref);
 	std::queue<MutationEntry> mutation_queue;
 	alnNonspliceOpt opt;
 	opt.max_mismatch = 1;

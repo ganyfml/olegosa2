@@ -4,36 +4,32 @@
 
 typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
-typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 bool MutationEntry::produceMatchEntry(MutationEntry& new_entry, char match_char) const
 {
-	SeqanSAIter origin_iter = this->ref_iter;
-	unsigned long ref_iter_seq_length = length(representative(origin_iter));
-
 	new_entry = *this;
 	++new_entry.query_pos;
 	new_entry.state = MutationEntry::State::STATE_M;
+	if(new_entry.ref_iter.godown_char(match_char))
+	{
+		return true;
+	}
+	else return false;
+}
 
-	if(this->extra_step == 0)
+bool MutationEntry::produceMismatchEntry(MutationEntry& new_entry, const alnNonspliceOpt& opt, char mismatch_char) const
+{
+	if(this->gap_mm.num_mismatch >= opt.max_mismatch) return false;
+
+	new_entry = *this;
+	new_entry.state = MutationEntry::State::STATE_M;
+	++new_entry.gap_mm.num_mismatch;
+	++new_entry.query_pos;
+	if(new_entry.ref_iter.godown_char(mismatch_char))
 	{
-		if(seqan::goDown(origin_iter, match_char))
-		{
-			new_entry.extra_step = length(representative(origin_iter)) - ref_iter_seq_length - 1;
-			new_entry.ref_iter = origin_iter;
-			return true;
-		}
+		return true;
 	}
-	else
-	{
-		if(representative(origin_iter)[ref_iter_seq_length - this->extra_step] == match_char)
-		{
-			--new_entry.extra_step;
-			new_entry.state = MutationEntry::State::STATE_M;
-			return true;
-		}
-	}
-	return false;
+	else return false;
 }
 
 bool MutationEntry::produceDeletionEntry(MutationEntry& new_entry, const alnNonspliceOpt& opt) const
@@ -58,32 +54,28 @@ bool MutationEntry::produceDeletionEntry(MutationEntry& new_entry, const alnNons
 	return true;
 }
 
-bool MutationEntry::produceMatchEntry(MutationEntry& new_entry, char match_char) const
+bool MutationEntry::produceInsertionEntry(MutationEntry& new_entry, const alnNonspliceOpt& opt, char insert_char) const
 {
-	SeqanSAIter origin_iter = this->ref_iter;
-	unsigned long ref_iter_seq_length = length(representative(origin_iter));
+	if(this->state == MutationEntry::State::STATE_D) return false;
+
+	if((this->state == MutationEntry::State::STATE_I && this->gap_mm.num_gapExt() >= opt.max_gapExt)
+			|| (this->state == MutationEntry::State::STATE_M && this->gap_mm.num_gapOpen() >= opt.max_gapOpen))
+		return false;
 
 	new_entry = *this;
-	++new_entry.query_pos;
-	new_entry.state = MutationEntry::State::STATE_M;
-
-	if(this->extra_step == 0)
+	if(this->state == MutationEntry::State::STATE_M)
 	{
-		if(seqan::goDown(origin_iter, match_char))
-		{
-			new_entry.extra_step = length(representative(origin_iter)) - ref_iter_seq_length - 1;
-			new_entry.ref_iter = origin_iter;
-			return true;
-		}
+		new_entry.state = MutationEntry::State::STATE_I;
+		++new_entry.gap_mm.num_gapOpenRef;
 	}
 	else
 	{
-		if(representative(origin_iter)[ref_iter_seq_length - this->extra_step] == match_char)
-		{
-			--new_entry.extra_step;
-			new_entry.state = MutationEntry::State::STATE_M;
-			return true;
-		}
+		++new_entry.gap_mm.num_gapExtRef;
 	}
-	return false;
+
+	if(new_entry.ref_iter.godown_char(insert_char))
+	{
+		return true;
+	}
+	else return false;
 }

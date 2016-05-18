@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index index((Dna5String(argv[1])));
-	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
+	SeqSAIter it(index);
 
 	MutationEntry test(it);
 	test.state = MutationEntry::STATE_M;
@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
 
 	std::queue<MutationEntry> mutation_queue;
 	alnNonspliceOpt opt;
+	opt.max_gapOpen = 1;
 
 	produceInsertion(test, mutation_queue, opt);
 

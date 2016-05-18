@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <nonspliced_aln/nonsplicedAln.hpp>
+#include <nonspliced_aln/SeqSAIter.hpp>
 #include <nonspliced_aln/MutationEntry.hpp>
 #include <nonspliced_aln/genmu.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
@@ -15,7 +16,7 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 {
 	//Change query and ref_SAIndex back to seqan type
 	SeqanSA sa_ref = *conv_back(ref_SAIndex);
-	SeqanSAIter init_iter(sa_ref);
+	SeqSAIter init_iter(sa_ref);
 
 	//Init start
 	MutationEntry init_mutation_entry(init_iter);
@@ -32,7 +33,7 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 			//Debug
 			using namespace std;
 			auto result = entry.get_seq();
-			cout << prefix(result, length(result) - entry.extra_step) << endl;
+			cout << result << endl;
 			//End
 		}
 		else

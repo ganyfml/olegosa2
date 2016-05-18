@@ -11,45 +11,12 @@ typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type Seq
 
 void produceInsertion(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt)
 {
-	if(origin.state == MutationEntry::State::STATE_D) return;
-
-	if((origin.state == MutationEntry::State::STATE_I && origin.gap_mm.num_gapExt() >= opt.max_gapExt)
-			|| (origin.state == MutationEntry::State::STATE_M && origin.gap_mm.num_gapOpen() >= opt.max_gapOpen))
-		return;
-
-	SeqanSAIter ref_iter = origin.ref_iter;	
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
 	{
-		MutationEntry entry_with_insert(origin);
-		if(origin.state == MutationEntry::State::STATE_M)
+		MutationEntry entry_with_insert;
+		if(origin.produceInsertionEntry(entry_with_insert, opt, char_to_insert))
 		{
-			entry_with_insert.state = MutationEntry::State::STATE_I;
-			++entry_with_insert.gap_mm.num_gapOpenRef;
-		}
-		else
-		{
-			++entry_with_insert.gap_mm.num_gapExtRef;
-		}
-
-		unsigned long ref_iter_seq_length = length(representative(ref_iter));
-		if(origin.extra_step == 0)
-		{
-			if(seqan::goDown(ref_iter, char_to_insert))
-			{
-				entry_with_insert.extra_step = length(representative(ref_iter)) - ref_iter_seq_length - 1;
-				entry_with_insert.ref_iter = ref_iter;
-				mutation_queue.emplace(entry_with_insert);
-				seqan::goUp(ref_iter);
-			}
-		}
-		else
-		{
-			if(representative(origin.ref_iter)[ref_iter_seq_length - origin.extra_step] == char_to_insert)
-			{
-				entry_with_insert.ref_iter = ref_iter;
-				--entry_with_insert.extra_step;
-				mutation_queue.emplace(entry_with_insert);
-			}
+			mutation_queue.emplace(entry_with_insert);
 		}
 	}
 }
@@ -58,43 +25,21 @@ void produceDeletion(const MutationEntry& origin, std::queue<MutationEntry>& mut
 {
 	MutationEntry entry_with_del;
 	if(origin.produceDeletionEntry(entry_with_del, opt))
+	{
 		mutation_queue.emplace(entry_with_del);
+	}
 }
 
 void produceMismatch(const MutationEntry& origin, std::queue<MutationEntry>& mutation_queue, const alnNonspliceOpt& opt, char next_char)
 {
-	if(origin.gap_mm.num_mismatch >= opt.max_mismatch) return;
-
-	SeqanSAIter ref_iter = origin.ref_iter;	
-
-	unsigned long ref_iter_seq_length = length(representative(ref_iter));
 	for(char char_to_insert : {'A', 'T', 'C', 'G'})
 	{
 		if(char_to_insert != next_char)
 		{
-			MutationEntry entry_with_insert(origin);
-			entry_with_insert.state = MutationEntry::State::STATE_M;
-			++entry_with_insert.gap_mm.num_mismatch;
-			++entry_with_insert.query_pos;
-
-			if(origin.extra_step == 0)
+			MutationEntry entry_with_mismatch;
+			if(origin.produceMismatchEntry(entry_with_mismatch, opt, char_to_insert))
 			{
-				if(seqan::goDown(ref_iter, char_to_insert))
-				{
-					entry_with_insert.ref_iter = ref_iter;
-					entry_with_insert.extra_step = length(representative(ref_iter)) - ref_iter_seq_length - 1;
-					mutation_queue.emplace(entry_with_insert);
-					seqan::goUp(ref_iter);
-				}
-			}
-			else
-			{
-				if(representative(ref_iter)[ref_iter_seq_length - origin.extra_step] == char_to_insert)
-				{
-					entry_with_insert.ref_iter = ref_iter;
-					--entry_with_insert.extra_step;
-					mutation_queue.emplace(entry_with_insert);
-				}
+				mutation_queue.emplace(entry_with_mismatch);
 			}
 		}
 	}
@@ -104,5 +49,7 @@ void produceMatch(const MutationEntry& origin, std::queue<MutationEntry>& mutati
 {
 	MutationEntry new_entry;
 	if(origin.produceMatchEntry(new_entry, next_char))
+	{
 		mutation_queue.emplace(new_entry);
+	}
 }

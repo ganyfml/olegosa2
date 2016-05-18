@@ -2,7 +2,7 @@
 
 #pragma once
 
-	template <typename T>
+template <typename T>
 T* constVoid2localType(const void* ptr)
 {
 	return const_cast<T*>(

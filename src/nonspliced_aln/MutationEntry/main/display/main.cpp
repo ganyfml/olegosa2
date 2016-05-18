@@ -11,11 +11,11 @@ int main(int argc, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index index((Dna5String(argv[1])));
-	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
+	SeqSAIter it(index);
 
 	MutationEntry test(it);
 
 	test.display();
-	goDown(test.ref_iter, 'A');
+	test.ref_iter.godown_char('A');
 	test.display();
 }

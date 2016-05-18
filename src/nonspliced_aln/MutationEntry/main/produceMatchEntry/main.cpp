@@ -11,8 +11,7 @@ int main(int argc, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index ref((Dna5String(argv[1])));
-	Dna5Index index(ref);
-	Iterator<Dna5Index, TopDown<ParentLinks<>>>::Type it(index);
+	SeqSAIter it(ref);
 
 	MutationEntry test(it);
 	SeqString query(argv[2]);
@@ -20,5 +19,6 @@ int main(int argc, char* argv[])
 	MutationEntry new_entry;
 	bool produce_succ = test.produceMatchEntry(new_entry, match_char);
 	printf("Produces successfully? %d\n", produce_succ);
-	new_entry.display();
+	if(produce_succ)
+		new_entry.display();
 }

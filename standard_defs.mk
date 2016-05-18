@@ -6,6 +6,6 @@ OS:=$(shell uname)
 ifeq ($(OS), Linux)
 	LDLIBS:=-lrt
 endif
-CXXFLAGS:=-std=c++11 -fno-elide-constructors
+CXXFLAGS:=-std=c++11 -fno-elide-constructors -Wextra -Wunused-variable -Ofast
 #CXXFLAGS:=-std=gnu++1z
 PKG_LIBS:=-lstdc++ -lrt
