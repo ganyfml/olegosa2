@@ -13,8 +13,8 @@ int main(int argc, char* argv[])
 	Dna5Index ref((Dna5String(argv[1])));
 	SeqSAIter it_ref(ref);
 
-	MutationEntry test(it_ref);
-	std::queue<MutationEntry> mutation_queue;
+	StateEntry test(it_ref);
+	std::queue<StateEntry> mutation_queue;
 	alnNonspliceOpt opt;
 	opt.max_mismatch = 1;
 	SeqString query_seq(argv[2]);

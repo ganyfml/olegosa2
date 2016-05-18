@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
 	Dna5Index index((Dna5String(argv[1])));
 	SeqSAIter it(index);
 
-	MutationEntry test(it);
-	test.state = MutationEntry::STATE_M;
-	std::queue<MutationEntry> mutation_queue;
+	StateEntry test(it);
+	test.state = StateEntry::STATE_M;
+	std::queue<StateEntry> mutation_queue;
 	alnNonspliceOpt opt;
 	opt.max_mismatch = 1;
 	SeqString query_seq(string("ATGC"));

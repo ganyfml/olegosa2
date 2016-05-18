@@ -3,7 +3,7 @@
 #include <queue>
 #include <nonspliced_aln/nonsplicedAln.hpp>
 #include <nonspliced_aln/SeqSAIter.hpp>
-#include <nonspliced_aln/MutationEntry.hpp>
+#include <nonspliced_aln/StateEntry.hpp>
 #include <nonspliced_aln/genmu.hpp>
 #include <seqan_api/SeqanAPIUtil.hpp>
 #include <seqan_api/SeqSuffixArray_conv.hpp>
@@ -19,13 +19,13 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 	SeqSAIter init_iter(sa_ref);
 
 	//Init start
-	MutationEntry init_mutation_entry(init_iter);
-	std::queue<MutationEntry> mutation_queue;
+	StateEntry init_mutation_entry(init_iter);
+	std::queue<StateEntry> mutation_queue;
 	mutation_queue.emplace(init_mutation_entry);
 
 	while(!mutation_queue.empty())
 	{
-		MutationEntry entry = mutation_queue.front();
+		StateEntry entry = mutation_queue.front();
 		mutation_queue.pop();
 		//If the potential has been found
 		if(entry.query_pos == query.get_length())

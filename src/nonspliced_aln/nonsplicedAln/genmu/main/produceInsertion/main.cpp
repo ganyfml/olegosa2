@@ -13,13 +13,13 @@ int main(int argc, char* argv[])
 	Dna5Index index((Dna5String(argv[1])));
 	SeqSAIter it(index);
 
-	MutationEntry test(it);
-	test.state = MutationEntry::STATE_M;
+	StateEntry test(it);
+	test.state = StateEntry::STATE_M;
 	printf("Original entry: \n");
 	test.display();
 	printf("\n");
 
-	std::queue<MutationEntry> mutation_queue;
+	std::queue<StateEntry> mutation_queue;
 	alnNonspliceOpt opt;
 	opt.max_gapOpen = 1;
 
