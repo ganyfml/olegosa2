@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# vim: set noexpandtab tabstop=2:
 
 target_dir=include
 rm -rf "$target_dir"
@@ -8,7 +9,7 @@ cd "$target_dir"
 while read -r -d '' f
 do
   export_dirs+=("$f")
-done < <(find ../src/ -type f -name .export -printf '%h\0')
+done < <(find ../src/ '(' -type d '(' -name backup ')' -prune ')' -o '(' -name .export -printf '%h\0' ')')
 
 while read -r -d '' f
 do
