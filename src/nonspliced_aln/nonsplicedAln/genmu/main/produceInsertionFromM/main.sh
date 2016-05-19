@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -x
+set -v
 ref=AAATACAG
 exist_part=A
 max_gapOpen=1

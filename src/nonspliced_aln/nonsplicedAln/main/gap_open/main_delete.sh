@@ -2,8 +2,8 @@
 #vim: set noexpandtab tabstop=2:
 
 set -v
-ref=T
-query=TA
+ref=TG
+query=TAG
 gap_open=1
 gap_ext=1
 gap_mm=0

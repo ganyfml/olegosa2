@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -x
+set -v
 gap_open=0
 gap_ext=0
 gap_mm=0
