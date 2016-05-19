@@ -3,8 +3,9 @@
 
 set -x
 gap_open=1
-gap_ext=0
+gap_ext=2
 gap_mm=0
-ref=T
-query=TA
+
+ref=CA
+query=CTTA
 ./main.exe "$ref" "$query" "$gap_ext" "$gap_open" "$gap_mm"

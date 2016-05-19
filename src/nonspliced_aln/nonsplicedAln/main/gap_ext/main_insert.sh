@@ -3,7 +3,7 @@
 
 set -x
 gap_open=1
-gap_ext=1
+gap_ext=2
 gap_mm=0
 
 ref=CTTA

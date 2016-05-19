@@ -26,7 +26,8 @@ int main(int argc, char* argv[])
 	printf("\n");
 
 	alnNonspliceOpt opt;
-	opt.max_gapOpen = 1;
+	opt.max_gapOpen = atoi(argv[3]);
+	opt.max_gapExt = atoi(argv[4]);
 	std::queue<StateEntry> mutation_queue;
 
 	produceInsertionFromM(test, mutation_queue, opt);

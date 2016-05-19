@@ -31,9 +31,10 @@ void produceInsertionFromM(const StateEntry& origin, std::queue<StateEntry>& se_
 	{
 		StateEntry se = origin;
 		se.state = StateEntry::State::STATE_I;
-		if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen)
+		if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen && origin.gap_mm.num_gapExt() < opt.max_gapExt)
 		{
 			++se.gap_mm.num_gapOpenRef;
+			++se.gap_mm.num_gapExtRef;
 			if(se.appendChar(insert_char))
 			{
 				se_queue.emplace(se);
@@ -55,12 +56,13 @@ void produceDeletionFromD(const StateEntry& origin, std::queue<StateEntry>& se_q
 
 void produceDeletionFromM(const StateEntry& origin, std::queue<StateEntry>& se_queue, const alnNonspliceOpt& opt)
 {
-	if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen)
+	if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen && origin.gap_mm.num_gapExt() < opt.max_gapExt)
 	{
 		StateEntry se = origin;
 		se.state = StateEntry::State::STATE_D;
 		++se.query_pos;
 		++se.gap_mm.num_gapOpenQuery;
+		++se.gap_mm.num_gapExtQuery;
 		se_queue.emplace(se);
 	}
 }
