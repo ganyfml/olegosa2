@@ -58,6 +58,7 @@ void produceDeletionFromM(const StateEntry& origin, std::queue<StateEntry>& se_q
 	if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen)
 	{
 		StateEntry se = origin;
+		se.state = StateEntry::State::STATE_D;
 		++se.query_pos;
 		++se.gap_mm.num_gapOpenQuery;
 		se_queue.emplace(se);

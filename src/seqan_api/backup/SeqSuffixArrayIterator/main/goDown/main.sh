@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -v
+set -x
 ref=AGT
 godown_char=A
 ./main.exe "$ref" "$godown_char"

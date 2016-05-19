@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -v
+set -x
 ref=AGATGTCAGATAGCATG
 query=AT
 ./main.exe "$ref" "$query"

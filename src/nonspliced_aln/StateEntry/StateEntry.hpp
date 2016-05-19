@@ -44,8 +44,8 @@ struct StateEntry
 	void produceMatchEntry(StateEntry& new_entry) const;
 	void produceMismatchEntry(StateEntry& new_entry) const;
 
-	State state;
-	SeqSAIter ref_iter;
 	unsigned long query_pos;
+	SeqSAIter ref_iter;
+	State state;
 	GapAndMM gap_mm;
 };
