@@ -12,7 +12,7 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
+void nonsplicedAln(const SeqString& query, queue<AlnResult>& result_queue, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
 {
 	//Change query and ref_SAIndex back to seqan type
 	SeqanSA sa_ref = *conv_back(ref_SAIndex);
@@ -30,6 +30,11 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 		//If the potential has been found
 		if(entry.query_pos == query.get_length())
 		{
+			for (int i = 0; i < length(getOccurrences(entry.)); ++i)
+			{
+				std::cout << getOccurrences(it)[i] << ", ";
+			}
+			cout << "\n";
 			//Debug
 			using namespace std;
 			auto result = entry.get_seq();

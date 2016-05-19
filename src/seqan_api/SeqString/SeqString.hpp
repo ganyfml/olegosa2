@@ -15,6 +15,7 @@
 class SeqString
 {
 	public:
+		SeqString();
 		SeqString(const std::string& seq);
 		SeqString(const SeqString& that);
 		~SeqString();

@@ -18,6 +18,9 @@ inline T* voidPtr2TPtr(void* original_ptr)
 	return static_cast<T*>(original_ptr);
 }
 
+SeqString::SeqString()
+	: impl_(new T()) {}
+
 SeqString::SeqString(const std::string& seq)
 	: impl_(new T(seq)) {}
 

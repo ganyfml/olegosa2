@@ -6,6 +6,7 @@
 
 struct AlnResult
 {
-	SeqString result;
+	SeqString seq;
 	unsigned long ref_pos;
+	long num_hits;
 };
