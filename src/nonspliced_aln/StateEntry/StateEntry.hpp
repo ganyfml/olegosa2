@@ -29,9 +29,13 @@ struct StateEntry
 	StateEntry(const StateEntry& that)
 		: query_pos(that.query_pos), ref_iter(that.ref_iter), state(that.state), gap_mm(that.gap_mm) {}
 
-	SeqanString get_seq() const { return ref_iter.get_prefix(); }
+	SeqString get_seq() const { return ref_iter.get_prefix(); }
 
 	bool appendChar(char x) { return ref_iter.godown_char(x); }
+
+	long num_hits() { return ref_iter.num_occ(); }
+
+	long next_hit_pos() { return ref_iter.next_occ_pos(); }
 
 	void display()
 	{

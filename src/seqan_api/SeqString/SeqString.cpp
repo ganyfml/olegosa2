@@ -32,6 +32,11 @@ SeqString::~SeqString()
 	delete voidPtr2TPtr(impl_);
 }
 
+SeqString& SeqString::operator=(const SeqString& other)
+{
+	impl_ = new T(*constVoid2localType<T>(other.get_pointer()));
+}
+
 unsigned long SeqString::get_length() const
 {
 	return seqan::length(*voidPtr2TPtr(impl_));

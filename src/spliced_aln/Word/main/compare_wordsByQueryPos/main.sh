@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -x
+set -v
 query_pos1=2
 query_pos2=4
 

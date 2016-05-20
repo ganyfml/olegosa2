@@ -1,6 +1,5 @@
 // vim: set noexpandtab tabstop=2:
 
-#include <queue>
 #include <nonspliced_aln/nonsplicedAln.hpp>
 #include <nonspliced_aln/SeqSAIter.hpp>
 #include <nonspliced_aln/StateEntry.hpp>
@@ -12,7 +11,7 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-void nonsplicedAln(const SeqString& query, queue<AlnResult>& result_queue, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
+void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
 {
 	//Change query and ref_SAIndex back to seqan type
 	SeqanSA sa_ref = *conv_back(ref_SAIndex);
@@ -30,16 +29,22 @@ void nonsplicedAln(const SeqString& query, queue<AlnResult>& result_queue, const
 		//If the potential has been found
 		if(entry.query_pos == query.get_length())
 		{
-			for (int i = 0; i < length(getOccurrences(entry.)); ++i)
+			//DEBUG
+			if(entry.get_seq().get_length() == 0)
 			{
-				std::cout << getOccurrences(it)[i] << ", ";
+				continue;
 			}
-			cout << "\n";
-			//Debug
-			using namespace std;
-			auto result = entry.get_seq();
-			cout << result << endl;
-			//End
+
+			long num_entry_hits = entry.num_hits();
+			for (int i = 0; i < num_entry_hits; ++i)
+			{
+				AlnResult r;
+				r.seq = entry.get_seq();
+				r.num_hits = num_entry_hits; 
+				r.ref_pos = entry.next_hit_pos();
+				result_queue.emplace(r);
+			}
+			//END
 		}
 		else
 		{

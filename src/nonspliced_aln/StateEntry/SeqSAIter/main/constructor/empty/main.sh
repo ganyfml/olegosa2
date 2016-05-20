@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #vim: set noexpandtab tabstop=2:
 
-set -x
+set -v
 seq=ATCG
 ./main.exe "$seq"
