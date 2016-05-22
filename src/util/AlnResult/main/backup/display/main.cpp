@@ -15,9 +15,11 @@ int main(int argc, char* argv[])
 	seq_test.set_pointer(new SeqanString("ATCG"));
 
 	AlnResult test;
-	test.seq = seq_test;
+	test.SA_index_high = 4;
+	test.SA_index_low = 3;
 	test.num_hits = 1;
 	test.ref_pos = 2;
+	test.seq_length = 5;
 
 	test.display();
 }

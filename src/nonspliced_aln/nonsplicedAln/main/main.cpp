@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 
 	while(!result.empty())
 	{
-		result.front().display();
+		result.front().display(ref_index);
 		result.pop();
 	}
 }

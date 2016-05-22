@@ -44,4 +44,16 @@ void SeqSuffixArray::saveSA(const std::string& index_file_name) const
 	{
 		THROW_RUNTIME_ERROR_MSG("Index Saved Failed for " + index_file_name);
 	}
-}	
+}
+
+unsigned long SeqSuffixArray::SAIndex2SeqPos(unsigned long SAIndex) const
+{
+	return saAt(SAIndex, *voidPtr2TPtr(impl_));
+}
+
+SeqString SeqSuffixArray::getSeq_bySAIndex(unsigned long SAIndex, int seq_length) const
+{
+	SeqString seq;
+	seq.set_pointer(new SeqanString(infixWithLength(indexText(*voidPtr2TPtr(impl_)), saAt(SAIndex, *voidPtr2TPtr(impl_)), seq_length)));
+	return seq;
+}

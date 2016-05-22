@@ -37,6 +37,10 @@ struct StateEntry
 
 	long next_hit_pos() { return ref_iter.next_occ_pos(); }
 
+	seqan::Pair<unsigned> get_SArange() {return ref_iter.get_SArange(); }
+
+	int seq_length() { return ref_iter.get_repLength(); }
+
 	void display()
 	{
 		const char* stateName[] = {"STATE_M", "STATE_I", "STATE_D"};

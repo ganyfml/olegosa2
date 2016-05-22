@@ -35,15 +35,13 @@ void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, 
 				continue;
 			}
 
-			long num_entry_hits = entry.num_hits();
-			for (int i = 0; i < num_entry_hits; ++i)
-			{
-				AlnResult r;
-				r.seq = entry.get_seq();
-				r.num_hits = num_entry_hits; 
-				r.ref_pos = entry.next_hit_pos();
-				result_queue.emplace(r);
-			}
+			AlnResult r;
+			r.num_hits = entry.num_hits();
+			seqan::Pair<unsigned> sa_range = entry.get_SArange();
+			r.SA_index_high = sa_range.i2;
+			r.SA_index_low = sa_range.i1;
+			r.seq_length = entry.seq_length();
+			result_queue.emplace(r);
 			//END
 		}
 		else
