@@ -18,7 +18,7 @@ inline T* voidPtr2TPtr(void* original_ptr)
 SeqSuffixArray::SeqSuffixArray(const SeqString& seq)
 {
 	impl_ = new T(*constVoid2localType<SeqanString>(seq.get_pointer()));
-	if(!indexCreate((*voidPtr2TPtr(impl_)), seqan::EsaChildtab())) 
+	if(!indexCreate((*voidPtr2TPtr(impl_)), seqan::EsaSA())) 
 	{
 		THROW_RUNTIME_ERROR_MSG("Index Create Failed");
 	}
