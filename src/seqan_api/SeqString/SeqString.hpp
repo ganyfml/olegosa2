@@ -24,6 +24,11 @@ class SeqString
 		const void* get_pointer() const { return impl_; }
 		void set_pointer(void* ptr) { impl_ = ptr; }
 		void erase_back();
+
+		SeqString get_infix(int begin_pos, int end_pos) const;
+		void make_reverse();
+		SeqString get_reverse() const;
+
 		SeqString& operator+=(const std::string& rhs);
 		char operator[](long idx) const;
 

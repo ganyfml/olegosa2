@@ -4,9 +4,6 @@
 
 using namespace seqan;
 
-SeqSAIter::SeqSAIter(SeqanSA& seqan_sa)
-	: seqan_sa_iter_(new SeqanSAIter(seqan_sa)), extra_steps_(0) {}
-
 SeqSAIter::~SeqSAIter()
 {
 	delete seqan_sa_iter_;

@@ -2,6 +2,7 @@
 #include <seqan_api/SeqanAPIUtil.hpp>
 #include <seqan_api/SeqString.hpp>
 #include <seqan/seq_io.h>
+#include <seqan/modifier.h>
 #include <iostream>
 
 /* FIXME
@@ -35,6 +36,7 @@ SeqString::~SeqString()
 SeqString& SeqString::operator=(const SeqString& other)
 {
 	impl_ = new T(*constVoid2localType<T>(other.get_pointer()));
+	return *this;
 }
 
 unsigned long SeqString::get_length() const
@@ -63,6 +65,24 @@ std::ostream& operator<<(std::ostream& os, const SeqString& obj)
 	return os << *constVoid2localType<T>(obj.get_pointer());
 }
 
+SeqString SeqString::get_infix(int begin_pos, int end_pos) const
+{
+	SeqString ret;
+	ret.set_pointer(new T(seqan::infix(*voidPtr2TPtr(impl_), begin_pos, end_pos)));
+	return ret;
+}
+
+void SeqString::make_reverse()
+{
+	seqan::reverseComplement(*voidPtr2TPtr(impl_));
+}
+
+SeqString SeqString::get_reverse() const
+{
+	SeqString ret = *this;
+	ret.make_reverse();
+	return ret;
+}
 #if 0
 // FIXME
 // Seems not useful for now

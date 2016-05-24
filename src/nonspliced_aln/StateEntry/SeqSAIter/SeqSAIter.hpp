@@ -13,7 +13,8 @@ class SeqSAIter
 	typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
 	public:
-	SeqSAIter(SeqanSA& seqan_sa);
+	SeqSAIter(SeqanSA& seqan_sa)
+		: seqan_sa_iter_(new SeqanSAIter(seqan_sa)), extra_steps_(0) {}
 	SeqSAIter()
 		: seqan_sa_iter_(new SeqanSAIter()), extra_steps_(0), occ_index_(0) {}
 	SeqSAIter(const SeqSAIter& other)

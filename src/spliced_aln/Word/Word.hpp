@@ -9,28 +9,21 @@
 struct Word
 {
 	int id;
-	int num_hits;
 	int length;
-	int strand;
-	long query_pos;
-	long ref_pos;
+	int query_pos;
+	int r_query_pos;
 	SeqString seq;
+	SeqString r_seq;
 
-	Word(int word_id)
-		: id(word_id), num_hits(0), length(0)
-			, strand(0), query_pos(0), ref_pos(0) {}
+	Word(int word_id, int length, int query_pos, int r_query_pos, SeqString seq, SeqString r_seq)
+		: id(word_id), length(length), query_pos(query_pos), r_query_pos(r_query_pos), seq(seq), r_seq(r_seq) {}
 
 	void display()
 	{
-		std::cout << "Word ID: " << id << " with " << num_hits << " hits" << std::endl;
-		std::cout << "query_pos: " << query_pos << ", ref_pos: " << ref_pos << std::endl;
+		std::cout << "Word ID: " << id << " with length: " << length << std::endl;
+		std::cout << "seq: " << seq << ", query pos: " << query_pos << std::endl;
+		std::cout << "reverse seq: " << r_seq << ", reverse query pos: " << r_query_pos << std::endl;
 	}
 };
 
 typedef std::shared_ptr<Word> WordPtr;
-
-bool compare_wordsByHitDiagonal(const WordPtr word1, const WordPtr word2);
-bool compare_wordsByRefPos(const WordPtr word1, const WordPtr word2);
-bool compare_wordsByQueryPos(const WordPtr word1, const WordPtr word2);
-bool compare_wordsByRefAndStrand(const WordPtr word1, const WordPtr word2);
-bool check_wordListsColinearity(const std::list<WordPtr>& wordList_);
