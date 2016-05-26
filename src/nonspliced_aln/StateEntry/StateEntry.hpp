@@ -52,7 +52,7 @@ struct StateEntry
 	void produceMatchEntry(StateEntry& new_entry) const;
 	void produceMismatchEntry(StateEntry& new_entry) const;
 
-	unsigned long query_pos;
+	long query_pos;
 	SeqSAIter ref_iter;
 	State state;
 	GapAndMM gap_mm;

@@ -20,7 +20,7 @@ class SeqString
 		SeqString(const std::string& seq);
 		SeqString(const SeqString& that);
 		~SeqString();
-		unsigned long get_length() const;
+		long get_length() const;
 		const void* get_pointer() const { return impl_; }
 		void set_pointer(void* ptr) { impl_ = ptr; }
 		void erase_back();

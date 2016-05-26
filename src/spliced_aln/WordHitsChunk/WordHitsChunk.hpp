@@ -3,12 +3,13 @@
 #pragma once
 
 #include <spliced_aln/WordHit.hpp>
+#include <seqan_api/SeqSuffixArray.hpp>
 #include <util/GapAndMM.hpp>
 #include <iostream>
 
 namespace ExtendDirection
 {
-	enum Value { left = 0, right = 1, both = 2};
+	enum Value {left = 0, right = 1, both = 2};
 }
 
 struct WordHitsChunk
@@ -39,6 +40,10 @@ struct WordHitsChunk
 	long queryStart_pos;
 	long queryEnd_pos;
 	std::list<WordHitPtr> wordHitList;
+
+	void extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore);
+	void extend_inexact_right(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore);
+	void extend_inexact(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore, ExtendDirection::Value direction);
 };
 
 typedef std::shared_ptr<WordHitsChunk> WordHitsChunkPtr;

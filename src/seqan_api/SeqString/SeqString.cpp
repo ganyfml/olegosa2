@@ -39,7 +39,7 @@ SeqString& SeqString::operator=(const SeqString& other)
 	return *this;
 }
 
-unsigned long SeqString::get_length() const
+long SeqString::get_length() const
 {
 	return seqan::length(*voidPtr2TPtr(impl_));
 }

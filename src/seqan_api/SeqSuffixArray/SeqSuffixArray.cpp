@@ -38,6 +38,16 @@ SeqSuffixArray::~SeqSuffixArray()
 	delete static_cast<T*>(impl_);
 }
 
+char SeqSuffixArray::char_at(int index) const
+{
+	return rawtextAt(index, *voidPtr2TPtr(impl_));
+}
+
+long SeqSuffixArray::seq_length() const
+{
+	return length(*voidPtr2TPtr(impl_));
+}
+
 void SeqSuffixArray::saveSA(const std::string& index_file_name) const
 {
 	if(!save(*voidPtr2TPtr(impl_), toCString(index_file_name)))
