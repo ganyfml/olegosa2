@@ -13,8 +13,14 @@ struct WordHit
 	long query_pos;
 	long ref_pos;
 
-	WordHit(int word_id)
-		: word_id(word_id) , strand(0), query_pos(0), ref_pos(0) {}
+	WordHit(int id, int strand)
+		: strand(strand), query_pos(0), ref_pos(0)
+	{
+		//DEBUG
+		//word_id = strand ? -id : id;
+		word_id = id;
+		//END
+	}
 
 	void display()
 	{

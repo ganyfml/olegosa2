@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	opt.word_max_overlap = 2;
 
 	SeqString query((string(argv[1])));
-	list<WordPtr> words;
+	vector<WordPtr> words;
 	generate_words(query, words, opt);
 
 	for(auto iter = words.begin(); iter != words.end(); ++iter)

@@ -18,18 +18,18 @@ int main(int argc, char* argv[])
 	opt.word_length = 2;
 	opt.word_max_overlap = 1;
 
-	list<WordPtr> words;
+	vector<WordPtr> words;
 	generate_words(query, words, opt);
-
-	for(auto iter = words.begin(); iter != words.end(); ++iter)
-	{
-		(*iter)->display();
-	}
 
 	std::list<WordHitPtr> wordHitList;
 	collect_wordHits(words, wordHitList, ref_SA, opt);
 
 	for(auto iter = wordHitList.begin(); iter != wordHitList.end(); ++iter)
+	{
+		(*iter)->display();
+	}
+
+	for(auto iter = words.begin(); iter != words.end(); ++iter)
 	{
 		(*iter)->display();
 	}

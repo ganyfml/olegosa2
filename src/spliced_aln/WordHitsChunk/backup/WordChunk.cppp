@@ -1,0 +1,184 @@
+// vim: set noexpandtab tabstop=2:
+#include <WordChunk.hpp>
+#include <helper.hpp>
+
+using namespace std;
+
+bool compare_wordChunks(const WordChunkPtr e1, const WordChunkPtr e2)
+{
+	if (e1->get_colinearity() != e2->get_colinearity())
+		return e1->get_colinearity() > e2->get_colinearity();
+	else return e2->get_refStartIndex() > e1->get_refStartIndex();
+}
+
+void WordChunk::eval()
+{
+	wordList_.sort(compare_wordsByQueryIndex);
+	colinearity_ = check_wordListsColinearity(wordList_);
+	coverage_ = double(wordList_.size())/(wordList_.back()->id - wordList_.front()->id + 1);
+
+	WordPtr first = wordList_.front();
+	WordPtr last = wordList_.back();
+
+	strand_ = first->strand;
+	index_refStart_ = first->ref_index;
+	index_refEnd_ = last->ref_index + last->word_length - 1;
+
+	index_queryStart_ = first->query_index;
+	index_queryEnd_ = last->query_index + last->word_length - 1;
+}
+
+void WordChunk::extend_inexact_left(const SeqString& query, const SeqString& ref, bool stop_atNegativeScore)
+{
+	const int match_score = 3;
+	const int mismatch_score = -1;
+	const int max_diff = 2;
+
+	long index = 0;
+	int end = 0;
+	int curr_score = 0;
+	int max_score = 0;
+	int diff = 0;
+	int min_diff = 0;
+
+	while((index_queryStart_ - index) >= 0
+			&& (index_refStart_ - index) >= 0)
+	{
+		if(query[index_queryStart_ - index] == ref[index_refStart_ - index])
+		{
+			curr_score += match_score;
+		}
+		else
+		{
+			curr_score += mismatch_score;
+			++diff;
+			if(diff > max_diff)
+			{
+				break;
+			}
+		}
+
+		if(stop_atNegativeScore && curr_score < 0)
+		{
+			break;
+		}
+		else if(curr_score > max_score || index == index_queryStart_)
+		{
+			max_score = curr_score;
+			end = index;
+			min_diff = diff;
+		}
+		++index;
+	}
+
+	index_queryStart_ -= end;
+	index_refStart_ -= end;
+	gapMM_.num_mismatch += min_diff;	
+}
+
+void WordChunk::extend_inexact_right(const SeqString& query, const SeqString& ref, bool stop_atNegativeScore)
+{
+	const int match_score = 3;
+	const int mismatch_score = -1;
+	const int max_diff = 2;
+
+	long index = 0;
+	int end = 0;
+	int score = 0;
+	int max_score = 0;
+	int diff = 0;
+	int min_diff = 0;
+
+	while((index_queryEnd_ + index) < get_seqLength(query)
+			&& (index_refEnd_ + index) < get_seqLength(ref))
+	{
+		if(query[index_queryEnd_+ index] == ref[index_refEnd_ + index])
+		{
+			score += match_score;
+		}
+		else
+		{
+			score += mismatch_score;
+			++diff;
+			if(diff > max_diff)
+			{
+				break;
+			}
+		}
+
+		if(stop_atNegativeScore && score < 0)
+		{
+			break;
+		}
+
+		if(score > max_score || ((index_queryEnd_ + index + 1) == get_seqLength(query)) )
+		{
+			max_score = score;
+			end = index;
+			min_diff = diff;
+		}
+		++index;
+	}
+
+	index_queryEnd_ += end;
+	index_refEnd_ += end;
+	gapMM_.num_mismatch += min_diff;
+}
+
+//Query need to be decided by strand, whethear is seq or reverse_seq
+void WordChunk::extend_inexact(const SeqString& query, const SeqString& ref, bool stop_atNegativeScore, ExtendDirection::Value direction)
+{
+	//extend on the left
+	if(direction != ExtendDirection::right)
+	{
+		extend_inexact_left(query, ref, stop_atNegativeScore);
+	}
+
+	//extend on the right
+	if(direction != ExtendDirection::left)
+	{
+		extend_inexact_right(query, ref, stop_atNegativeScore);
+	}
+}
+
+//FIXME
+//TODO
+void WordChunk::aln_wordChunk(SeqString& query, SeqString& reference)
+{
+	if(wordList_.size() >= 2)
+	{
+		for(auto first = wordList_.begin(), second = ++wordList_.begin(); second != wordList_.end(); ++first, ++second) 
+		{
+			long ref_start = (*first)->ref_index + (*first)->word_length;
+			long ref_len = (*second)->ref_index - ref_start;
+
+			long query_start = (*first)->query_index + (*first)->word_length;
+			long query_len = (*second)->query_index - query_start;
+
+			if(query_len <= 0 && ref_len <= 0 && ref_len == query_len)
+				continue;
+
+			else if (ref_len <= 0 && query_len > ref_len)
+			{
+				gapMM_.num_gapOpenQuery++;
+				gapMM_.num_gapExtQuery++;
+				continue;
+			}
+
+			else if(query_len <= 0 && ref_len > query_len)
+			{
+				gapMM_.num_gapOpenRef++;
+				gapMM_.num_gapExtRef++;
+				continue;
+			}
+
+			SeqString ref_seq =get_stringInfix(reference, ref_start, ref_start + ref_len);
+			SeqString query_seq = get_stringInfix(query, query_start, query_start + query_len);
+
+			GapAndMM new_gapAmm;
+			get_alnPath(ref_seq, query_seq, new_gapAmm);
+
+			gapMM_ = gapMM_ + new_gapAmm;
+		}
+	}
+}

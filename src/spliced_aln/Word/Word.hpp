@@ -12,15 +12,16 @@ struct Word
 	int length;
 	int query_pos;
 	int r_query_pos;
+	int num_occ;
 	SeqString seq;
 	SeqString r_seq;
 
 	Word(int word_id, int length, int query_pos, int r_query_pos, SeqString seq, SeqString r_seq)
-		: id(word_id), length(length), query_pos(query_pos), r_query_pos(r_query_pos), seq(seq), r_seq(r_seq) {}
+		: id(word_id), length(length), query_pos(query_pos), r_query_pos(r_query_pos), num_occ(0), seq(seq), r_seq(r_seq) {}
 
 	void display()
 	{
-		std::cout << "Word ID: " << id << " with length: " << length << std::endl;
+		std::cout << "Word ID: " << id << " with length: " << length << " and " << num_occ <<" hits" << std::endl;
 		std::cout << "seq: " << seq << ", query pos: " << query_pos << std::endl;
 		std::cout << "reverse seq: " << r_seq << ", reverse query pos: " << r_query_pos << std::endl;
 	}

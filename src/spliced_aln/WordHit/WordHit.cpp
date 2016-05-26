@@ -14,7 +14,7 @@ bool compare_wordHitsByRefPos(const WordHitPtr word_hit1, const WordHitPtr word_
 	return word_hit1->ref_pos < word_hit2->ref_pos;
 }
 
-bool compare_WordHitsByQueryPos(const WordHitPtr word_hit1, const WordHitPtr word_hit2)
+bool compare_wordHitsByQueryPos(const WordHitPtr word_hit1, const WordHitPtr word_hit2)
 {
 	return word_hit1->query_pos < word_hit2->query_pos;
 }
