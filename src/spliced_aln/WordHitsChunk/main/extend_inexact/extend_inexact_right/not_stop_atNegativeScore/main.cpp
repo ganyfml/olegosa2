@@ -8,7 +8,7 @@ using namespace std;
 int main(int argv, char** argc)
 {
   SeqString query = string("TTTTTTTTTTTTT");
-  SeqString ref = string(string("GGTGGTTGTG"));
+  SeqString ref = string(string("GGGTGTTGTG"));
   SeqSuffixArray ref_SAIndex(ref);
 
   int word_hit_id = 0;
@@ -25,7 +25,7 @@ int main(int argv, char** argc)
   chunk->queryStart_pos = 5;
   chunk->queryEnd_pos = 7;
 
-  bool stop_atNegativeScore = true;
-  chunk->extend_inexact_left(query, ref_SAIndex, stop_atNegativeScore);
+  bool stop_atNegativeScore = false;
+  chunk->extend_inexact_right(query, ref_SAIndex, stop_atNegativeScore);
   chunk->display();
 }

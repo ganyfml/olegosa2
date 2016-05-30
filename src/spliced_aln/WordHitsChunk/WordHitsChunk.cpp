@@ -8,7 +8,7 @@ void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixA
 	const int mismatch_score = -1;
 	const int max_diff = 2;
 
-	long index = 0;
+	long index = 1;
 	int end = 0;
 	int curr_score = 0;
 	int max_score = 0;
