@@ -14,6 +14,7 @@ class SeqSuffixArray
 	 void saveSA(const std::string& index_file_name) const;
 	 unsigned long SAIndex2SeqPos(unsigned long SAIndex) const;
 	 SeqString getSeq_bySAIndex(unsigned long SAIndex, int seq_length) const;
+	 SeqString get_infixSeq(unsigned long beginPos, unsigned long endPos) const;
 	 char char_at(int index) const;
 	 long seq_length() const;
 	 const void* get_pointer() const { return impl_; }

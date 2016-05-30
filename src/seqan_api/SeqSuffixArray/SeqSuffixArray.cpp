@@ -67,3 +67,10 @@ SeqString SeqSuffixArray::getSeq_bySAIndex(unsigned long SAIndex, int seq_length
 	seq.set_pointer(new SeqanString(infixWithLength(indexText(*voidPtr2TPtr(impl_)), saAt(SAIndex, *voidPtr2TPtr(impl_)), seq_length)));
 	return seq;
 }
+
+SeqString SeqSuffixArray::get_infixSeq(unsigned long beginPos, unsigned long endPos) const
+{
+	SeqString ret;
+	ret.set_pointer(new SeqanString(infix(indexText(*voidPtr2TPtr(impl_)), beginPos, endPos)));
+	return ret;
+}

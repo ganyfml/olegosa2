@@ -1,6 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <spliced_aln/WordHitsChunk.hpp>
+#include <spliced_aln/aln_global.hpp>
 
 void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
 {
@@ -112,5 +113,42 @@ void WordHitsChunk::extend_inexact(const SeqString& query, const SeqSuffixArray&
 	if(direction != ExtendDirection::left)
 	{
 		extend_inexact_right(query, ref_SAIndex, stop_atNegativeScore);
+	}
+}
+
+void WordHitsChunk::refine(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	if(wordHitList.size() < 2) return;
+
+	for(auto first = wordHitList.begin(), second = ++wordHitList.begin(); second != wordHitList.end(); ++first, ++second)
+	{
+		long ref_start = (*first)->ref_pos + opt.word_length;
+		long ref_len = (*second)->ref_pos - ref_start;
+
+		long query_start = (*first)->query_pos + opt.word_length;
+		long query_len = (*second)->query_pos - query_start;
+
+		if (ref_len <= 0 && query_len <= 0 && query_len == ref_len )
+		{
+			continue;
+		}
+		else if (ref_len <= 0 && query_len > ref_len )
+		{
+			this->gapMM.num_gapOpenRef += 1;
+			this->gapMM.num_gapExtRef += (query_len- ref_len - 1);
+			continue;
+		}
+		else if (query_len <= 0 && ref_len > query_len)
+		{
+			this->gapMM.num_gapOpenQuery += 1;
+			this->gapMM.num_gapExtQuery += (ref_len- query_len - 1);
+			continue;
+		}
+
+		SeqString query_part = query.get_infix(query_start, query_start + query_len);
+		SeqString ref_part = ref_SAIndex.get_infixSeq(ref_start, ref_start + ref_len);
+		GapAndMM gap_mm;
+		aln_global(ref_part, query_part, gap_mm);
+		this->gapMM += gap_mm;
 	}
 }
