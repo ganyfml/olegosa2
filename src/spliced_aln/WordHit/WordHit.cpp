@@ -31,18 +31,18 @@ bool compare_wordHitsByRefAndStrand(const WordHitPtr word_hit1, const WordHitPtr
 	}
 }
 
-bool check_wordHitListColinearity(const std::list<WordHitPtr>& wordList)
+bool is_collinear(const std::list<WordHitPtr>& wordList)
 {
-	bool isColinear = true;
-	for(auto first = wordList.begin(), second = ++wordList.begin();
-			second != wordList.end();
-			++first, ++second)
+	bool is_colinear = true;
+	for(auto first = wordList.begin(), second = ++wordList.begin()
+			; second != wordList.end()
+			; ++first, ++second)
 	{
 		if((*first)->ref_pos > (*second)->ref_pos)
 		{
-			isColinear = false;
+			is_colinear = false;
 			break;
 		}
 	}
-	return isColinear;
+	return is_colinear;
 }

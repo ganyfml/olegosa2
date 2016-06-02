@@ -37,5 +37,5 @@ int main(int argv, char** argc)
 	wordptr_list.push_back(word3ptr);	
 	wordptr_list.push_back(word4ptr);	
 
-	cout << check_wordHitListColinearity(wordptr_list) << endl;
+	cout << is_collinear(wordptr_list) << endl;
 }

@@ -35,4 +35,4 @@ bool compare_wordHitsByHitDiagonal(const WordHitPtr word_hit1, const WordHitPtr 
 bool compare_wordHitsByRefPos(const WordHitPtr word_hit1, const WordHitPtr word_hit2);
 bool compare_wordHitsByQueryPos(const WordHitPtr word_hit1, const WordHitPtr word_hit2);
 bool compare_wordHitsByRefAndStrand(const WordHitPtr word_hit1, const WordHitPtr word_hit2);
-bool check_wordHitListColinearity(const std::list<WordHitPtr>& wordList_);
+bool is_collinear(const std::list<WordHitPtr>& wordList_);
