@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	string index_file_name = string(argv[1]);
 	SeqSuffixArray ref_load(index_file_name);

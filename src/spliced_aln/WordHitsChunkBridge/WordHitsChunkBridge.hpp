@@ -10,21 +10,21 @@
 
 struct WordHitsChunkBridge
 {
-	WordHitsChunkBridge(int id) :
-		id(id), strand(-1) , colinearity(false), coverage(0), refStart_pos(-1)
-		, refEnd_pos(-1), queryStart_pos(-1), queryEnd_pos(-1) {}
+	WordHitsChunkBridge() :
+		strand(-1) , colinearity(false), coverage(0), refStart_pos(-1)
+		, refEnd_pos(-1), queryStart_pos(-1), queryEnd_pos(-1), score(0) {}
 
 	void display()
 	{
-		std::cout << "Bridge ID: " << id << std::endl;
 		std::cout << "Ref   Start Pos: " << refStart_pos   << ", Ref   End Pos: " << refEnd_pos << std::endl;
 		std::cout << "Query Start Pos: " << queryStart_pos << ", Query End Pos: " << queryEnd_pos << std::endl;
 		std::cout << "Colinearity: " << colinearity << ", Coverage: " << coverage << std::endl;
-		gapMM.display();
+		gap_mm.display();
 	}
 
-	GapAndMM gapMM;
-	int id;
+	WordHitsChunkPtr head_chunk;
+	WordHitsChunkPtr tail_chunk;
+	GapAndMM gap_mm;
 	int strand;
 	bool colinearity;
 	double coverage;
@@ -32,6 +32,7 @@ struct WordHitsChunkBridge
 	long refEnd_pos;
 	long queryStart_pos;
 	long queryEnd_pos;
+	double score;
 };
 
 typedef std::shared_ptr<WordHitsChunkBridge> WordHitsChunkBridgePtr;

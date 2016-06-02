@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString query_seq((string(argv[2])));
 	SeqString ref_seq((string(argv[1])));

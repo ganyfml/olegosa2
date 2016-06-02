@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <string>
-#include "../../SeqString.hpp"
+#include "../../../SeqString.hpp"
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString query_seq(string("ATGC"));
-	query_seq += "ATCG";
+	query_seq += SeqString("ATCG");
 	std::cout << query_seq << std::endl;
 }

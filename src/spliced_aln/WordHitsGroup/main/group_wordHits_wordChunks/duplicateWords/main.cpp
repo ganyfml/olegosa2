@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
   int hit1_wordid = atoi(argv[1]);
   int hit1_strand = 0;

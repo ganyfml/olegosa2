@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString query_seq(string("ATCG"));
 	constVoid2localType<seqan::Dna5String>(query_seq.get_pointer());

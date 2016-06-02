@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main()
 {
   int word1_hit1_wordID = 0;
   int word1_hit1_strand= 0;

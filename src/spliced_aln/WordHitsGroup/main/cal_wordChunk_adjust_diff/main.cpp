@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int, char* argv[])
+int main()
 {
   WordHitsChunkPtr head_chunk = make_shared<WordHitsChunk>(1);
   WordHitsChunkPtr tail_chunk = make_shared<WordHitsChunk>(1);

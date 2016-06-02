@@ -55,6 +55,12 @@ SeqString& SeqString::operator+=(const std::string& rhs)
 	return *this;
 }
 
+SeqString& SeqString::operator+=(const SeqString& rhs)
+{
+	*voidPtr2TPtr(impl_) += *constVoid2localType<T>(rhs.get_pointer());
+	return *this;
+}
+
 char SeqString::operator[](long idx) const
 {
 	return (*voidPtr2TPtr(impl_))[idx];
@@ -82,6 +88,12 @@ SeqString SeqString::get_reverse() const
 	SeqString ret = *this;
 	ret.make_reverse();
 	return ret;
+}
+
+SeqString operator+(SeqString lhs, const SeqString& rhs)
+{
+	*constVoid2localType<T>(lhs.get_pointer()) += *constVoid2localType<T>(rhs.get_pointer());
+	return lhs;
 }
 #if 0
 // FIXME

@@ -7,7 +7,7 @@
 using namespace seqan;
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index ref((Dna5String(argv[1])));

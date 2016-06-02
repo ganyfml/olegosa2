@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <spliced_aln/WordHitsGroup.hpp>
+#include <spliced_aln/splicedScore.hpp>
+#include <spliced_aln/aln_global.hpp>
 
 using namespace std;
 
@@ -86,20 +88,17 @@ void WordHitsGroup::pair_wordChunks(const SeqString& query, const SeqSuffixArray
 			}
 
 			/***************** If annotation exist, use annotation search first ***************/
-			int gap_length = tail_chunk->queryStart_pos - head_chunk->queryEnd_pos;
 			/* For annotation search
 				 int wordID_diff = tail_chunk->get_wordList().front()->id - head_chunk->get_wordList().back()->id;
 				 int gap_length = tail_chunk->queryStart_pos - head_chunk->queryEnd_pos - 1;
 				 */
 
-			//DEBUG
-			//locate_junc_two_anchors(head_chunk, tail_chunk, query, ref_SAIndex);
-			//END
+			locate_junc_two_chunks(head_chunk, tail_chunk, query, ref_SAIndex, opt);
 		}
 	}
 }
 
-void WordHitsGroup::locate_junc_two_chunks(const WordHitsChunkPtr& head_chunk, const WordHitsChunkPtr& tail_chunk, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+void WordHitsGroup::locate_junc_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
 	//Determin Number of BackSearch
 	int num_backSearch = opt.max_overhang;
@@ -139,7 +138,7 @@ void WordHitsGroup::locate_junc_two_chunks(const WordHitsChunkPtr& head_chunk, c
 	if(opt.denovo_search && 
 			(tail_chunk->refStart_pos - 1 - head_chunk->refEnd_pos < opt.max_intron_size))
 	{
-		//int result = locate_junc_two_anchors_denovo(head_chunk, tail_chunk, min_headChunk_refEnd, max_headChunk_refEnd, gap_length, num_backSearch, query, ref);
+		locate_junc_two_chunks_denovo(head_chunk, tail_chunk, min_headChunk_refEnd, max_headChunk_refEnd, gap_length, num_backSearch, query, ref_SAIndex, opt);
 	}
 }
 
@@ -169,23 +168,37 @@ void cal_wordChunk_adjust_diff(const WordHitsChunkPtr head_chunk, const WordHits
 	}
 }
 
+int check_spliceSite(const SeqSuffixArray& ref_SAIndex, long refStart_pos, long refEnd_pos)
+{
+	int splice_strand = -1;
+	if(ref_SAIndex.char_at(refStart_pos) == 'G' && ref_SAIndex.char_at(refStart_pos + 1) == 'T'
+			&& ref_SAIndex.char_at(refEnd_pos - 1) == 'A' && ref_SAIndex.char_at(refEnd_pos) == 'G')
+	{
+		splice_strand = 0;
+	}
+	else if(ref_SAIndex.char_at(refStart_pos) == 'C' && ref_SAIndex.char_at(refStart_pos + 1) == 'T'
+			&& ref_SAIndex.char_at(refEnd_pos - 1) == 'A' && ref_SAIndex.char_at(refEnd_pos) == 'C')
+	{
+		splice_strand = 1;
+	}
+
+	return splice_strand;
+}
+
 int WordHitsGroup::locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int min_headChunk_refEnd, int max_headChunk_refEnd, int gap_length, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
-	int num_foundInDenovoSearch = 0;
-
 	vector<int> head_chunk_adjust_diff;
 	vector<int> tail_chunk_adjust_diff;
 	cal_wordChunk_adjust_diff(head_chunk, tail_chunk, head_chunk_adjust_diff, tail_chunk_adjust_diff, query, ref_SAIndex, num_backSearch);
 
-	int local_max_diff = opt.max_diff > 2 ? 2 : opt.max_diff;
+	int local_max_diff = opt.wordChunk_max_diff > 2 ? 2 : opt.wordChunk_max_diff;
 	int best_diff = local_max_diff + 1;
 
-	WordChunkBridge new_jun;
-
+	WordHitsChunkBridgePtr new_jun;
+	int num_foundInDenovoSearch = 0;
 	for(long headChunk_refEnd = min_headChunk_refEnd; headChunk_refEnd <= max_headChunk_refEnd; ++headChunk_refEnd)
 	{
 		long tailChunk_refStart = tail_chunk->refStart_pos + num_backSearch - (gap_length - (headChunk_refEnd - min_headChunk_refEnd));
-
 		if((tailChunk_refStart - headChunk_refEnd) < opt.min_intron_size)
 		{
 			continue;
@@ -195,67 +208,57 @@ int WordHitsGroup::locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, W
 		long index_gap_refEnd = tailChunk_refStart - 1;
 
 		//TODO WHY?
+		/*
 		long breakpoint_index_query_tmp = head_chunk->queryEnd_pos - num_backSearch + headChunk_refEnd - min_headChunk_refEnd;
 		if(breakpoint_index_query_tmp + 1 < opt.min_anchor || (get_seqLength(query)- breakpoint_index_query_tmp) < opt.min_anchor)
 			continue;
 		//TODO END
+	*/
 
-		int splice_strand;
-		if(ref_SAIndex.char_at(index_refStart) == 'G' && ref_SAIndex.char_at(index_refStart + 1) == 'T'
-				&& ref_SAIndex.char_at(index_refEnd - 1) == 'A' && ref_SAIndex(index_refEnd) == 'G')
-		{
-			splice_strand = 0;
-		}
-		else if((int)ref_SAIndex.char_at(index_refStart) == 'C' && (int)ref_SAIndex.char_at(index_refStart + 1) == 'T'
-				&& (int)ref_SAIndex.char_at(index_refEnd - 2) == 'A' && (int)ref_SAIndex.char_at(index_refEnd) == 'C')
-		{
-			splice_strand = 1;
-		}
-		else continue;
+		int splice_strand = check_spliceSite(ref_SAIndex, index_gap_refStart, index_gap_refEnd);
+		if(splice_strand == -1)
+			continue;
+		if(opt.strand_mode != Strand_mode::reverse && splice_strand != head_chunk->strand)
+			continue;
+		if(opt.strand_mode != Strand_mode::forward && splice_strand == head_chunk->strand)
+			continue;
 
-		/*
-			 if(opt.strand_mode != Strand_mode::reverse && splice_strand != head_chunk->strand)
-			 continue;
-			 if(opt.strand_mode != Strand_mode::forward && splice_strand == head_chunk->strand)
-			 continue;
-			 */
-
-		//TODO FIX
-		SeqString ref_seq = get_stringInfix(ref, min_headChunk_refEnd, headChunk_refEnd);
-		SeqString ref_seq2 = get_stringInfix(ref, tailChunk_refStart, tailChunk_refStart + num_backSearch);
-		ref_seq += ref_seq2;
-		SeqString gap_seq = query.get_infixSeq(head_chunk->queryEnd_pos - num_backSearch + 1);
-
+		SeqString gap_ref = ref_SAIndex.get_infixSeq(min_headChunk_refEnd, headChunk_refEnd) + ref_SAIndex.get_infixSeq(tailChunk_refStart, tailChunk_refStart + num_backSearch);
+		SeqString gap_seq = query.get_infix(head_chunk->queryEnd_pos - num_backSearch + 1, head_chunk->queryEnd_pos - num_backSearch + 1 + gap_length);
 		GapAndMM gap_mm;
-		get_alnPath(ref_seq, gap_seq, gap_mm);
-
-		int adjuest_mm = 0;
-		adjuest_mm += begin_wordChunk_adjustDiff[num_backSearch - 1]; // note the -1
-		adjuest_mm += end_wordChunk_adjustDiff[num_backSearch - 1];
+		aln_global(gap_ref, gap_seq, gap_mm);
+		int adjuest_mm = head_chunk_adjust_diff[num_backSearch - 1] + tail_chunk_adjust_diff[num_backSearch - 1];
 		int diff = gap_mm.total_diff() - adjuest_mm;
-		//TODO END
 
-		//Only choose the best one
-		if (diff <= local_max_diff && diff < best_diff)
+		if(diff < opt.wordChunk_max_diff)
 		{
-			new_jun.spliced_strand = splice_strand;
-			new_jun.head_chunk = head_chunk;
-			new_jun.tail_chunk = end_wordChunk;
-			new_jun.gap_mm = gap_mm;
-			new_jun.index_refStart = headChunk_refEnd;
-			new_jun.index_refEnd = tailChunk_refStart;
-			new_jun.index_queryStart = head_chunk->queryEnd_pos - num_backSearch + headChunk_refEnd  - min_headChunk_refEnd;
-			new_jun.index_queryEnd = new_jun.index_queryStart + 1;
-
-			//p.logistic_prob = get_splice_score(pacseq, ue_end_t, de_start_t);
-			best_diff = diff;
-			head_chunk->set_isFirst(false);
-			head_chunk->set_isFirst(false);
-
-			num_foundInDenovoSearch++;
+			WordHitsChunkBridgePtr new_jun_temp = make_shared<WordHitsChunkBridge>();
+			new_jun_temp->head_chunk = head_chunk;
+			new_jun_temp->tail_chunk = tail_chunk;
+			new_jun_temp->refStart_pos = headChunk_refEnd;
+			new_jun_temp->refEnd_pos = tailChunk_refStart;
+			new_jun_temp->queryStart_pos = head_chunk->queryEnd_pos - num_backSearch + (headChunk_refEnd - min_headChunk_refEnd);
+			new_jun_temp->queryEnd_pos = new_jun_temp->queryStart_pos + 1; //TODO WHY + 1?
+			new_jun_temp->gap_mm = gap_mm;
+			new_jun_temp->score = 
+			head_chunk->is_first = false;
+			tail_chunk->is_last = false;
+			if(opt.report_best_only && diff < best_diff)
+			{
+				new_jun = new_jun_temp;
+				best_diff = diff;
+			}
+			else
+			{
+				wordhitschunkbridge.push_back(new_jun_temp);
+				++num_foundInDenovoSearch;
+			}
 		}
 	}
 
-	wordChunkBridgeList_.emplace(make_shared<WordChunkBridge>(new_jun));
+	if(opt.report_best_only && new_jun != nullptr)
+	{
+		wordhitschunkbridge.push_back(new_jun);
+	}
 	return num_foundInDenovoSearch;
 }

@@ -30,9 +30,12 @@ class SeqString
 		SeqString get_reverse() const;
 
 		SeqString& operator+=(const std::string& rhs);
+		SeqString& operator+=(const SeqString& rhs);
 		char operator[](long idx) const;
 
 		SeqString& operator=(const SeqString& other);
+
+		friend SeqString operator+(SeqString lhs, const SeqString& rhs);
 
 		/* FIXME
 		 * Seems not useful for now

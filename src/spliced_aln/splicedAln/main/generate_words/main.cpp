@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	AlnSpliceOpt opt;
 	opt.word_length = 5;

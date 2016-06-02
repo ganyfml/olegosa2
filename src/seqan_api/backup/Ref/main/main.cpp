@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString ref_query((string("ATGC")));
 	SeqIndex index(ref_query);

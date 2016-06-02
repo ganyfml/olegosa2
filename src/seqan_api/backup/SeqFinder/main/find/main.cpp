@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString ref(string("ATGCAT"));
 	SeqSuffixArray seq_SA(ref);
