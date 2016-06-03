@@ -1,7 +1,7 @@
 // vim: set noexpandtab tabstop=3:
 
 #include <list>
-#include "../../splicedAln.hpp"
+#include "../../WordHitsGroup.hpp"
 #include <spliced_aln/AlnSpliceOpt.hpp>
 #include <seqan_api/SeqString.hpp>
 
@@ -27,16 +27,19 @@ int main(int, char* argv[])
   hit3.ref_pos = 4;
   WordHitPtr hit3_ptr = make_shared<WordHit>(hit3);
 
-  list<WordHitPtr> hits;
-  hits.push_back(hit1_ptr);
-  hits.push_back(hit2_ptr);
-  hits.push_back(hit3_ptr);
+  int group_id = 0;
+  WordHitsGroupPtr test_chunk = make_shared<WordHitsGroup>(group_id);
+  test_chunk->wordhits.push_back(hit1_ptr);
+  test_chunk->wordhits.push_back(hit2_ptr);
+  test_chunk->wordhits.push_back(hit3_ptr);
 
-  list<WordHitsGroupPtr> groups;
-  int max_intro_size = 100;
-  group_wordHits_wordHitsGroup(hits, groups, max_intro_size);
+  AlnSpliceOpt opt;
+  opt.wordChunk_max_diff = 2;
+  int num_words = 3;
 
-  for(auto iter = groups.begin(); iter != groups.end(); ++iter)
+  test_chunk->group_wordHits_wordChunks(opt, num_words);
+
+  for(auto iter = test_chunk->wordhitschunks.begin(); iter != test_chunk->wordhitschunks.end(); ++iter)
   {
 	 (*iter)->display();
   }

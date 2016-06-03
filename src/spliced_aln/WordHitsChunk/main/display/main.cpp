@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int, char** argc)
+int main()
 {
 	int chunk_id = 0;
 	WordHitsChunk w1(chunk_id);

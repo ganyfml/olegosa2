@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int argv, char** argc)
+int main(int, char** argc)
 {
 	int wordID = 0;
 	Word word1 {wordID};

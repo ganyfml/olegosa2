@@ -28,18 +28,19 @@ struct WordHitsGroup
 
 	int id;
 	double score;
-	std::vector<WordHitPtr> wordhits;
+	std::list<WordHitPtr> wordhits;
 	std::list<WordHitsChunkPtr> wordhitschunks;
 	std::list<WordHitsChunkBridgePtr> wordhitschunkbridge;
 
 	void group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_words);
-	void pair_wordChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
+	void pair_wordHitsChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 	void locate_junc_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 	int locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int min_headChunk_refEnd, int max_headChunk_refEnd, int gap_length, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 };
 
 typedef std::shared_ptr<WordHitsGroup> WordHitsGroupPtr;
 
+bool compare_wordHitsGroupByScore(const WordHitsGroupPtr group1, const WordHitsGroupPtr group2);
 //DEBUG
 double calculate_wordhitsChunk_score(const WordHitsGroupPtr& group, const std::vector<WordPtr>& words, long ref_length, int num_words);
 bool can_pair(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, const AlnSpliceOpt& opt);

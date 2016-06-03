@@ -1,7 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <list>
-#include "../../splicedAln.hpp"
+#include "../../splicedAlnUtil.hpp"
 #include <spliced_aln/AlnSpliceOpt.hpp>
 #include <seqan_api/SeqString.hpp>
 

@@ -49,3 +49,5 @@ struct WordHitsChunk
 };
 
 typedef std::shared_ptr<WordHitsChunk> WordHitsChunkPtr;
+
+bool compare_wordHitsChunkByColinearAndRefStartpos(const WordHitsChunkPtr chunk1, const WordHitsChunkPtr chunk2);

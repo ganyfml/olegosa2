@@ -1,13 +1,13 @@
 // vim: set noexpandtab tabstop=3:
 
-#include <spliced_aln/splicedAln.hpp>
+#include <spliced_aln/splicedAlnUtil.hpp>
 #include <nonspliced_aln/nonsplicedAln.hpp>
 #include <util/AlnResult.hpp>
 #include <queue>
 
 using namespace std;
 
-void generate_words(const SeqString& query, std::list<WordPtr>& wordList, const AlnSpliceOpt& opt)
+void generate_words(const SeqString& query, std::vector<WordPtr>& words, const AlnSpliceOpt& opt)
 {
   int num_words = (query.get_length() - opt.word_max_overlap) / (opt.word_length - opt.word_max_overlap);
   for(int i = 0; i != num_words; ++i)
@@ -16,16 +16,17 @@ void generate_words(const SeqString& query, std::list<WordPtr>& wordList, const 
 	 SeqString word_seq = query.get_infix(query_pos, query_pos + opt.word_length);
 	 SeqString word_rseq = word_seq.get_reverse();
 	 int rev_query_pos = query.get_length() - (query_pos + opt.word_length);
-	 wordList.push_back(std::make_shared<Word>(i, opt.word_length, query_pos, rev_query_pos, word_seq, word_rseq));	
+	 words.push_back(std::make_shared<Word>(i, opt.word_length, query_pos, rev_query_pos, word_seq, word_rseq));	
   }
 }
 
-void collect_wordHitsByAlnResult(std::queue<AlnResult>& word_hit_result, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, const WordPtr current_word, int strand)
+void collect_wordHitsByAlnResult(std::queue<AlnResult>& word_hit_result, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, WordPtr current_word, int strand)
 {
   while(!word_hit_result.empty())
   {
 	 AlnResult a = word_hit_result.front();
 	 word_hit_result.pop();
+	 current_word->num_occ += a.SA_index_high - a.SA_index_low;
 	 for(unsigned long i = a.SA_index_low; i < a.SA_index_high; ++i)
 	 {
 		WordHit w(current_word->id, strand);
@@ -36,16 +37,16 @@ void collect_wordHitsByAlnResult(std::queue<AlnResult>& word_hit_result, std::li
   }
 }
 
-void collect_wordHits(const std::list<WordPtr>& wordList, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+void collect_wordHits(const std::vector<WordPtr>& words, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
   alnNonspliceOpt word_search_opt;
-  for(auto word_iter = wordList.begin(); word_iter != wordList.end(); ++word_iter)
+  for(auto word_iter = words.begin(); word_iter != words.end(); ++word_iter)
   {
 	 std::queue<AlnResult> word_hit_result;
 	 nonsplicedAln((*word_iter)->seq, word_hit_result, ref_SAIndex, word_search_opt);
 	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 0);
 	 nonsplicedAln((*word_iter)->r_seq, word_hit_result, ref_SAIndex, word_search_opt);
-	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 1);
+	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 2);
   }
 }
 
@@ -57,8 +58,7 @@ void group_wordHits_wordHitsGroup(const list<WordHitPtr>& hits, list<WordHitsGro
   int prev_wordID = -1;
 
   int curr_wordGroup_id = 0;
-  WordHitsGroupPtr curr_group = make_shared<WordHitsGroup>(curr_wordGroup_id++);
-  groups.push_back(curr_group);
+  WordHitsGroupPtr curr_group;
   for (auto iter = hits.begin(); iter != hits.end(); ++iter)
   {
 	 WordHitPtr hit = *iter;
@@ -77,18 +77,19 @@ void group_wordHits_wordHitsGroup(const list<WordHitPtr>& hits, list<WordHitsGro
 		{
 		  curr_word_direction = 2;
 		}
-
-		if (hit->strand != prev_strand
-			 || curr_ref_pos - prev_ref_pos > 2 * max_intron_size
-			 || curr_word_direction == 2
-			 || (prev_word_direction != 0 && prev_word_direction != curr_word_direction))
-		{
-		  prev_wordID = -1;
-		  curr_word_direction = 0;
-		  curr_group = make_shared<WordHitsGroup>(curr_wordGroup_id++);
-		  groups.push_back(curr_group);
-		}
 	 }
+
+	 if (hit->strand != prev_strand
+		  || curr_ref_pos - prev_ref_pos > 2 * max_intron_size
+		  || curr_word_direction == 2
+		  || (prev_word_direction != 0 && prev_word_direction != curr_word_direction))
+	 {
+		prev_wordID = -1;
+		curr_word_direction = 0;
+		curr_group = make_shared<WordHitsGroup>(curr_wordGroup_id++);
+		groups.push_back(curr_group);
+	 }
+
 	 curr_group->wordhits.push_back(hit);
 	 prev_word_direction = curr_word_direction;
 	 prev_ref_pos = curr_ref_pos;

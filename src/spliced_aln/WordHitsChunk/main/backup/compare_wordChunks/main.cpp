@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int argv, char** argc)
+int main(int, char** argc)
 {
 	int wordChunkID1 = 1;
 	WordChunk w1 {wordChunkID1};

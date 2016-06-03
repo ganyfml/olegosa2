@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int argv, char** argc)
+int main(int, char** argc)
 {
 	SeqString query = "TTTTTTTTTTTTT";
 	SeqString ref = "GTGTTTTGTG";

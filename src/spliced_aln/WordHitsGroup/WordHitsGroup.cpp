@@ -1,4 +1,4 @@
-// vim: set noexpandtab tabstop=2:
+// vim: set noexpandtab tabstop=3:
 
 #include <cmath>
 #include <spliced_aln/WordHitsGroup.hpp>
@@ -6,6 +6,11 @@
 #include <spliced_aln/aln_global.hpp>
 
 using namespace std;
+
+bool compare_wordHitsGroupByScore(const WordHitsGroupPtr group1, const WordHitsGroupPtr group2)
+{
+	return group1->score < group2->score;
+}
 
 void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_words)
 {
@@ -73,7 +78,7 @@ bool can_pair(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chu
 	return true;
 }
 
-void WordHitsGroup::pair_wordChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+void WordHitsGroup::pair_wordHitsChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
 	for(auto head_chunk_iter = wordhitschunks.begin(); head_chunk_iter != wordhitschunks.end(); ++head_chunk_iter)
 	{
@@ -209,11 +214,11 @@ int WordHitsGroup::locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, W
 
 		//TODO WHY?
 		/*
-		long breakpoint_index_query_tmp = head_chunk->queryEnd_pos - num_backSearch + headChunk_refEnd - min_headChunk_refEnd;
-		if(breakpoint_index_query_tmp + 1 < opt.min_anchor || (get_seqLength(query)- breakpoint_index_query_tmp) < opt.min_anchor)
-			continue;
+			 long breakpoint_index_query_tmp = head_chunk->queryEnd_pos - num_backSearch + headChunk_refEnd - min_headChunk_refEnd;
+			 if(breakpoint_index_query_tmp + 1 < opt.min_anchor || (get_seqLength(query)- breakpoint_index_query_tmp) < opt.min_anchor)
+			 continue;
 		//TODO END
-	*/
+		*/
 
 		int splice_strand = check_spliceSite(ref_SAIndex, index_gap_refStart, index_gap_refEnd);
 		if(splice_strand == -1)
@@ -241,7 +246,7 @@ int WordHitsGroup::locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, W
 			new_jun_temp->queryEnd_pos = new_jun_temp->queryStart_pos + 1; //TODO WHY + 1?
 			new_jun_temp->gap_mm = gap_mm;
 			new_jun_temp->score = 
-			head_chunk->is_first = false;
+				head_chunk->is_first = false;
 			tail_chunk->is_last = false;
 			if(opt.report_best_only && diff < best_diff)
 			{

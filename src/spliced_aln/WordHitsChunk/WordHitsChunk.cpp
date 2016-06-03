@@ -3,6 +3,18 @@
 #include <spliced_aln/WordHitsChunk.hpp>
 #include <spliced_aln/aln_global.hpp>
 
+bool compare_wordHitsChunkByColinearAndRefStartpos(const WordHitsChunkPtr chunk1, const WordHitsChunkPtr chunk2)
+{
+	if(chunk1->colinearity != chunk2->colinearity)
+	{
+		return chunk1->colinearity > chunk2->colinearity;
+	}
+	else
+	{
+		return chunk1->refStart_pos < chunk2->refStart_pos;
+	}
+}
+
 void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
 {
 	const int match_score = 3;
