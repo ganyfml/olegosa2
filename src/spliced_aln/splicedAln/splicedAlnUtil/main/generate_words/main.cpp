@@ -10,15 +10,16 @@ using namespace std;
 int main(int, char* argv[])
 {
 	AlnSpliceOpt opt;
-	opt.word_length = 5;
-	opt.word_max_overlap = 2;
+	opt.word_length = atoi(argv[1]);
+	opt.word_max_overlap = atoi(argv[2]);
 
-	SeqString query((string(argv[1])));
+	SeqString query((string(argv[3])));
 	vector<WordPtr> words;
 	generate_words(query, words, opt);
 
 	for(auto iter = words.begin(); iter != words.end(); ++iter)
 	{
-		(*iter)->display();
+		//(*iter)->display();
+		cout << (*iter)->seq << "\t" << (*iter)->r_seq << endl;
 	}
 }

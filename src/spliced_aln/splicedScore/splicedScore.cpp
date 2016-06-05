@@ -42,10 +42,12 @@ double cal_splice_score(const SeqSuffixArray& ref_IndexSA, long splice_begin, lo
 double cal_seqs_score(long fragment_size, const SeqString& ref_seq, double (&global_score_matrix)[4][60], double* global_score_background)
 {
 	double seqs_score = 0.0;
-	for(int i = 0; i < fragment_size; i++)
+	for(int i = 0; i < fragment_size; ++i)
 	{
 		if(ref_seq[i] == 'N')
+		{
 			continue;
+		}
 		seqs_score += log(global_score_matrix[int(ref_seq[i])][i] / (double)global_foreground_num / global_score_background[int(ref_seq[i])]);
 	}
 	return seqs_score;

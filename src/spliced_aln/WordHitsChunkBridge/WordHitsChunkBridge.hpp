@@ -4,6 +4,7 @@
 
 #include <spliced_aln/WordHit.hpp>
 #include <spliced_aln/AlnSpliceOpt.hpp>
+#include <spliced_aln/WordHitsChunk.hpp>
 #include <seqan_api/SeqSuffixArray.hpp>
 #include <util/GapAndMM.hpp>
 #include <iostream>
@@ -11,7 +12,7 @@
 struct WordHitsChunkBridge
 {
 	WordHitsChunkBridge() :
-		strand(-1) , colinearity(false), coverage(0), refStart_pos(-1)
+		sense_strand(-1) , colinearity(false), coverage(0), refStart_pos(-1)
 		, refEnd_pos(-1), queryStart_pos(-1), queryEnd_pos(-1), score(0) {}
 
 	void display()
@@ -25,7 +26,7 @@ struct WordHitsChunkBridge
 	WordHitsChunkPtr head_chunk;
 	WordHitsChunkPtr tail_chunk;
 	GapAndMM gap_mm;
-	int strand;
+	int sense_strand;
 	bool colinearity;
 	double coverage;
 	long refStart_pos;
@@ -36,3 +37,6 @@ struct WordHitsChunkBridge
 };
 
 typedef std::shared_ptr<WordHitsChunkBridge> WordHitsChunkBridgePtr;
+
+bool compare_wordHitsChunkBridgeByRefAndStrand(const WordHitsChunkBridgePtr bridge1, const WordHitsChunkBridgePtr& bridge2);
+void uniq_wordHitsChunkBridge(std::list<WordHitsChunkBridgePtr>& bridges);
