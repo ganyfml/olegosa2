@@ -1,4 +1,5 @@
 // vim: set noexpandtab tabstop=2:
+#include "../../SeqSuffixArray.hpp"
 #include <seqan_api/SeqSuffixArray_conv.hpp>
 #include <seqan/index.h>
 #include <iostream>
@@ -28,5 +29,5 @@ int main(int, char* argv[])
 	printf("Ref SA Index: %d, %d\n", query_RefSAIndexLow, query_RefSAIndexHigh);
 
 	//Get the query back based on its length and SA index
-	printf("Query appeared in Ref pos: %lu\n", ref_SA.SAIndex2SeqPos(query_RefSAIndexLow));
+	cout << ref_SA.getSeq_bySAIndex(query_RefSAIndexLow, query.get_length()) << endl;
 }

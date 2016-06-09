@@ -30,10 +30,7 @@ void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, 
 		if(entry.query_pos == query.get_length())
 		{
 			//DEBUG
-			if(entry.get_seq().get_length() == 0)
-			{
-				continue;
-			}
+			if(entry.get_seq().get_length() == 0) continue;
 
 			AlnResult r;
 			r.num_hits = entry.num_hits();
