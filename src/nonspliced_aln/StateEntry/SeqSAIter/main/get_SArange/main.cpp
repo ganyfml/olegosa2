@@ -22,7 +22,7 @@ int main(int, char* argv[])
 		char x = argv[2][i];
 		seq_sa_iter.godown_char(x);
 	}
- 	seq_sa_iter.display();
+	seq_sa_iter.display();
 
 	seqan::Pair<unsigned> sa_range = seq_sa_iter.get_SArange();
 	cout << "Number of query appeared: " << sa_range.i2 - sa_range.i1 << endl;

@@ -22,7 +22,7 @@ int main(int, char* argv[])
 		char x = argv[2][i];
 		seq_sa_iter.godown_char(x);
 	}
- 	seq_sa_iter.display();
+	seq_sa_iter.display();
 
 	cout << "Number of query appeared: " << seq_sa_iter.num_occ() << endl;
 }

@@ -18,7 +18,7 @@ int main(int, char* argv[])
 
 	SeqSAIter seq_sa_iter(seq_index);
 	printf("Init iter seq: ");
- 	seq_sa_iter.display();
+	seq_sa_iter.display();
 	for(int i = 0; argv[2][i] != '\0'; ++i)
 	{
 		char x = argv[2][i];
