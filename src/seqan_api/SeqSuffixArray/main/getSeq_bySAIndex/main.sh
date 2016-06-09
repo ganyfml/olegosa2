@@ -2,6 +2,6 @@
 #vim: set noexpandtab tabstop=2:
 
 set -v
-ref=ATGAC
-query=TG
+ref=ATGACTACGCATCAAGTG
+query=ACG
 ./main.exe "$ref" "$query"
