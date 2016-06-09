@@ -11,6 +11,7 @@
 #include <util/GapAndMM.hpp>
 #include <iostream>
 #include <vector>
+#include <list>
 
 struct WordHitsGroup
 {
@@ -37,7 +38,7 @@ struct WordHitsGroup
 	void pair_wordHitsChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 	void locate_junc_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 	int locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int min_headChunk_refEnd, int max_headChunk_refEnd, int gap_length, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
-	void concat_bridges(std::list<SplicedAlnResultPtr>& results);
+	void concat_bridges(std::list<SplicedAlnResultPtr>& results, int query_length, bool global);
 };
 
 typedef std::shared_ptr<WordHitsGroup> WordHitsGroupPtr;

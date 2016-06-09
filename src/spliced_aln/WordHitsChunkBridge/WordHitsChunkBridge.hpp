@@ -26,6 +26,7 @@ struct WordHitsChunkBridge
 	WordHitsChunkPtr head_chunk;
 	WordHitsChunkPtr tail_chunk;
 	GapAndMM gap_mm;
+	int adjust_diff;
 	int sense_strand;
 	bool colinearity;
 	double coverage;

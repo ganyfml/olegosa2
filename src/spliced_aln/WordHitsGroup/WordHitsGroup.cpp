@@ -232,31 +232,32 @@ int WordHitsGroup::locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, W
 	 SeqString gap_seq = query.get_infix(head_chunk->queryEnd_pos - num_backSearch + 1, head_chunk->queryEnd_pos - num_backSearch + 1 + gap_length);
 	 GapAndMM gap_mm;
 	 aln_global(gap_ref, gap_seq, gap_mm);
-	 int adjuest_mm = head_chunk_adjust_diff[num_backSearch - 1] + tail_chunk_adjust_diff[num_backSearch - 1];
-	 int diff = gap_mm.total_diff() - adjuest_mm;
+	 int adjust_diff = head_chunk_adjust_diff[num_backSearch - 1] + tail_chunk_adjust_diff[num_backSearch - 1];
+	 int diff = gap_mm.total_diff() - adjust_diff;
 
 	 if(diff < opt.wordChunk_max_diff)
 	 {
-		WordHitsChunkBridgePtr new_jun_temp = make_shared<WordHitsChunkBridge>();
-		new_jun_temp->head_chunk = head_chunk;
-		new_jun_temp->tail_chunk = tail_chunk;
-		new_jun_temp->refStart_pos = headChunk_refEnd;
-		new_jun_temp->refEnd_pos = tailChunk_refStart;
-		new_jun_temp->queryStart_pos = head_chunk->queryEnd_pos - num_backSearch + (headChunk_refEnd - min_headChunk_refEnd);
-		new_jun_temp->queryEnd_pos = new_jun_temp->queryStart_pos + 1; //TODO WHY + 1?
-		new_jun_temp->gap_mm = gap_mm;
-		new_jun_temp->sense_strand = splice_strand;
-		new_jun_temp->score = cal_splice_score(ref_IndexSA, headChunk_refEnd, tailChunk_refStart);
+		WordHitsChunkBridgePtr new_bridge = make_shared<WordHitsChunkBridge>();
+		new_bridge->head_chunk = head_chunk;
+		new_bridge->tail_chunk = tail_chunk;
+		new_bridge->refStart_pos = headChunk_refEnd;
+		new_bridge->refEnd_pos = tailChunk_refStart;
+		new_bridge->queryStart_pos = head_chunk->queryEnd_pos - num_backSearch + (headChunk_refEnd - min_headChunk_refEnd);
+		new_bridge->queryEnd_pos = new_bridge->queryStart_pos + 1; //TODO WHY + 1?
+		new_bridge->gap_mm = gap_mm;
+		new_bridge->adjust_diff = adjust_diff;
+		new_bridge->sense_strand = splice_strand;
+		new_bridge->score = cal_splice_score(ref_SAIndex, headChunk_refEnd, tailChunk_refStart);
 		head_chunk->is_first = false;
 		tail_chunk->is_last = false;
 		if(opt.report_best_only && diff < best_diff)
 		{
-		  new_jun = new_jun_temp;
+		  new_jun = new_bridge;
 		  best_diff = diff;
 		}
 		else
 		{
-		  wordhitschunkbridge.push_back(new_jun_temp);
+		  wordhitschunkbridge.push_back(new_bridge);
 		  ++num_foundInDenovoSearch;
 		}
 	 }
@@ -269,7 +270,119 @@ int WordHitsGroup::locate_junc_two_chunks_denovo(WordHitsChunkPtr& head_chunk, W
   return num_foundInDenovoSearch;
 }
 
-void WordHitsGroup::concat_bridges(list<SplicedAlnResultPtr>& results)
+void update_aln_list(list<SplicedAlnResultPtr>& results, vector<bool>& destroy_flag, int& aln_length)
 {
-  wordhitschunkbridge.sort(compare_wordHitsChunkBridgeByRefAndStrand);
+  auto aln_iter = results.begin();
+  for (int i = 0; i < aln_length; ++i)
+  {
+	 if(destroy_flag[i])
+	 {
+		aln_iter = results.erase(aln_iter);
+	 }
+	 else
+	 {
+		++aln_iter;
+	 }
+  }
+  aln_length = results.size();
+  destroy_flag.resize(aln_length, false);
+}
+
+void evaluate_SplicedAlnResults(list<SplicedAlnResultPtr>& results, int query_length, bool global)
+{
+  for(auto aln_iter = results.begin(); aln_iter != results.end(); ++aln_iter)
+  {
+	 if(aln_iter != results.begin())
+	 {
+		auto prev_aln_iter = aln_iter;
+		--prev_aln_iter;
+		if(is_identical(*prev_aln_iter, *aln_iter))
+		{
+		  aln_iter = results.erase(aln_iter);
+		  --aln_iter;
+		}
+	 }
+	 (*aln_iter)->evaluate(global, query_length);
+  }
+}
+
+void WordHitsGroup::concat_bridges(list<SplicedAlnResultPtr>& results, int query_length, bool global)
+{
+  if(wordhitschunkbridge.size() == 0)
+	 return;
+  else
+  {
+	 wordhitschunkbridge.sort(compare_wordHitsChunkBridgeByRefAndStrand);
+	 uniq_wordHitsChunkBridge(wordhitschunkbridge);
+	 SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+	 r->bridges.push_back(wordhitschunkbridge.front());
+	 results.push_back(r);
+  }
+
+  auto curr_bridge_iter = ++wordhitschunkbridge.begin();
+  for(auto begin_bridge_iter = wordhitschunkbridge.begin(); curr_bridge_iter != wordhitschunkbridge.end(); ++curr_bridge_iter)
+  {
+	 if((*begin_bridge_iter)->head_chunk == (*curr_bridge_iter)->head_chunk && (*begin_bridge_iter)->sense_strand == (*curr_bridge_iter)->sense_strand)
+	 {
+		SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+		r->bridges.push_back(*curr_bridge_iter);
+		results.push_back(r);
+	 }
+	 else
+	 {
+		break;
+	 }
+  }
+
+  int prev_aln_length = results.size();
+  vector<bool>destroy_flag(prev_aln_length, false);
+
+  auto prev_bridge_iter = curr_bridge_iter;
+  prev_bridge_iter--;
+  bool need_to_update_aln_list = false;
+  while(curr_bridge_iter != wordhitschunkbridge.end())
+  {
+	 WordHitsChunkBridgePtr prev_bridge = *prev_bridge_iter;
+	 WordHitsChunkBridgePtr curr_bridge = *curr_bridge_iter;	
+
+	 if(curr_bridge->head_chunk == prev_bridge->head_chunk && need_to_update_aln_list)
+	 {
+		need_to_update_aln_list = false;
+		update_aln_list(results, destroy_flag, prev_aln_length);
+	 }
+
+	 bool curr_bridge_extended = false;
+	 auto aln_iter = results.begin();
+	 for (int i = 0; i < prev_aln_length; aln_iter++, i++)
+	 {
+		WordHitsChunkBridgePtr aln_last_bridge = (*aln_iter)->bridges.back();
+		if (aln_last_bridge->tail_chunk == curr_bridge->head_chunk && aln_last_bridge->sense_strand == curr_bridge->sense_strand && aln_last_bridge->queryStart_pos < curr_bridge->queryStart_pos)
+		{
+		  SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+		  r->bridges = list<WordHitsChunkBridgePtr>((*aln_iter)->bridges.begin(), (*aln_iter)->bridges.end());
+		  r->bridges.push_back(curr_bridge);
+		  results.push_back(r);
+		  need_to_update_aln_list = true;
+		  curr_bridge_extended = true;
+		  if(aln_last_bridge->tail_chunk->queryEnd_pos != query_length - 1)
+		  {
+			 destroy_flag[i] = true;
+		  }
+		}
+	 }
+
+	 if(!curr_bridge_extended || curr_bridge->head_chunk->queryStart_pos == 0)
+	 {
+		SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+		r->bridges.push_back(curr_bridge);
+		results.push_back(r);
+	 }
+	 ++prev_bridge_iter;
+	 ++curr_bridge_iter;
+  }
+  if(need_to_update_aln_list)
+  {
+	 update_aln_list(results, destroy_flag, prev_aln_length);
+  }
+  evaluate_SplicedAlnResults(results, query_length, global);
 }

@@ -33,12 +33,12 @@ void uniq_wordHitsChunkBridge(std::list<WordHitsChunkBridgePtr>& bridges)
     --tail;
     if((*head)->head_chunk == (*tail)->head_chunk && (*head)->tail_chunk == (*tail)->tail_chunk
         && (*head)->refStart_pos == (*tail)->refStart_pos && (*head)->refEnd_pos == (*tail)->refEnd_pos)
-      {
-        tail = bridges.erase(tail);
-      }
+    {
+      head = bridges.erase(head);
+    }
     else
     {
-      ++tail;
+      ++head;
     }
   }
 }
