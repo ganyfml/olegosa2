@@ -26,7 +26,7 @@ class SeqString
 		void erase_back();
 
 		SeqString get_infix(int begin_pos, int end_pos) const;
-		void make_reverse();
+		void make_revcomp();
 		SeqString get_reverse() const;
 
 		SeqString& operator+=(const std::string& rhs);
