@@ -6,9 +6,9 @@
 
 using namespace std;
 
-int main(int, char* argv[])
+int main()
 {
 	SeqString query_seq(string("ATGC"));
-	cout << query_seq.get_reverse() << endl;
+	cout << query_seq.get_revcomp() << endl;
 	cout << query_seq << endl;
 }

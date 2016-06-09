@@ -83,7 +83,7 @@ void SeqString::make_revcomp()
 	seqan::reverseComplement(*voidPtr2TPtr(impl_));
 }
 
-SeqString SeqString::get_reverse() const
+SeqString SeqString::get_revcomp() const
 {
 	SeqString ret = *this;
 	ret.make_revcomp();

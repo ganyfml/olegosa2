@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(int, char* argv[])
+int main()
 {
 	SeqString query_seq(string("ATGC"));
 	cout << query_seq << endl;
