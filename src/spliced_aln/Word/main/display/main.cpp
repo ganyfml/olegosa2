@@ -12,7 +12,7 @@ int main(int, char* argv[])
 	int query_pos = 3;
 	int rev_query_pos = 4;
 	SeqString word_seq = string("ACG");
-	SeqString word_rseq = word_seq.get_reverse();
+	SeqString word_rseq = word_seq.get_revcomp();
 	Word temp(word_id, word_length, query_pos, rev_query_pos, word_seq, word_rseq);	
 
 	temp.display();

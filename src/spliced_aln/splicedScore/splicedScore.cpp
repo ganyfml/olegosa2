@@ -26,7 +26,7 @@ double cal_splice_score(const SeqSuffixArray& ref_IndexSA, long splice_begin, lo
 	SeqString splice_ref_seq = ref_IndexSA.get_infixSeq(splice_begin - flanking_size + 1, splice_begin + flanking_size + 1) + ref_IndexSA.get_infixSeq(splice_end - flanking_size, splice_end + flanking_size);
 	if(splice_ref_seq[flanking_size] != 'G' || splice_ref_seq[flanking_size + 1] != 'T')
 	{
-		splice_ref_seq.make_reverse();
+		splice_ref_seq.make_revcomp();
 	}
 
 	//compare to the motif

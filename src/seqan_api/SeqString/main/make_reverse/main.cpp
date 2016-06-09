@@ -10,6 +10,6 @@ int main(int, char* argv[])
 {
 	SeqString query_seq(string("ATGC"));
 	cout << query_seq << endl;
-	query_seq.make_reverse();
+	query_seq.make_revcomp();
 	cout << query_seq << endl;
 }
