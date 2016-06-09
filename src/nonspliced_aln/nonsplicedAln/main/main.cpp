@@ -5,10 +5,11 @@
 #include <queue>
 #include <cstdlib>
 #include "../nonsplicedAln.hpp"
+#include <util/AlnResult.hpp>
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString query_seq((string(argv[2])));
 	SeqString ref_seq((string(argv[1])));
@@ -18,5 +19,12 @@ int main(int argc, char* argv[])
 	aln_opt.max_gapExt = atoi(argv[3]);
 	aln_opt.max_gapOpen = atoi(argv[4]);
 	aln_opt.max_mismatch = atoi(argv[5]);
-	nonsplicedAln(query_seq, ref_index, aln_opt);
+	queue<AlnResult> result;
+	nonsplicedAln(query_seq, result, ref_index, aln_opt);
+
+	while(!result.empty())
+	{
+		result.front().display(ref_index);
+		result.pop();
+	}
 }

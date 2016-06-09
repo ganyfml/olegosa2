@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	seqan::Dna5String query_seq = "ATGCATCGATCGATCGACTAGCTACGACTCAGTACGCT";
 	int infix_start = 0;

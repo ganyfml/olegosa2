@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString seq((string(argv[1])));
 	SeqSuffixArray ref_sa(seq);

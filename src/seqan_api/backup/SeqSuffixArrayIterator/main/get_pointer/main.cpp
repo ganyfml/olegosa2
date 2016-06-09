@@ -8,7 +8,7 @@ typedef seqan::Index<SeqanString, seqan::IndexEsa<>> T;
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	SeqString seq(string("ACG"));
 	SeqSuffixArray ref_sa(seq);

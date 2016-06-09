@@ -1,6 +1,5 @@
 // vim: set noexpandtab tabstop=2:
 
-#include <queue>
 #include <nonspliced_aln/nonsplicedAln.hpp>
 #include <nonspliced_aln/SeqSAIter.hpp>
 #include <nonspliced_aln/StateEntry.hpp>
@@ -12,7 +11,7 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
+void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
 {
 	//Change query and ref_SAIndex back to seqan type
 	SeqanSA sa_ref = *conv_back(ref_SAIndex);
@@ -30,11 +29,20 @@ void nonsplicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, co
 		//If the potential has been found
 		if(entry.query_pos == query.get_length())
 		{
-			//Debug
-			using namespace std;
-			auto result = entry.get_seq();
-			cout << result << endl;
-			//End
+			//DEBUG
+			if(entry.get_seq().get_length() == 0)
+			{
+				continue;
+			}
+
+			AlnResult r;
+			r.num_hits = entry.num_hits();
+			seqan::Pair<unsigned> sa_range = entry.get_SArange();
+			r.SA_index_high = sa_range.i2;
+			r.SA_index_low = sa_range.i1;
+			r.seq_length = entry.seq_length();
+			result_queue.emplace(r);
+			//END
 		}
 		else
 		{
