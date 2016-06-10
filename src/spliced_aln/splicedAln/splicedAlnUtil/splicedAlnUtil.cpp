@@ -21,3 +21,33 @@ void generate_words(const SeqString& query, std::vector<WordPtr>& words, const A
 	 }
   }
 }
+
+void collect_wordHitsByAlnResult(std::queue<AlnResult>& word_hit_result, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, WordPtr current_word, int strand)
+{
+  while(!word_hit_result.empty())
+  {
+	 AlnResult a = word_hit_result.front();
+	 word_hit_result.pop();
+	 current_word->num_occ += a.SA_index_high - a.SA_index_low;
+	 for(unsigned long i = a.SA_index_low; i < a.SA_index_high; ++i)
+	 {
+		WordHit w(current_word->id, strand);
+		w.query_pos = strand ? current_word->r_query_pos : current_word->query_pos;
+		w.ref_pos = ref_SAIndex.SAIndex2SeqPos(i);
+		wordHitList.push_front(make_shared<WordHit>(w));
+	 }
+  }
+}
+
+void collect_wordHits(const std::vector<WordPtr>& words, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex)
+{
+  alnNonspliceOpt word_search_opt;
+  for(auto word_iter = words.begin(); word_iter != words.end(); ++word_iter)
+  {
+	 std::queue<AlnResult> word_hit_result;
+	 nonsplicedAln((*word_iter)->seq, word_hit_result, ref_SAIndex, word_search_opt);
+	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 0);
+	 nonsplicedAln((*word_iter)->r_seq, word_hit_result, ref_SAIndex, word_search_opt);
+	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 1);
+  }
+}
