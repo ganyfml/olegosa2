@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int, char* argv[])
 {
-	SeqString query_seq(string("ATGC"));
+	SeqString query_seq("ATGC");
 
 	cout << "query_seq: " << query_seq << endl;
 
