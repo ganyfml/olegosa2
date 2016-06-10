@@ -16,8 +16,8 @@ struct Word
 	SeqString seq;
 	SeqString r_seq;
 
-	Word(int word_id, int length, int query_pos, int r_query_pos, SeqString seq, SeqString r_seq)
-		: id(word_id), length(length), query_pos(query_pos), r_query_pos(r_query_pos), num_occ(0), seq(seq), r_seq(r_seq) {}
+	Word(int word_id, int length, int query_pos, int r_query_pos, SeqString seq)
+		: id(word_id), length(length), query_pos(query_pos), r_query_pos(r_query_pos), num_occ(0), seq(seq), r_seq(seq.get_revcomp()) {}
 
 	void display()
 	{
