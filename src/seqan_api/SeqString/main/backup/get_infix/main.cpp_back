@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
+int main(int, char** argv)
 {
 	string query("ATGCACTAGCTAGC");
 	SeqString query_seq {query};

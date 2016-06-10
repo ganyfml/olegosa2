@@ -7,7 +7,7 @@
 using namespace seqan;
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	typedef Index<Dna5String, seqan::IndexEsa<>> Dna5Index;
 	Dna5Index index((Dna5String(argv[1])));
@@ -26,8 +26,7 @@ int main(int argc, char* argv[])
 	printf("\n");
 
 	alnNonspliceOpt opt;
-	opt.max_gapOpen = atoi(argv[4]);
-	opt.max_gapExt = atoi(argv[5]);
+	opt.max_gapOpen = 1;
 	std::queue<StateEntry> mutation_queue;
 
 	produceDeletionFromM(test, mutation_queue, opt);

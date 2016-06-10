@@ -48,4 +48,4 @@ SeqString SeqSuffixArrayIterator::get_seq()
 {
 	T seqan_iter = *voidPtr2TPtr(impl_);
 	return SeqString(std::string(seqanString(prefix(representative(seqan_iter), length(seqan_iter) - this->extra_steps_)));
-}
+			}

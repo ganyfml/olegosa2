@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
 	seqan::Dna5String seq = "ATGC";
 	auto segment = seqan::suffix(seq, 1);
