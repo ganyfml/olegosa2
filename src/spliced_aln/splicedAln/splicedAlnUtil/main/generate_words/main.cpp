@@ -17,9 +17,10 @@ int main(int, char* argv[])
 	vector<WordPtr> words;
 	generate_words(query, words, opt);
 
+	printf("Word_seq\tWord_r_seq\tQuery_pos\n");
+
 	for(auto iter = words.begin(); iter != words.end(); ++iter)
 	{
-		//(*iter)->display();
-		cout << (*iter)->seq << "\t" << (*iter)->r_seq << endl;
+		cout << (*iter)->seq << "\t" << (*iter)->r_seq << "\t" << (*iter)->query_pos << endl;
 	}
 }

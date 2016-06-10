@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include <seqan_api/SeqSuffixArray.hpp>
 #include <seqan_api/SeqString.hpp>
 #include <spliced_aln/Word.hpp>
 #include <spliced_aln/WordHit.hpp>
