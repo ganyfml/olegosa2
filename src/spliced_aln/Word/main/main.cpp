@@ -1,6 +1,6 @@
 // vim: set noexpandtab tabstop=2:
 
-#include "../../Word.hpp"
+#include "../Word.hpp"
 #include <seqan_api/SeqString.hpp>
 
 using namespace std;

@@ -19,18 +19,6 @@ bool compare_wordHitsByQueryPos(const WordHitPtr word_hit1, const WordHitPtr wor
 	return word_hit1->query_pos < word_hit2->query_pos;
 }
 
-bool compare_wordHitsByRefAndStrand(const WordHitPtr word_hit1, const WordHitPtr word_hit2)
-{
-	if (word_hit1->strand != word_hit2->strand)
-	{
-		return word_hit1->strand < word_hit2->strand;
-	}
-	else
-	{
-		return word_hit1->ref_pos < word_hit2->ref_pos;
-	}
-}
-
 bool is_collinear(const std::list<WordHitPtr>& wordList)
 {
 	bool is_colinear = true;

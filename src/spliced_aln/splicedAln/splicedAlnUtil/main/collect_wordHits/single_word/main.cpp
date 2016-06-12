@@ -3,7 +3,7 @@
 #include <list>
 #include <vector>
 #include <iostream>
-#include "../../splicedAlnUtil.hpp"
+#include "../../../splicedAlnUtil.hpp"
 #include <spliced_aln/AlnSpliceOpt.hpp>
 #include <seqan_api/SeqString.hpp>
 
