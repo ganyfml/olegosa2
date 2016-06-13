@@ -44,40 +44,9 @@ void collect_wordHits(const std::vector<WordPtr>& words, std::list<WordHitPtr>& 
   }
 }
 
-void collect_wordHitsByAlnResult(std::queue<AlnResult>& word_hit_result, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, WordPtr current_word, int strand)
-{
-  while(!word_hit_result.empty())
-  {
-	 AlnResult a = word_hit_result.front();
-	 word_hit_result.pop();
-	 current_word->num_occ += a.SA_index_high - a.SA_index_low;
-	 for(unsigned long i = a.SA_index_low; i < a.SA_index_high; ++i)
-	 {
-		WordHit w(current_word->id, strand);
-		w.query_pos = strand ? current_word->r_query_pos : current_word->query_pos;
-		w.ref_pos = ref_SAIndex.SAIndex2SeqPos(i);
-		wordHitList.push_front(make_shared<WordHit>(w));
-	 }
-  }
-}
-
-void collect_wordHits(const std::vector<WordPtr>& words, std::list<WordHitPtr>& wordHitList, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
-{
-  alnNonspliceOpt word_search_opt;
-  for(auto word_iter = words.begin(); word_iter != words.end(); ++word_iter)
-  {
-	 std::queue<AlnResult> word_hit_result;
-	 nonsplicedAln((*word_iter)->seq, word_hit_result, ref_SAIndex, word_search_opt);
-	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 0);
-	 nonsplicedAln((*word_iter)->r_seq, word_hit_result, ref_SAIndex, word_search_opt);
-	 collect_wordHitsByAlnResult(word_hit_result, wordHitList, ref_SAIndex, *word_iter, 2);
-  }
-}
-
 void group_wordHits_wordHitsGroup(const list<WordHitPtr>& hits, list<WordHitsGroupPtr>& groups, int max_intron_size)
 {
   long prev_ref_pos = -1;
-  int prev_strand = -1;
   int prev_word_direction = 0;
   int prev_wordID = -1;
 
@@ -103,7 +72,7 @@ void group_wordHits_wordHitsGroup(const list<WordHitPtr>& hits, list<WordHitsGro
 		}
 	 }
 
-	 if (hit->strand != prev_strand
+	 if (prev_ref_pos == -1
 		  || curr_ref_pos - prev_ref_pos > 2 * max_intron_size
 		  || curr_word_direction == 2
 		  || (prev_word_direction != 0 && prev_word_direction != curr_word_direction))
@@ -118,6 +87,5 @@ void group_wordHits_wordHitsGroup(const list<WordHitPtr>& hits, list<WordHitsGro
 	 prev_word_direction = curr_word_direction;
 	 prev_ref_pos = curr_ref_pos;
 	 prev_wordID = curr_wordID;
-	 prev_strand = hit->strand;
   }
 }

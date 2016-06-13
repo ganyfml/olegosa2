@@ -10,22 +10,19 @@ using namespace std;
 int main(int, char* argv[])
 {
   int hit1_wordid = atoi(argv[1]);
-  int hit1_strand = 0;
-  WordHit hit1(hit1_wordid, hit1_strand);
+  WordHit hit1(hit1_wordid);
   hit1.ref_pos = 2;
   hit1.query_pos= 1;
   WordHitPtr hit1_ptr = make_shared<WordHit>(hit1);
 
   int hit2_wordid = atoi(argv[2]);
-  int hit2_strand = 0;
-  WordHit hit2(hit2_wordid, hit2_strand);
+  WordHit hit2(hit2_wordid);
   hit2.ref_pos = 3;
   hit2.query_pos= 2;
   WordHitPtr hit2_ptr = make_shared<WordHit>(hit2);
 
   int hit3_wordid = atoi(argv[3]);
-  int hit3_strand = 0;
-  WordHit hit3(hit3_wordid, hit3_strand);
+  WordHit hit3(hit3_wordid);
   hit3.ref_pos = 4;
   hit3.query_pos= 3;
   WordHitPtr hit3_ptr = make_shared<WordHit>(hit3);

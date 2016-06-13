@@ -2,22 +2,22 @@
 #vim: set noexpandtab tabstop=2:
 
 set -v
-hit1_strand=1
-hit2_strand=1
-hit3_strand=1
-./main.exe "$hit1_strand" "$hit2_strand" "$hit3_strand"
+hit1_ref_pos=1
+hit2_ref_pos=2
+hit3_ref_pos=3
+./main.exe "$hit1_ref_pos" "$hit2_ref_pos" "$hit3_ref_pos"
 
-hit1_strand=0
-hit2_strand=1
-hit3_strand=1
-./main.exe "$hit1_strand" "$hit2_strand" "$hit3_strand"
+hit1_ref_pos=1
+hit2_ref_pos=202
+hit3_ref_pos=203
+./main.exe "$hit1_ref_pos" "$hit2_ref_pos" "$hit3_ref_pos"
 
-hit1_strand=1
-hit2_strand=0
-hit3_strand=1
-./main.exe "$hit1_strand" "$hit2_strand" "$hit3_strand"
+hit1_ref_pos=1
+hit2_ref_pos=2
+hit3_ref_pos=203
+./main.exe "$hit1_ref_pos" "$hit2_ref_pos" "$hit3_ref_pos"
 
-hit1_strand=1
-hit2_strand=1
-hit3_strand=0
-./main.exe "$hit1_strand" "$hit2_strand" "$hit3_strand"
+hit1_ref_pos=1
+hit2_ref_pos=202
+hit3_ref_pos=403
+./main.exe "$hit1_ref_pos" "$hit2_ref_pos" "$hit3_ref_pos"

@@ -20,7 +20,6 @@ void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_w
 	 ++words_occ[(*iter)->word_id];
   }
 
-  int prev_strand = -1;
   long prev_hit_diag = -1;
   int local_wordChunk_diff = (opt.wordChunk_max_diff > 2) ? 2 : opt.wordChunk_max_diff;
 
@@ -32,7 +31,8 @@ void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_w
 		continue;
 
 	 long curr_hit_diag = (*iter)->ref_pos - (*iter)->query_pos;
-	 if ((*iter)->strand != prev_strand || curr_hit_diag - prev_hit_diag > local_wordChunk_diff)
+	 if (prev_hit_diag == -1
+		  || curr_hit_diag - prev_hit_diag > local_wordChunk_diff)
 	 {
 		curr_chunk = make_shared<WordHitsChunk>(curr_wordChunk_id++);
 		wordhitschunks.push_back(curr_chunk);
@@ -40,7 +40,6 @@ void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_w
 
 	 curr_chunk->wordHitList.push_back(*iter);
 	 prev_hit_diag = curr_hit_diag;
-	 prev_strand = (*iter)->strand;
   }
 }
 

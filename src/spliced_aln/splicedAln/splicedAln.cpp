@@ -16,9 +16,13 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
 
   //Generate WordHit
   list<WordHitPtr> wordHitsList;
-  collect_wordHits(words, wordHitsList, ref_SAIndex, opt);
+  alnNonspliceOpt word_search_opt;
+  bool rev_comp = false;
+  collect_wordHits(words, wordHitsList, ref_SAIndex, rev_comp, word_search_opt);
+  rev_comp = true;
+  collect_wordHits(words, wordHitsList, ref_SAIndex, rev_comp, word_search_opt);
 
-  wordHitsList.sort(compare_wordHitsByRefAndStrand);
+  wordHitsList.sort(compare_wordHitsByRefPos);
 
   //Use WordHits to form WordHitsGroup
   list<WordHitsGroupPtr> wordHitsGroupList;
