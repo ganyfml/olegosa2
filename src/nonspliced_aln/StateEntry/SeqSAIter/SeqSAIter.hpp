@@ -33,7 +33,7 @@ class SeqSAIter
 	seqan::Pair<unsigned> get_SArange() { return range(*seqan_sa_iter_); }
 	long num_occ() { return countOccurrences(*seqan_sa_iter_); }
 	long next_occ_pos() { return getOccurrences(*seqan_sa_iter_)[occ_index_++]; }
-	int get_repLength() { return repLength(*seqan_sa_iter_); }
+	int get_repLength() { return repLength(*seqan_sa_iter_) - extra_steps_; }
 
 	void display()
 	{
