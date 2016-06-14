@@ -13,10 +13,7 @@ struct WordHit
 	long ref_pos;
 
 	WordHit(int id)
-		: query_pos(0), ref_pos(0)
-	{
-		word_id = id;
-	}
+		: word_id(id), query_pos(0), ref_pos(0) {}
 
 	void display()
 	{
@@ -30,4 +27,4 @@ typedef std::shared_ptr<WordHit> WordHitPtr;
 bool compare_wordHitsByHitDiagonal(const WordHitPtr word_hit1, const WordHitPtr word_hit2);
 bool compare_wordHitsByRefPos(const WordHitPtr word_hit1, const WordHitPtr word_hit2);
 bool compare_wordHitsByQueryPos(const WordHitPtr word_hit1, const WordHitPtr word_hit2);
-bool is_collinear(const std::list<WordHitPtr>& wordList_);
+bool is_refPos_nondecreasing(const std::list<WordHitPtr>& wordList);

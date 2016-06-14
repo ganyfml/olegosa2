@@ -3,13 +3,13 @@
 
 set -v
 seq=TCG
-godown_char=A
-./main.exe "$seq" "$godown_char" 
+godown_seq=A
+./main.exe "$seq" "$godown_seq" 
 
 seq=TCG
-godown_char=TA
-./main.exe "$seq" "$godown_char" 
+godown_seq=TA
+./main.exe "$seq" "$godown_seq" 
 
 seq=ATCG
-godown_char=TC
-./main.exe "$seq" "$godown_char" 
+godown_seq=TC
+./main.exe "$seq" "$godown_seq" 

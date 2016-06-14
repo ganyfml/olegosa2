@@ -19,18 +19,16 @@ bool compare_wordHitsByQueryPos(const WordHitPtr word_hit1, const WordHitPtr wor
 	return word_hit1->query_pos < word_hit2->query_pos;
 }
 
-bool is_collinear(const std::list<WordHitPtr>& wordList)
+bool is_refPos_nondecreasing(const std::list<WordHitPtr>& wordList)
 {
-	bool is_colinear = true;
 	for(auto first = wordList.begin(), second = ++wordList.begin()
 			; second != wordList.end()
 			; ++first, ++second)
 	{
 		if((*first)->ref_pos > (*second)->ref_pos)
 		{
-			is_colinear = false;
-			break;
+			return false;
 		}
 	}
-	return is_colinear;
+	return true;
 }

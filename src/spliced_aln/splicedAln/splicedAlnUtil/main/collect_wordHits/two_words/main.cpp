@@ -44,6 +44,5 @@ int main(int, char* argv[])
 	for(auto iter = wordHitList.begin(); iter != wordHitList.end(); ++iter)
 	{
 		printf("%d\t%lu\t%lu\n", (*iter)->word_id, (*iter)->ref_pos, (*iter)->query_pos);
-		cout << "\n\n";
 	}
 }
