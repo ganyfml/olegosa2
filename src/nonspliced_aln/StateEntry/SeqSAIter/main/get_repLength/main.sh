@@ -13,4 +13,3 @@ godown_seq=TA
 seq=ATCG
 godown_seq=TC
 ./main.exe "$seq" "$godown_seq" 
-

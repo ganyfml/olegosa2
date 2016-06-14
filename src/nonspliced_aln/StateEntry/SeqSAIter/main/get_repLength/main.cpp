@@ -18,12 +18,12 @@ int main(int, char* argv[])
 	SeqSAIter seq_sa_iter(seq_index);
 	printf("Init iter seq: ");
 	seq_sa_iter.display();
-	for(int i = 0; argv[2][i] != '\0'; ++i)
+	SeqString godown_seq(argv[2]);
+	for(int i = 0; i < godown_seq.get_length(); ++i)
 	{
-		char godown_char = argv[2][i];
-		cout << "Trying to go down: " << godown_char << endl;
-		cout << "Go Down successfully? " << seq_sa_iter.godown_char(godown_char) << endl;
-		seq_sa_iter.display();
-		printf("\n");
+		char x = godown_seq[i];
+		seq_sa_iter.godown_char(x);
 	}
+
+	cout << "Result seq length: " << seq_sa_iter.get_repLength() << endl;
 }
