@@ -1,4 +1,4 @@
-// vim: set noexpandtab tabstop=3:
+// vim: set noexpandtab tabstop=2:
 
 #include <spliced_aln/WordHitsGroup.hpp>
 
