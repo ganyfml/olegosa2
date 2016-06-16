@@ -38,6 +38,8 @@ struct WordHitsChunk
 	long queryStart_pos;
 	long queryEnd_pos;
 	std::list<WordHitPtr> wordHitList;
+
+	void evaluate(int word_size, int hit_strand);
 };
 
 typedef std::shared_ptr<WordHitsChunk> WordHitsChunkPtr;
