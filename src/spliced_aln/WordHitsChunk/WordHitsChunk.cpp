@@ -26,9 +26,7 @@ void WordHitsChunk::evaluate(int word_size, int hit_strand)
 
 	refStart_pos = first_hit->ref_pos;
 	refEnd_pos = last_hit->ref_pos + word_size;
-
 	queryStart_pos = first_hit->query_pos;
 	queryEnd_pos = last_hit->query_pos + word_size;
-
 	strand = hit_strand;
 }
