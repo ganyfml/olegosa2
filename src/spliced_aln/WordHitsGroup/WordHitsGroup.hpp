@@ -4,6 +4,8 @@
 
 #include <spliced_aln/Word.hpp>
 #include <spliced_aln/WordHit.hpp>
+#include <spliced_aln/WordHitsChunk.hpp>
+#include <spliced_aln/AlnSpliceOpt.hpp>
 #include <iostream>
 #include <list>
 
@@ -25,6 +27,8 @@ struct WordHitsGroup
 	int id;
 	double score;
 	std::list<WordHitPtr> wordhits;
+	std::list<WordHitsChunkPtr> wordhitschunks;
+	void group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_words);
 };
 
 typedef std::shared_ptr<WordHitsGroup> WordHitsGroupPtr;

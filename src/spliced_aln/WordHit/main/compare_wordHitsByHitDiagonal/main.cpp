@@ -18,7 +18,7 @@ int main(int, char** argc)
 	wordHit2.ref_pos = atoi(argc[3]);
 	wordHit2.query_pos = atoi(argc[4]);
 	WordHitPtr wordHit2ptr = make_shared<WordHit>(wordHit2);
-	
+
 	printf("word 1 hit diagona: %lu\n", wordHit1ptr->ref_pos - wordHit1ptr->query_pos);
 	printf("word 2 hit diagona: %lu\n", wordHit2ptr->ref_pos - wordHit2ptr->query_pos);
 	cout << endl << "Result: " << compare_wordHitsByHitDiagonal(wordHit1ptr, wordHit2ptr) << endl;
