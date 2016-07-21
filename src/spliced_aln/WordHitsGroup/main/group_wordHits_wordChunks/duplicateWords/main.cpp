@@ -27,10 +27,10 @@ int main(int argc, char* argv[])
 	test_group->group_wordHits_wordChunks(opt, num_words);
 
 	printf("wordchunk_id\thit_wordIDs\n");
-	for(WordHitsChunkPtr chunk : test_group->wordhitschunks)
+	for(WordHitsChunkPtr chunk: test_group->wordhitschunks)
 	{
 		printf("%d\t", chunk->id);
-		for(WordHitPtr hit : chunk->wordHitList)
+		for(WordHitPtr hit: chunk->wordHitList)
 		{
 			printf("%d, ", hit->word_id);
 		}

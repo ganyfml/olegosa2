@@ -4,17 +4,18 @@
 
 bool compare_wordHitsChunkByRefPos(const WordHitsChunkPtr chunk1, const WordHitsChunkPtr chunk2)
 {
-	if(chunk1->hit_refPosNonDec != chunk2->hit_refPosNonDec)
-	{
-		return chunk1->hit_refPosNonDec > chunk2->hit_refPosNonDec;
-	}
-	else
+	if(chunk1->hit_refPosNonDec == chunk2->hit_refPosNonDec)
 	{
 		return chunk1->refStart_pos < chunk2->refStart_pos;
 	}
+	else
+	{
+		std::cout << "Get here!\n";
+		return chunk1->hit_refPosNonDec > chunk2->hit_refPosNonDec;
+	}
 }
 
-void WordHitsChunk::evaluate(int word_size, int hit_strand)
+void WordHitsChunk::evaluate(int word_size, Strand::Value hit_strand)
 {
 	wordHitList.sort(compare_wordHitsByQueryPos);
 	hit_refPosNonDec = is_refPos_nondecreasing(wordHitList);

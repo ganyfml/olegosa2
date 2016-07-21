@@ -13,10 +13,15 @@ namespace ExtendDirection
 	enum Value {left = 0, right = 1, both = 2};
 }
 
+namespace Strand
+{
+	enum Value {forward = 1, reverse = -1, none_decide = 0};
+}
+
 struct WordHitsChunk
 {
 	WordHitsChunk(int id) :
-		id(id), strand(-1) , hit_refPosNonDec(false), coverage(0)
+		id(id), strand(Strand::none_decide) , hit_refPosNonDec(false), coverage(0)
 		, refStart_pos(-1), refEnd_pos(-1) , queryStart_pos(-1), queryEnd_pos(-1) {}
 
 	void display()
@@ -30,7 +35,7 @@ struct WordHitsChunk
 
 	GapAndMM gapMM;
 	int id;
-	int strand;
+	Strand::Value strand;
 	bool hit_refPosNonDec;
 	double coverage;
 	long refStart_pos;
@@ -39,7 +44,7 @@ struct WordHitsChunk
 	long queryEnd_pos;
 	std::list<WordHitPtr> wordHitList;
 
-	void evaluate(int word_size, int hit_strand);
+	void evaluate(int word_size, Strand::Value hit_strand);
 };
 
 typedef std::shared_ptr<WordHitsChunk> WordHitsChunkPtr;

@@ -25,7 +25,7 @@ int main()
 	printf("before evaluate: \n");
 	chunk->display();
 	int word_size = 5;
-	int hit_strand = 1;
+	Strand::Value hit_strand = Strand::forward;
 	chunk->evaluate(word_size, hit_strand);
 	printf("\nAfter evaluate: \n");
 	chunk->display();
