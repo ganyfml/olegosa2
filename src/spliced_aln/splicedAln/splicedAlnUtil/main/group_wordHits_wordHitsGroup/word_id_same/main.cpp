@@ -9,20 +9,20 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-  list<WordHitPtr> hits;
-  for(int i = 0; i < argc - 1; ++i)
-  {
-	 WordHitPtr hit = make_shared<WordHit>(atoi(argv[i + 1]));
-	 hit->ref_pos = i;
-	 hits.push_back(hit);
-  }
+	list<WordHitPtr> hits;
+	for(int i = 0; i < argc - 1; ++i)
+	{
+		WordHitPtr hit = make_shared<WordHit>(atoi(argv[i + 1]));
+		hit->ref_pos = i;
+		hits.push_back(hit);
+	}
 
-  list<WordHitsGroupPtr> groups;
-  int max_intro_size = 100;
-  group_wordHits_wordHitsGroup(hits, groups, max_intro_size);
+	list<WordHitsGroupPtr> groups;
+	int max_intro_size = 100;
+	group_wordHits_wordHitsGroup(hits, groups, max_intro_size);
 
-  for(auto iter = groups.begin(); iter != groups.end(); ++iter)
-  {
-	 (*iter)->display();
-  }
+	for(auto iter = groups.begin(); iter != groups.end(); ++iter)
+	{
+		(*iter)->display();
+	}
 }
