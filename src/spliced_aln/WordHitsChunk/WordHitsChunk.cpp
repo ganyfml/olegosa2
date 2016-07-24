@@ -6,7 +6,7 @@ bool compare_wordHitsChunkByRefPos(const WordHitsChunkPtr chunk1, const WordHits
 {
 	if(chunk1->hit_refPosNonDec == chunk2->hit_refPosNonDec)
 	{
-		return chunk1->refStart_pos < chunk2->refStart_pos;
+		return chunk1->start_pos_in_ref < chunk2->start_pos_in_ref;
 	}
 	else
 	{
@@ -25,21 +25,21 @@ void WordHitsChunk::evaluate(int word_size, Strand::Value hit_strand)
 	WordHitPtr first_hit = wordHitList.front();
 	WordHitPtr last_hit = wordHitList.back();
 
-	refStart_pos = first_hit->ref_pos;
-	refEnd_pos = last_hit->ref_pos + word_size;
-	queryStart_pos = first_hit->query_pos;
-	queryEnd_pos = last_hit->query_pos + word_size;
+	start_pos_in_ref = first_hit->ref_pos;
+	end_pos_in_ref = last_hit->ref_pos + word_size;
+	start_pos_in_query = first_hit->query_pos;
+	end_pos_in_query = last_hit->query_pos + word_size;
 	strand = hit_strand;
 }
 
 void WordHitsChunk::extend_inexact(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore, ExtendDirection::Value direction)
 {
-	if(direction != ExtendDirection::right)
+	if(direction & ExtendDirection::right)
 	{
 		extend_inexact_left(query, ref_SAIndex, stop_atNegativeScore);
 	}
 
-	if(direction != ExtendDirection::left)
+	if(direction & ExtendDirection::left)
 	{
 		extend_inexact_right(query, ref_SAIndex, stop_atNegativeScore);
 	}
@@ -47,21 +47,13 @@ void WordHitsChunk::extend_inexact(const SeqString& query, const SeqSuffixArray&
 
 void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
 {
-	const int match_score = 3;
-	const int mismatch_score = -1;
-	const int max_diff = 2;
+	const int match_score = 3, mismatch_score = -1, max_diff = 2;
 
-	long index = 0;
-	int end = 0;
-	int curr_score = 0;
-	int max_score = 0;
-	int diff = 0;
-	int min_diff = 0;
+	int offset_at_max_score = 0, diff_at_max_score = 0;
 
-	while((queryStart_pos - index) >= 0
-			&& (refStart_pos - index) >= 0)
+	for(int i = 0, curr_score = 0, diff = 0, max_score = 0; start_pos_in_query - i >= 0 && start_pos_in_ref - i >= 0; ++i)
 	{
-		if(query[queryStart_pos - index] == ref_SAIndex.char_at(refStart_pos - index))
+		if(query[start_pos_in_query - i] == ref_SAIndex.char_at(start_pos_in_ref - i))
 		{
 			curr_score += match_score;
 		}
@@ -79,43 +71,34 @@ void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixA
 		{
 			break;
 		}
-		else if(curr_score > max_score || index == queryStart_pos)
+		else if(curr_score > max_score || start_pos_in_query - i == 0)
 		{
 			max_score = curr_score;
-			end = index;
-			min_diff = diff;
+			offset_at_max_score = i;
+			diff_at_max_score = diff;
 		}
-		++index;
 	}
 
-	queryStart_pos -= end;
-	refStart_pos -= end;
-	gapMM.num_mismatch += min_diff;	
+	start_pos_in_query -= offset_at_max_score;
+	start_pos_in_ref -= offset_at_max_score;
+	gapMM.num_mismatch += diff_at_max_score;	
 }
 
 void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
 {
-	const int match_score = 3;
-	const int mismatch_score = -1;
-	const int max_diff = 2;
+	const int match_score = 3, mismatch_score = -1, max_diff = 2;
 
-	long index = 0;
-	int end = 0;
-	int score = 0;
-	int max_score = 0;
-	int diff = 0;
-	int min_diff = 0;
+	int offset_at_max_score = 0, diff_at_max_score = 0;
 
-	while((queryEnd_pos + index) < query.get_length()
-			&& (refEnd_pos + index) < ref_SAIndex.seq_length())
+	for(int i = 0, curr_score = 0, diff = 0, max_score = 0; (end_pos_in_query + i) < query.get_length() && (end_pos_in_ref + i) < ref_SAIndex.seq_length() ; ++i)
 	{
-		if(query[queryEnd_pos+ index] == ref_SAIndex.char_at(refEnd_pos + index))
+		if(query[end_pos_in_query+ i] == ref_SAIndex.char_at(end_pos_in_ref + i))
 		{
-			score += match_score;
+			curr_score += match_score;
 		}
 		else
 		{
-			score += mismatch_score;
+			curr_score += mismatch_score;
 			++diff;
 			if(diff > max_diff)
 			{
@@ -123,21 +106,20 @@ void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffix
 			}
 		}
 
-		if(stop_atNegativeScore && score < 0)
+		if(stop_atNegativeScore && curr_score < 0)
 		{
 			break;
 		}
 
-		if(score > max_score || ((queryEnd_pos + index + 1) == query.get_length()) )
+		if(curr_score > max_score || ((end_pos_in_query + i + 1) == query.get_length()) )
 		{
-			max_score = score;
-			end = index;
-			min_diff = diff;
+			max_score = curr_score;
+			offset_at_max_score = i;
+			diff_at_max_score = diff;
 		}
-		++index;
 	}
 
-	queryEnd_pos += end;
-	refEnd_pos += end;
-	gapMM.num_mismatch += min_diff;
+	end_pos_in_query += offset_at_max_score;
+	end_pos_in_ref += offset_at_max_score;
+	gapMM.num_mismatch += diff_at_max_score;
 }

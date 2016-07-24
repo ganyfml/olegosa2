@@ -8,16 +8,16 @@ using namespace std;
 int main()
 {
 	SeqString query = string("TT");
-	SeqString ref = string(string("TG"));
+	SeqString ref = string("TG");
 	SeqSuffixArray ref_SAIndex(ref);
 
 	int wordHitChunkID = 0;
 	WordHitsChunkPtr chunk = make_shared<WordHitsChunk>(wordHitChunkID);
-	chunk->refStart_pos = 1;
-	chunk->queryStart_pos = 1;
+	chunk->start_pos_in_ref = 1;
+	chunk->start_pos_in_query = 1;
 
 	bool stop_atNegativeScore = false;
-	printf("before extend, ref_pos: %ld, query_pos: %ld\n", chunk->refStart_pos, chunk->queryStart_pos);
+	printf("before extend, ref_pos: %ld, query_pos: %ld\n", chunk->start_pos_in_ref, chunk->start_pos_in_query);
 	chunk->extend_inexact_left(query, ref_SAIndex, stop_atNegativeScore);
-	printf("aftern extend, ref_pos: %ld, query_pos: %ld\n", chunk->refStart_pos, chunk->queryStart_pos);
+	printf("after extend, ref_pos: %ld, query_pos: %ld\n", chunk->start_pos_in_ref, chunk->start_pos_in_query);
 }
