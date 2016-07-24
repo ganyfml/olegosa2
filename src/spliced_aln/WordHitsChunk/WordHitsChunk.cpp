@@ -50,8 +50,8 @@ void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixA
 	const int match_score = 3, mismatch_score = -1, max_diff = 2;
 
 	int offset_at_max_score = 0, diff_at_max_score = 0;
-
-	for(int i = 0, curr_score = 0, diff = 0, max_score = 0; start_pos_in_query - i >= 0 && start_pos_in_ref - i >= 0; ++i)
+	int curr_score = 0, diff = 0, max_score = 0;
+	for(int i = 0; i <= start_pos_in_query && i <= start_pos_in_ref; ++i)
 	{
 		if(query[start_pos_in_query - i] == ref_SAIndex.char_at(start_pos_in_ref - i))
 		{
@@ -89,10 +89,10 @@ void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffix
 	const int match_score = 3, mismatch_score = -1, max_diff = 2;
 
 	int offset_at_max_score = 0, diff_at_max_score = 0;
-
-	for(int i = 0, curr_score = 0, diff = 0, max_score = 0; (end_pos_in_query + i) < query.get_length() && (end_pos_in_ref + i) < ref_SAIndex.seq_length() ; ++i)
+	int curr_score = 0, diff = 0, max_score = 0;
+	for(int i = 0; i < (query.get_length() - end_pos_in_query) && i < (ref_SAIndex.seq_length() - end_pos_in_ref); ++i)
 	{
-		if(query[end_pos_in_query+ i] == ref_SAIndex.char_at(end_pos_in_ref + i))
+		if(query[end_pos_in_query + i] == ref_SAIndex.char_at(end_pos_in_ref + i))
 		{
 			curr_score += match_score;
 		}
