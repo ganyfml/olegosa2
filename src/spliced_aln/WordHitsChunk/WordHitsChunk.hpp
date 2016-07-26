@@ -6,16 +6,12 @@
 #include <spliced_aln/AlnSpliceOpt.hpp>
 #include <seqan_api/SeqSuffixArray.hpp>
 #include <util/GapAndMM.hpp>
+#include <spliced_aln/Util.hpp>
 #include <iostream>
 
 namespace ExtendDirection
 {
 	enum Value {left = 1, right = 2, both = 3};
-}
-
-namespace Strand
-{
-	enum Value {forward = 1, reverse = -1, none_decide = 0};
 }
 
 struct WordHitsChunk
@@ -37,6 +33,8 @@ struct WordHitsChunk
 	int id;
 	Strand::Value strand;
 	bool hit_refPosNonDec;
+	bool is_first_in_bridge;
+	bool is_last_in_bridge;
 	double coverage;
 	long start_pos_in_ref;
 	long end_pos_in_ref;
