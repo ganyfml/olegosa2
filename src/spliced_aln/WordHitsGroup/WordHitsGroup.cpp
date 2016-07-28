@@ -44,7 +44,7 @@ void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_w
 	}
 }
 
-int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int min_headChunk_refEnd, int max_headChunk_refEnd, int gap_length, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int num_backSearch, int gap_length, int min_headChunk_refEnd, int max_headChunk_refEnd, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
 	std::pair<int, int> chunks_backsearch_area_diff = cal_two_wordchunks_backsearch_area_diff(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
 	int local_max_diff = opt.local_wordChunk_diff;
@@ -104,6 +104,7 @@ int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head
 	if(opt.report_best_only && bridge_to_be_added != nullptr)
 	{
 		wordhitschunkbridges.push_back(bridge_to_be_added);
+		++num_bridge_found;
 	}
 	return num_bridge_found;
 }

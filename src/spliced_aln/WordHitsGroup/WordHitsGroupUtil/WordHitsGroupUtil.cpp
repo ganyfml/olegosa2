@@ -6,25 +6,24 @@ using namespace std;
 
 Strand::Value determin_strand_by_canonical_spliceSite(const SeqSuffixArray& ref_SAIndex, long donor_pos, long acceptor_pos)
 {
-	Strand::Value splice_strand = Strand::none_decide;
 	if(ref_SAIndex.char_at(donor_pos) == 'G' && ref_SAIndex.char_at(donor_pos + 1) == 'T'
 			&& ref_SAIndex.char_at(acceptor_pos - 1) == 'A' && ref_SAIndex.char_at(acceptor_pos) == 'G')
 	{
-		splice_strand = Strand::forward;
+		return Strand::forward;
 	}
 	else if(ref_SAIndex.char_at(donor_pos) == 'C' && ref_SAIndex.char_at(donor_pos + 1) == 'T'
 			&& ref_SAIndex.char_at(acceptor_pos - 1) == 'A' && ref_SAIndex.char_at(acceptor_pos) == 'C')
 	{
-		splice_strand = Strand::reverse;
+		return Strand::reverse;
 	}
-	return splice_strand;
+	return Strand::none_decide;
 }
 
 std::pair<int, int> cal_two_wordchunks_backsearch_area_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
 {
 	int head_chunk_diff = 0;
 	int tail_chunk_diff = 0;
-	for(int i = 0; i < num_backSearch + 1; ++i)
+	for(int i = 0; i <= num_backSearch; ++i)
 	{
 		long head_chunk_queryEnd = head_chunk->end_pos_in_query - i;
 		long head_chunk_refEnd = head_chunk->end_pos_in_ref - i;

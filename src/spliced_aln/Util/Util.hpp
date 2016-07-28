@@ -4,5 +4,5 @@
 
 namespace Strand
 {
-	enum Value {forward = 1, reverse = -1, none_decide = 0};
+	enum Value {none_decide = 0, forward = 1, reverse = 2};
 }

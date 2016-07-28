@@ -1,6 +1,6 @@
 // vim: set noexpandtab tabstop=2:
 
-#include <splicedScore.hpp>
+#include <spliced_aln/splicedScore.hpp>
 #include <cmath>
 
 double global_score_matrix[4][60] =

@@ -4,7 +4,7 @@
 
 namespace Strand_mode
 {
-	enum Value {forward = 1, reverse = 2, disable = 0};
+	enum Value {disable = 0, forward = 1, reverse = 2};
 }
 
 struct AlnSpliceOpt
