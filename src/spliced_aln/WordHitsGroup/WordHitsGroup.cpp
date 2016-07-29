@@ -1,6 +1,5 @@
 // vim: set noexpandtab tabstop=2:
 
-#include <spliced_aln/splicedScore.hpp>
 #include <spliced_aln/WordHitsGroup.hpp>
 #include <spliced_aln/WordHitsGroupUtil.hpp>
 #include <spliced_aln/aln_global.hpp>
@@ -44,21 +43,25 @@ void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_w
 	}
 }
 
-int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int num_backSearch, int gap_length, int min_headChunk_refEnd, int max_headChunk_refEnd, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
-	std::pair<int, int> chunks_backsearch_area_diff = cal_two_wordchunks_backsearch_area_diff(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
-	int local_max_diff = opt.local_wordChunk_diff;
-	int best_diff = local_max_diff + 1;
-
 	WordHitsChunkBridgePtr bridge_to_be_added;
 	int num_bridge_found = 0;
+
+	int local_max_diff = opt.local_wordChunk_diff;
+	int best_diff = local_max_diff + 1;
+	std::pair<int, int> chunks_backsearch_area_diff = cal_two_wordchunks_backsearch_area_diff(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
+	int cleft_and_backsearch_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1 + 2 * num_backSearch;
+	long min_headChunk_refEnd = head_chunk->end_pos_in_ref - num_backSearch;
+	long max_headChunk_refEnd = min_headChunk_refEnd + cleft_and_backsearch_length - 1;
+
 	for(long headChunk_refEnd = min_headChunk_refEnd; headChunk_refEnd <= max_headChunk_refEnd; ++headChunk_refEnd)
 	{
 		long headChunk_queryEnd = head_chunk->end_pos_in_query - num_backSearch + (headChunk_refEnd - min_headChunk_refEnd);
 		if(headChunk_queryEnd + 1 < opt.min_anchor_size || (query.get_length() - headChunk_queryEnd) < opt.min_anchor_size) continue;
-		long tailChunk_refStart = tail_chunk->start_pos_in_ref + num_backSearch - (gap_length - (headChunk_refEnd - min_headChunk_refEnd));
 
 		long splice_site_donor_pos = headChunk_refEnd + 1;
+		long tailChunk_refStart = tail_chunk->start_pos_in_ref + num_backSearch - (cleft_and_backsearch_length - (headChunk_refEnd - min_headChunk_refEnd));
 		long splice_site_acceptor_pos = tailChunk_refStart - 1;
 
 		Strand::Value splice_strand = determin_strand_by_canonical_spliceSite(ref_SAIndex, splice_site_donor_pos, splice_site_acceptor_pos);
@@ -66,8 +69,8 @@ int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head
 		if(opt.strand_mode & Strand_mode::reverse && splice_strand != head_chunk->strand) continue;
 		if(opt.strand_mode & Strand_mode::forward && splice_strand == head_chunk->strand) continue;
 
-		SeqString gap_ref = ref_SAIndex.get_infixSeq(min_headChunk_refEnd, headChunk_refEnd) + ref_SAIndex.get_infixSeq(tailChunk_refStart, tailChunk_refStart + num_backSearch);
-		SeqString gap_query = query.get_infix(head_chunk->end_pos_in_query - num_backSearch + 1, head_chunk->end_pos_in_query - num_backSearch + 1 + gap_length);
+		SeqString gap_ref = ref_SAIndex.get_infixSeq(min_headChunk_refEnd + 1, headChunk_refEnd + 1) + ref_SAIndex.get_infixSeq(tailChunk_refStart, tail_chunk->start_pos_in_ref + num_backSearch);
+		SeqString gap_query = query.get_infix(head_chunk->end_pos_in_query - num_backSearch + 1, head_chunk->end_pos_in_query - num_backSearch + 1 + cleft_and_backsearch_length);
 		GapAndMM gap_mm;
 		aln_global(gap_ref, gap_query, gap_mm);
 		int adjust_diff = chunks_backsearch_area_diff.first + chunks_backsearch_area_diff.second;
@@ -80,6 +83,7 @@ int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head
 			new_bridge->tail_chunk = tail_chunk;
 			new_bridge->start_pos_in_ref = headChunk_refEnd;
 			new_bridge->end_pos_in_ref = tailChunk_refStart;
+			//TODO confused
 			new_bridge->start_pos_in_query = head_chunk->end_pos_in_query - num_backSearch + (headChunk_refEnd - min_headChunk_refEnd);
 			new_bridge->end_pos_in_query = new_bridge->start_pos_in_query + 1;
 			new_bridge->gap_mm = gap_mm;

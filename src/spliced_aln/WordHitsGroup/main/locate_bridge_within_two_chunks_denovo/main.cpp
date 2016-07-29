@@ -28,15 +28,10 @@ int main(int, char* argv[])
 	wordhit_group.wordhitschunks.push_back(tail_chunk);
 
 	int num_backSearch = atoi(argv[7]);
-	int gap_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1 + 2 * num_backSearch;
-	long min_headChunk_refEnd = head_chunk->end_pos_in_ref - num_backSearch;
-	long max_headChunk_refEnd = min_headChunk_refEnd + gap_length - 1;
 
 	wordhit_group.locate_bridge_within_two_chunks_denovo(
 			head_chunk, tail_chunk
 			, num_backSearch
-			, gap_length
-			, min_headChunk_refEnd, max_headChunk_refEnd
 			, query, ref_SAIndex, opt);
 
 	printf("number of bridge created: %lu\n", wordhit_group.wordhitschunkbridges.size());
