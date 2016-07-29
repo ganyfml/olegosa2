@@ -45,27 +45,27 @@ std::pair<int, int> cal_two_wordchunks_backsearch_area_diff(const WordHitsChunkP
 
 //BACKUP
 /*
-	 void cal_two_wordChunks_adjust_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_adjust_diff, vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
-	 {
-	 head_chunk_adjust_diff = vector<int>(num_backSearch + 1);
-	 tail_chunk_adjust_diff = vector<int>(num_backSearch + 1);
-	 int head_chunk_diff = 0;
-	 int tail_chunk_diff = 0;
-	 for(int i = 0; i < num_backSearch + 1; ++i)
-	 {
-	 long head_chunk_queryEnd = head_chunk->end_pos_in_query - i;
-	 if(query[head_chunk_queryEnd] != ref_SAIndex.char_at(head_chunk_refEnd))
-	 {
-	 ++head_chunk_diff;
-	 }
-	 head_chunk_adjust_diff[i] = head_chunk_diff;
+   void cal_two_wordChunks_adjust_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_adjust_diff, vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
+   {
+   head_chunk_adjust_diff = vector<int>(num_backSearch + 1);
+   tail_chunk_adjust_diff = vector<int>(num_backSearch + 1);
+   int head_chunk_diff = 0;
+   int tail_chunk_diff = 0;
+   for(int i = 0; i < num_backSearch + 1; ++i)
+   {
+   long head_chunk_queryEnd = head_chunk->end_pos_in_query - i;
+   if(query[head_chunk_queryEnd] != ref_SAIndex.char_at(head_chunk_refEnd))
+   {
+   ++head_chunk_diff;
+   }
+   head_chunk_adjust_diff[i] = head_chunk_diff;
 
-	 long tail_chunk_refEnd = tail_chunk->start_pos_in_ref + i;
-	 long tail_chunk_queryEnd = tail_chunk->start_pos_in_query + i;
-	 if(query[tail_chunk_queryEnd] != ref_SAIndex.char_at(tail_chunk_refEnd))
-	 {
-	 ++tail_chunk_diff;
-	 }
-	 tail_chunk_adjust_diff[i] = tail_chunk_diff;
-	 }
-	 }*/
+   long tail_chunk_refEnd = tail_chunk->start_pos_in_ref + i;
+   long tail_chunk_queryEnd = tail_chunk->start_pos_in_query + i;
+   if(query[tail_chunk_queryEnd] != ref_SAIndex.char_at(tail_chunk_refEnd))
+   {
+   ++tail_chunk_diff;
+   }
+   tail_chunk_adjust_diff[i] = tail_chunk_diff;
+   }
+   }*/
