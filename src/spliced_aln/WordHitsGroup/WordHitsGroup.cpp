@@ -53,7 +53,7 @@ int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head
 	std::pair<int, int> chunks_backsearch_area_diff = cal_two_wordchunks_backsearch_area_diff(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
 	int cleft_and_backsearch_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1 + 2 * num_backSearch;
 	long min_bridge_ref_start_pos = head_chunk->end_pos_in_ref - num_backSearch;
-	long max_bridge_ref_start_pos = min_bridge_ref_start_pos + cleft_and_backsearch_length - 1;
+	long max_bridge_ref_start_pos = min_bridge_ref_start_pos + cleft_and_backsearch_length;
 
 	for(long curr_bridge_ref_start_pos = min_bridge_ref_start_pos; curr_bridge_ref_start_pos <= max_bridge_ref_start_pos; ++curr_bridge_ref_start_pos)
 	{
@@ -63,6 +63,7 @@ int WordHitsGroup::locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head
 		long splice_site_donor_pos = curr_bridge_ref_start_pos + 1;
 		long curr_bridge_ref_end_pos = tail_chunk->start_pos_in_ref + num_backSearch - (cleft_and_backsearch_length - (curr_bridge_ref_start_pos - min_bridge_ref_start_pos));
 		long splice_site_acceptor_pos = curr_bridge_ref_end_pos - 1;
+		cout << splice_site_donor_pos - 1 << ", " << splice_site_acceptor_pos + 1 << endl;
 
 		Strand::Value splice_strand = determin_strand_by_canonical_spliceSite(ref_SAIndex, splice_site_donor_pos, splice_site_acceptor_pos);
 		if(splice_strand == Strand::none_decide) continue;
