@@ -58,9 +58,10 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	 *                      min_bridge_ref_start_pos   |   max_bridge_ref_start_pos
 	 * (head_chunk_ref_end_pos - num_backsearch)    \  |    /    (head_chunk_ref_end_pos + cleft_length + num_backsearch)
 	 *                                               ↓ ↓   ↓
-	 *                                      ref:  ------------
-	 *                                            ||||||  |||||
-	 *                                    query:  ------..-----
+	 *                                      ref:  -----------------
+	 *                                        head_chunk  tail_chunk
+	 *                                            ||||||  ||||||
+	 *                                    query:  ------..---------
 	 *                                               ↑ ↑|| ↑
 	 * (head_chunk_query_end_pos - num_backsearch)  / / ||  \    (head_chunk_query_end_pos + cleft_length + num_backsearch)
 	 *                   min_bridge_query_start_pos  /  ||   max_bridge_query_start_pos
