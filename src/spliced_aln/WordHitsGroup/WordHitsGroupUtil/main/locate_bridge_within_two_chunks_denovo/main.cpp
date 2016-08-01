@@ -1,6 +1,6 @@
 // vim: set noexpandtab tabstop=2:
 
-#include "../../WordHitsGroup.hpp"
+#include "../../WordHitsGroupUtil.hpp"
 #include <iostream>
 
 using namespace std;
@@ -29,8 +29,9 @@ int main(int, char* argv[])
 
 	int num_backSearch = atoi(argv[7]);
 
-	wordhit_group.locate_bridge_within_two_chunks_denovo(
+	locate_bridge_within_two_chunks_denovo(
 			head_chunk, tail_chunk
+			, wordhit_group.wordhitschunkbridges
 			, num_backSearch
 			, query, ref_SAIndex, opt);
 

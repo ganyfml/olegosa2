@@ -4,7 +4,7 @@
 
 namespace Strand_mode
 {
-	enum Value {disable = 0, forward = 1, reverse = 2};
+	enum Value {both = 3, forward = 1, reverse = 2};
 }
 
 struct AlnSpliceOpt
@@ -19,5 +19,5 @@ struct AlnSpliceOpt
 	int min_anchor_size = 8;
 	int local_wordChunk_diff = 2; //local_wordChunk_diff = (opt.wordChunk_max_diff > 2) ? 2 : opt.wordChunk_max_diff;
 	bool report_best_only = true;
-	Strand_mode::Value strand_mode = Strand_mode::disable;
+	Strand_mode::Value strand_mode = Strand_mode::both;
 };

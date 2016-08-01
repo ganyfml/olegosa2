@@ -31,9 +31,9 @@ struct WordHitsGroup
 	std::list<WordHitsChunkPtr> wordhitschunks;
 	std::list<WordHitsChunkBridgePtr> wordhitschunkbridges;
 	void group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_words);
-	int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 };
 
 typedef std::shared_ptr<WordHitsGroup> WordHitsGroupPtr;
 
 bool compare_wordHitsGroupByScore(const WordHitsGroupPtr group1, const WordHitsGroupPtr group2);
+int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);

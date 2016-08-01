@@ -26,7 +26,6 @@ int main(int, char* argv[])
 	printf("tail_chunk: start pos in ref: %ld, start pos in query: %ld\n", tail_chunk->start_pos_in_ref, tail_chunk->start_pos_in_query);
 
 	int num_backSearch = 1;
-	pair<int, int> result = cal_two_wordchunks_backsearch_area_diff(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
-	printf("head chunk backsearch area diff: %d\n", result.first);
-	printf("tail chunk backsearch area diff: %d\n", result.second);
+	int diff_sum = cal_two_wordchunks_backsearch_area_diff_sum(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
+	printf("head_chunk and tail_chunk diff sum: %d\n", diff_sum);
 }
