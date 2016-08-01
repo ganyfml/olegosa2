@@ -19,7 +19,7 @@ int main(int, char* argv[])
 
 	strand_info[1] = "forward";
 	strand_info[0] = "none_decide";
-	strand_info[-1] = "reverse";
+	strand_info[2] = "reverse";
 
 	Strand::Value result_strand = determin_strand_by_canonical_spliceSite(ref_SAIndex, donor_pos, acceptor_pos);
 	cout << strand_info[result_strand] << endl;
