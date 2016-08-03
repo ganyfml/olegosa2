@@ -24,6 +24,9 @@ Strand::Value determin_strand_by_canonical_spliceSite(const SeqSuffixArray& ref_
 
 bool is_splice_site_by_refPos(const SeqSuffixArray& ref, long ref_pos, SpliceType::Value splice_type, Strand::Value splice_strand);
 
+SeqString get_partner_splice_site(SpliceType::Value splice_type, Strand::Value splice_strand);
+
 //In hpp due to debug
 bool is_donor_splice_site(const SeqSuffixArray& ref, long ref_pos, bool revcomp);
 bool is_acceptor_splice_site(const SeqSuffixArray& ref, long ref_pos, bool revcomp);
+void cal_two_wordchunks_backsearch_area_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, std::vector<int>& head_chunk_adjust_diff, std::vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch);
