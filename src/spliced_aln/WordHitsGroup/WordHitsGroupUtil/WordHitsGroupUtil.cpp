@@ -70,7 +70,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	 *                                             cleft_length
 	 */
 
-	int chunks_backsearch_area_diff_sum = cal_two_wordchunks_backsearch_area_diff_sum(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
+	int original_search_area_diff = cal_two_wordchunks_backsearch_area_diff_sum(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
 	long min_bridge_ref_start_pos = head_chunk->end_pos_in_ref - num_backSearch;
 	long max_bridge_ref_start_pos = head_chunk->end_pos_in_ref + (tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1) + num_backSearch;
 	long cleft_and_backsearch_length = max_bridge_ref_start_pos - min_bridge_ref_start_pos; //none symmetric search region length
@@ -99,9 +99,9 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 		SeqString gap_ref = ref_SAIndex.get_infixSeq(min_bridge_ref_start_pos + 1, curr_bridge_ref_start_pos) + ref_SAIndex.get_infixSeq(curr_bridge_ref_end_pos, tail_chunk->start_pos_in_ref + num_backSearch - 1);
 		SeqString gap_query = query.get_infix(min_bridge_query_start_pos + 1, min_bridge_query_start_pos + 1 + (tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1) + 1);
 
-		GapAndMM gap_mm;
-		aln_global(gap_ref, gap_query, gap_mm);
-		int diff = gap_mm.total_diff() - chunks_backsearch_area_diff_sum;
+		GapAndMM search_area_gap_mm_with_bridge;
+		aln_global(gap_ref, gap_query, search_area_gap_mm_with_bridge);
+		int diff = search_area_gap_mm_with_bridge.total_diff() - original_search_area_diff;
 
 		/*
 		 *                                              search_area
@@ -121,7 +121,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 					head_chunk, tail_chunk
 					, curr_bridge_ref_start_pos, curr_bridge_ref_end_pos
 					, curr_bridge_query_start_pos, curr_bridge_query_start_pos + 1
-					, splice_strand, gap_mm, chunks_backsearch_area_diff_sum); //original_search_area_diff = chunks_backsearch_area_diff_sum 
+					, splice_strand, search_area_gap_mm_with_bridge, original_search_area_diff);
 			head_chunk->is_first_in_bridge = false;
 			tail_chunk->is_last_in_bridge = false;
 			if(opt.report_best_only && diff < best_diff)
@@ -147,27 +147,27 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 
 //BACKUP
 /*
-	 void cal_two_wordChunks_adjust_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_adjust_diff, vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
-	 {
-	 head_chunk_adjust_diff = vector<int>(num_backSearch + 1);
-	 tail_chunk_adjust_diff = vector<int>(num_backSearch + 1);
-	 int head_chunk_diff = 0;
-	 int tail_chunk_diff = 0;
-	 for(int i = 0; i < num_backSearch + 1; ++i)
-	 {
-	 long head_chunk_queryEnd = head_chunk->end_pos_in_query - i;
-	 if(query[head_chunk_queryEnd] != ref_SAIndex.char_at(head_chunk_refEnd))
-	 {
-	 ++head_chunk_diff;
-	 }
-	 head_chunk_adjust_diff[i] = head_chunk_diff;
+   void cal_two_wordChunks_adjust_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_adjust_diff, vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
+   {
+   head_chunk_adjust_diff = vector<int>(num_backSearch + 1);
+   tail_chunk_adjust_diff = vector<int>(num_backSearch + 1);
+   int head_chunk_diff = 0;
+   int tail_chunk_diff = 0;
+   for(int i = 0; i < num_backSearch + 1; ++i)
+   {
+   long head_chunk_queryEnd = head_chunk->end_pos_in_query - i;
+   if(query[head_chunk_queryEnd] != ref_SAIndex.char_at(head_chunk_refEnd))
+   {
+   ++head_chunk_diff;
+   }
+   head_chunk_adjust_diff[i] = head_chunk_diff;
 
-	 long tail_chunk_refEnd = tail_chunk->start_pos_in_ref + i;
-	 long tail_chunk_queryEnd = tail_chunk->start_pos_in_query + i;
-	 if(query[tail_chunk_queryEnd] != ref_SAIndex.char_at(tail_chunk_refEnd))
-	 {
-	 ++tail_chunk_diff;
-	 }
-	 tail_chunk_adjust_diff[i] = tail_chunk_diff;
-	 }
-	 }*/
+   long tail_chunk_refEnd = tail_chunk->start_pos_in_ref + i;
+   long tail_chunk_queryEnd = tail_chunk->start_pos_in_query + i;
+   if(query[tail_chunk_queryEnd] != ref_SAIndex.char_at(tail_chunk_refEnd))
+   {
+   ++tail_chunk_diff;
+   }
+   tail_chunk_adjust_diff[i] = tail_chunk_diff;
+   }
+   }*/
