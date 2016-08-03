@@ -33,7 +33,7 @@ int cal_two_wordchunks_backsearch_area_diff_sum(const WordHitsChunkPtr head_chun
 int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
 	WordHitsChunkBridgePtr bridge_to_be_added;
-	int num_bridge_found = 0;
+	int num_bridge_created = 0;
 
 	int local_max_diff = opt.local_wordChunk_diff;
 	int best_diff = local_max_diff + 1;
@@ -109,7 +109,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 			else
 			{
 				wordhitschunkbridges.push_back(new_bridge);
-				++num_bridge_found;
+				++num_bridge_created;
 			}
 		}
 	}
@@ -117,9 +117,9 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	if(opt.report_best_only && bridge_to_be_added != nullptr)
 	{
 		wordhitschunkbridges.push_back(bridge_to_be_added);
-		++num_bridge_found;
+		++num_bridge_created;
 	}
-	return num_bridge_found;
+	return num_bridge_created;
 }
 
 void collect_anchor_hits_within_bound(const SeqString& anchor_seq, list<long>& anchor_hit_list, const SeqSuffixArray& ref_SAIndex, long hit_left_bound, long hit_right_bound, const alnNonspliceOpt& anchor_search_opt)
@@ -201,105 +201,104 @@ bool is_splice_site_by_refPos(const SeqSuffixArray& ref, long ref_pos, SpliceTyp
 	}
 }
 
-/*
-	 int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
-	 {
-	 vector<int> head_chunk_adjust_diff;
-	 vector<int> tail_chunk_adjust_diff;
-	 cal_two_wordChunks_adjust_diff(head_chunk, tail_chunk, head_chunk_adjust_diff, tail_chunk_adjust_diff, query, ref_SAIndex, num_backSearch);
+int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	vector<int> head_chunk_adjust_diff;
+	vector<int> tail_chunk_adjust_diff;
+	cal_two_wordChunks_adjust_diff(head_chunk, tail_chunk, head_chunk_adjust_diff, tail_chunk_adjust_diff, query, ref_SAIndex, num_backSearch);
 
-	 int num_foundInDenovoSearch = 0;
-	 for(long curr_bridge_ref_start_pos = min_headChunk_refEnd
-	 , curr_bridge_query_start_pos = head_chunk->queryEnd_pos - num_backSearch
-	 ; curr_bridge_ref_start_pos <= max_headChunk_refEnd
-	 ; ++curr_bridge_ref_start_pos, ++ curr_bridge_query_start_pos)
-	 {
-	 if(curr_bridge_query_start_pos + 1 < opt.min_anchor_size) continue;
+	int num_bridge_created = 0;
+	for(long curr_bridge_ref_start_pos = min_headChunk_refEnd
+			, curr_bridge_query_start_pos = head_chunk->queryEnd_pos - num_backSearch
+			; curr_bridge_ref_start_pos <= max_headChunk_refEnd
+			; ++curr_bridge_ref_start_pos, ++ curr_bridge_query_start_pos)
+	{
+		if(curr_bridge_query_start_pos + 1 < opt.min_anchor_size) continue;
 
-	 for(int splice_strand = 0; splice_strand < 2; ++splice_strand)
-	 {
-	 if((!(opt.strand_mode & Strand_mode::reverse)) && splice_strand != head_chunk->strand) continue;
-	 if((!(opt.strand_mode & Strand_mode::forward)) && splice_strand == head_chunk->strand) continue;
+		for(int splice_strand = 0; splice_strand < 2; ++splice_strand)
+		{
+			if((!(opt.strand_mode & Strand_mode::reverse)) && splice_strand != head_chunk->strand) continue;
+			if((!(opt.strand_mode & Strand_mode::forward)) && splice_strand == head_chunk->strand) continue;
 
-	 int head_chunk_splice_type = splice_strand ? SpliceType::SPLICE_DONOR : SpliceType::SPLICE_ACCEPTOR;
-	 if((annotation->retrieve_spliceSite(curr_bridge_ref_start_pos + 1, splice_strand, head_chunk_splice_type) == nullptr)
-	 && (!is_splice_site_by_refPos(ref_SAIndex, curr_bridge_ref_start_pos + 1, head_chunk_splice_type, splice_strand))) continue; //TODO + 1 issue
+			int head_chunk_splice_type = splice_strand ? SpliceType::SPLICE_DONOR : SpliceType::SPLICE_ACCEPTOR;
+			if((annotation->retrieve_spliceSite(curr_bridge_ref_start_pos + 1, splice_strand, head_chunk_splice_type) == nullptr)
+					&& (!is_splice_site_by_refPos(ref_SAIndex, curr_bridge_ref_start_pos + 1, head_chunk_splice_type, splice_strand))) continue; //TODO + 1 issue
 
-	 int tail_chunk_splice_type = splice_strand ? SpliceType::SPLICE_ACCEPTOR : SpliceType::SPLICE_DONOR;
-	 for(long tailChunk_refStart = tail_chunk->refStart_pos + num_backSearch, tailChunk_queryStart = tail_chunk->queryStart_pos + num_backSearch
-	 ; tailChunk_refStart >= tail_chunk->refStart_pos
-	 ; --tailChunk_refStart, --tailChunk_queryStart)
-	 {
-	 if(tailChunk_refStart - curr_bridge_ref_start_pos < 2 * opt.min_intron_size + opt.min_exon_size ) continue;
-	 if((query.get_length() - tailChunk_queryStart) < opt.min_anchor_size) continue;
-	 int query_gap = tailChunk_queryStart - curr_bridge_query_start_pos;
-	 if(query_gap + 1 < opt.min_exon_size) continue;
+			int tail_chunk_splice_type = splice_strand ? SpliceType::SPLICE_ACCEPTOR : SpliceType::SPLICE_DONOR;
+			for(long tailChunk_refStart = tail_chunk->refStart_pos + num_backSearch, tailChunk_queryStart = tail_chunk->queryStart_pos + num_backSearch
+					; tailChunk_refStart >= tail_chunk->refStart_pos
+					; --tailChunk_refStart, --tailChunk_queryStart)
+			{
+				if(tailChunk_refStart - curr_bridge_ref_start_pos < 2 * opt.min_intron_size + opt.min_exon_size ) continue;
+				if((query.get_length() - tailChunk_queryStart) < opt.min_anchor_size) continue;
+				int query_gap = tailChunk_queryStart - curr_bridge_query_start_pos;
+				if(query_gap + 1 < opt.min_exon_size) continue;
 
-	 if((annotation->retrieve_spliceSite(tailChunk_refStart - 1, splice_strand, tail_chunk_splice_type) == nullptr)
-	 && (!is_splice_site_by_refPos(ref_SAIndex, tailChunk_refStart - 1, tail_chunk_splice_type, splice_strand))) continue; //TODO + 1 issue
+				if((annotation->retrieve_spliceSite(tailChunk_refStart - 1, splice_strand, tail_chunk_splice_type) == nullptr)
+						&& (!is_splice_site_by_refPos(ref_SAIndex, tailChunk_refStart - 1, tail_chunk_splice_type, splice_strand))) continue; //TODO + 1 issue
 
-	 SeqString gap_head_ss = get_partner_splice_site(head_chunk_splice_type, splice_strand);
-	 SeqString gap_middle = query.get_infix(curr_bridge_query_start_pos, tailChunk_queryStart);
-	 SeqString gap_tail_ss = get_partner_splice_site(tail_chunk_splice_type, splice_strand);
-	 SeqString anchor_seq = gap_head_ss + gap_middle + gap_tail_ss;
-	 int anchor_length = anchor_seq.get_length();
-	 long ref_left_bound = curr_bridge_ref_start_pos + opt.min_intron_size;
-	 long ref_right_bound = tailChunk_refStart - opt.min_intron_size - anchor_length;
-	 list<long> anchor_hits_ref_list;
+				SeqString gap_head_ss = get_partner_splice_site(head_chunk_splice_type, splice_strand);
+				SeqString gap_middle = query.get_infix(curr_bridge_query_start_pos, tailChunk_queryStart);
+				SeqString gap_tail_ss = get_partner_splice_site(tail_chunk_splice_type, splice_strand);
+				SeqString anchor_seq = gap_head_ss + gap_middle + gap_tail_ss;
+				int anchor_length = anchor_seq.get_length();
+				long ref_left_bound = curr_bridge_ref_start_pos + opt.min_intron_size;
+				long ref_right_bound = tailChunk_refStart - opt.min_intron_size - anchor_length;
+				list<long> anchor_hits_ref_list;
 
-	 alnNonspliceOpt opt;
-	 collect_anchor_hits(anchor_seq, anchor_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt); //TODO strand? Why only accept strand = 0
+				alnNonspliceOpt opt;
+				collect_anchor_hits(anchor_seq, anchor_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt); //TODO strand? Why only accept strand = 0
 
-	 for(long ref_hit_pos : anchor_hits_ref_list)
-	 {
-	 head_chunk->is_last = false;
-	 int middle_chunk_id = -1;
-	 WordHitsChunkPtr middle_chunk = make_shared<WordHitsChunk>(middle_chunk_id);
-	 middle_chunk->strand = head_chunk->strand;
-	 middle_chunk->colinearity = true;
-	 middle_chunk->coverage = 1;
-	 middle_chunk->refStart_pos = ref_hit_pos + 2;
-	 middle_chunk->refEnd_pos = middle_chunk->refStart_pos + anchor_length - 1;
-	 middle_chunk->queryStart_pos = curr_bridge_query_start_pos;
-	 middle_chunk->queryEnd_pos = tailChunk_queryStart;
-	 middle_chunk->is_first = false;
-	 middle_chunk->is_last = false;
-	 tail_chunk->is_first = false;
-	 wordhitschunks.push_back(middle_chunk);
+				for(long ref_hit_pos : anchor_hits_ref_list)
+				{
+					head_chunk->is_last = false;
+					int middle_chunk_id = -1;
+					WordHitsChunkPtr middle_chunk = make_shared<WordHitsChunk>(middle_chunk_id);
+					middle_chunk->strand = head_chunk->strand;
+					middle_chunk->colinearity = true;
+					middle_chunk->coverage = 1;
+					middle_chunk->refStart_pos = ref_hit_pos + 2;
+					middle_chunk->refEnd_pos = middle_chunk->refStart_pos + anchor_length - 1;
+					middle_chunk->queryStart_pos = curr_bridge_query_start_pos;
+					middle_chunk->queryEnd_pos = tailChunk_queryStart;
+					middle_chunk->is_first = false;
+					middle_chunk->is_last = false;
+					tail_chunk->is_first = false;
+					wordhitschunks.push_back(middle_chunk);
 
-	 WordHitsChunkBridgePtr first_bridge = make_shared<WordHitsChunkBridge>();
-	 first_bridge->head_chunk = head_chunk;
-	 first_bridge->tail_chunk = middle_chunk;
-	 first_bridge->refStart_pos = curr_bridge_ref_start_pos;
-	 first_bridge->refEnd_pos = middle_chunk->refStart_pos;
-first_bridge->queryStart_pos = curr_bridge_query_start_pos;
-first_bridge->queryEnd_pos = first_bridge->queryStart_pos + 1;
-first_bridge->adjust_diff = (curr_bridge_ref_start_pos - head_chunk->refEnd_pos <= 0) ? head_chunk_adjust_diff[head_chunk->refEnd_pos - curr_bridge_ref_start_pos] : 0; //TODO double check
-first_bridge->splice_strand = splice_strand;
-first_bridge->score = cal_splice_score(ref_SAIndex, curr_bridge_ref_start_pos, middle_chunk->refStart_pos);
-wordhitschunkbridge.push_back(first_bridge);
+					WordHitsChunkBridgePtr first_bridge = make_shared<WordHitsChunkBridge>();
+					first_bridge->head_chunk = head_chunk;
+					first_bridge->tail_chunk = middle_chunk;
+					first_bridge->refStart_pos = curr_bridge_ref_start_pos;
+					first_bridge->refEnd_pos = middle_chunk->refStart_pos;
+					first_bridge->queryStart_pos = curr_bridge_query_start_pos;
+					first_bridge->queryEnd_pos = first_bridge->queryStart_pos + 1;
+					first_bridge->adjust_diff = (curr_bridge_ref_start_pos - head_chunk->refEnd_pos <= 0) ? head_chunk_adjust_diff[head_chunk->refEnd_pos - curr_bridge_ref_start_pos] : 0; //TODO double check
+					first_bridge->splice_strand = splice_strand;
+					first_bridge->score = cal_splice_score(ref_SAIndex, curr_bridge_ref_start_pos, middle_chunk->refStart_pos);
+					wordhitschunkbridge.push_back(first_bridge);
 
-WordHitsChunkBridgePtr second_bridge = make_shared<WordHitsChunkBridge>();
-second_bridge->head_chunk = middle_chunk;
-second_bridge->tail_chunk = tail_chunk;
-second_bridge->refStart_pos = middle_chunk->refEnd_pos;
-second_bridge->refEnd_pos = tailChunk_refStart;
-second_bridge->queryStart_pos = middle_chunk->queryStart_pos;
-second_bridge->queryEnd_pos = second_bridge->queryStart_pos + 1;
-second_bridge->adjust_diff = (tailChunk_refStart - tail_chunk->refStart_pos >= 0) ? tail_chunk_adjust_diff[tailChunk_refStart - tail_chunk->refStart_pos] : 0; //TODO double check
-second_bridge->splice_strand = splice_strand;
-second_bridge->score = cal_splice_score(ref_SAIndex, curr_bridge_ref_start_pos, middle_chunk->refStart_pos);
-wordhitschunkbridge.push_back(second_bridge);
+					WordHitsChunkBridgePtr second_bridge = make_shared<WordHitsChunkBridge>();
+					second_bridge->head_chunk = middle_chunk;
+					second_bridge->tail_chunk = tail_chunk;
+					second_bridge->refStart_pos = middle_chunk->refEnd_pos;
+					second_bridge->refEnd_pos = tailChunk_refStart;
+					second_bridge->queryStart_pos = middle_chunk->queryStart_pos;
+					second_bridge->queryEnd_pos = second_bridge->queryStart_pos + 1;
+					second_bridge->adjust_diff = (tailChunk_refStart - tail_chunk->refStart_pos >= 0) ? tail_chunk_adjust_diff[tailChunk_refStart - tail_chunk->refStart_pos] : 0; //TODO double check
+					second_bridge->splice_strand = splice_strand;
+					second_bridge->score = cal_splice_score(ref_SAIndex, curr_bridge_ref_start_pos, middle_chunk->refStart_pos);
+					wordhitschunkbridge.push_back(second_bridge);
 
-wordhitschunkbridge.push_back(second_bridge);
-num_foundInDenovoSearch++;
+					wordhitschunkbridge.push_back(second_bridge);
+					num_bridge_created++;
+				}
+			}
+		}
+	}
+	return num_bridge_created;
 }
-}
-}
-}
-return num_foundInDenovoSearch;
-}
-*/
+
 //BACKUP
 /*
 	 void cal_two_wordChunks_adjust_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_adjust_diff, vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
