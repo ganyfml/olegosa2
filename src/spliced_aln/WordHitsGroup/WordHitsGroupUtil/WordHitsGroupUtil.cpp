@@ -110,9 +110,9 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 		 *                          new_head_chunk → ||||     |||||||| ← new_tail_chunk
 		 *                                    query: -------...-------
 		 *                                    
-		 *                          original_diff = (orginal_head_chunk + orginal_tail_chunk) vs query
-		 *                          bridge_diff = (new_head_chunk + new_tail_chunk) vs query
-		 *                                 diff = bridge_diff - original_diff
+		 *            original_search_area_diff = (orginal_head_chunk + orginal_tail_chunk) vs query
+		 *         search_area_diff_with_bridge = (new_head_chunk + new_tail_chunk) vs query
+		 *                                 diff = search_area_diff_with_bridge - original_search_area_diff
 		 */
 
 		if(diff < local_max_diff)
@@ -121,7 +121,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 					head_chunk, tail_chunk
 					, curr_bridge_ref_start_pos, curr_bridge_ref_end_pos
 					, curr_bridge_query_start_pos, curr_bridge_query_start_pos + 1
-					, splice_strand, gap_mm, chunks_backsearch_area_diff_sum); //adjust_diff = chunks_backsearch_area_diff_sum 
+					, splice_strand, gap_mm, chunks_backsearch_area_diff_sum); //original_search_area_diff = chunks_backsearch_area_diff_sum 
 			head_chunk->is_first_in_bridge = false;
 			tail_chunk->is_last_in_bridge = false;
 			if(opt.report_best_only && diff < best_diff)

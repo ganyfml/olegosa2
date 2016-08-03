@@ -12,17 +12,17 @@
 struct WordHitsChunkBridge
 {
 	WordHitsChunkBridge(WordHitsChunkPtr head_chunk, WordHitsChunkPtr tail_chunk, long start_pos_in_ref, long end_pos_in_ref
-			, int start_pos_in_query, int end_pos_in_query, int spliced_strand, GapAndMM gap_mm, int adjust_diff) :
+			, int start_pos_in_query, int end_pos_in_query, int spliced_strand, GapAndMM gap_mm, int original_search_area_diff) :
 		head_chunk(head_chunk) , tail_chunk(tail_chunk), start_pos_in_ref(start_pos_in_ref) , end_pos_in_ref(end_pos_in_ref)
 		, start_pos_in_query(start_pos_in_query), end_pos_in_query(end_pos_in_query), spliced_strand(spliced_strand), gap_mm(gap_mm)
-		, adjust_diff(adjust_diff) {}
+		, original_search_area_diff(original_search_area_diff) {}
 
 	void display()
 	{
 		std::cout << "Ref   Start Pos: " << start_pos_in_ref   << ", Ref   End Pos: " << end_pos_in_ref << std::endl;
 		std::cout << "Query Start Pos: " << start_pos_in_query << ", Query End Pos: " << end_pos_in_query << std::endl;
 		gap_mm.display();
-		std::cout << "Adjust diff: " << adjust_diff << std::endl;
+		std::cout << "original_search_area_diff: " << original_search_area_diff << std::endl;
 	}
 
 	WordHitsChunkPtr head_chunk;
@@ -33,7 +33,7 @@ struct WordHitsChunkBridge
 	long end_pos_in_query;
 	int spliced_strand;
 	GapAndMM gap_mm;
-	int adjust_diff;
+	int original_search_area_diff;
 	double score;
 };
 
