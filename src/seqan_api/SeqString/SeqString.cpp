@@ -74,7 +74,7 @@ std::ostream& operator<<(std::ostream& os, const SeqString& obj)
 SeqString SeqString::get_infix(int begin_pos, int end_pos) const
 {
 	SeqString ret;
-	ret.set_pointer(new T(seqan::infix(*voidPtr2TPtr(impl_), begin_pos, end_pos)));
+	ret.set_pointer(new T(seqan::infix(*voidPtr2TPtr(impl_), begin_pos, end_pos + 1))); //chaneg [) to []
 	return ret;
 }
 

@@ -6,8 +6,8 @@ using namespace std;
 
 int main(int, char* argv[])
 {
-	SeqString ref_seq(string("ATCGATCG"));
+	SeqString ref_seq(string("ATCG"));
 	SeqSuffixArray ref_SA(ref_seq);
 
-	cout << ref_SA.get_infixSeq(2, 5)<< endl;
+	cout << ref_SA.get_infixSeq(1, 2)<< endl;
 }
