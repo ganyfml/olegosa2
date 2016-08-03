@@ -103,6 +103,18 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 		aln_global(gap_ref, gap_query, gap_mm);
 		int diff = gap_mm.total_diff() - chunks_backsearch_area_diff_sum;
 
+		/*
+		 *                                              search_area
+		 *                                      ref: -----------------
+		 *                      orginal_head_chunk → ||||||     |||||| ← orginal_tail_chunk
+		 *                          new_head_chunk → ||||     |||||||| ← new_tail_chunk
+		 *                                    query: -------...-------
+		 *                                    
+		 *                          original_diff = (orginal_head_chunk + orginal_tail_chunk) vs query
+		 *                          bridge_diff = (new_head_chunk + new_tail_chunk) vs query
+		 *                                 diff = bridge_diff - original_diff
+		 */
+
 		if(diff < local_max_diff)
 		{
 			WordHitsChunkBridgePtr new_bridge = make_shared<WordHitsChunkBridge>(
