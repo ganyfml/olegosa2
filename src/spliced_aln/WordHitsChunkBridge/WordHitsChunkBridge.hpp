@@ -11,8 +11,11 @@
 
 struct WordHitsChunkBridge
 {
-	WordHitsChunkBridge(WordHitsChunkPtr head_chunk, WordHitsChunkPtr tail_chunk, long start_pos_in_ref, long end_pos_in_ref
-			, int start_pos_in_query, int end_pos_in_query, int spliced_strand, GapAndMM gap_mm, int original_search_area_diff) :
+	WordHitsChunkBridge(
+			WordHitsChunkPtr head_chunk, WordHitsChunkPtr tail_chunk
+			, long start_pos_in_ref, long end_pos_in_ref
+			, int start_pos_in_query, int end_pos_in_query
+			, int spliced_strand, GapAndMM gap_mm, int original_search_area_diff) :
 		head_chunk(head_chunk) , tail_chunk(tail_chunk), start_pos_in_ref(start_pos_in_ref) , end_pos_in_ref(end_pos_in_ref)
 		, start_pos_in_query(start_pos_in_query), end_pos_in_query(end_pos_in_query), spliced_strand(spliced_strand), gap_mm(gap_mm)
 		, original_search_area_diff(original_search_area_diff) {}

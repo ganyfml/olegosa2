@@ -19,7 +19,7 @@ num_backsearch=1
 #         2 **  **10
 # Ref   TTTAGTGGAGTTT
 # Query TTTA......TTT
-#         2      4
+#         2       4
 
 query=TTTATTT
 ref=TTTAGTGGAGTTT
@@ -32,7 +32,7 @@ num_backsearch=1
 #         2 **  **10
 # Ref   TTTGTGGAGATTT
 # Query TTT......ATTT
-#         2      4
+#         2       4
 
 query=TTTATTT
 ref=TTTGTGGAGATTT
@@ -48,8 +48,8 @@ num_backsearch=1
 # Query TTT......AA
 #         2      3
 
-query=TTTTT
-ref=TTGTGGAGTTT
+query=TTTAA
+ref=TTGTGGAGTAA
 head_chunk_end_pos_in_ref_and_query=(2 2)
 tail_chunk_start_pos_in_ref_and_query=(9 3)
 num_backsearch=1
