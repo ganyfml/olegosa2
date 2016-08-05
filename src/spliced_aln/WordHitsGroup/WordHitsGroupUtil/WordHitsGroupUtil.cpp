@@ -266,13 +266,12 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 	 *                                      ref:  -----------------
 	 *                               head_chunk → ||||||  |||||| ← tail_chunk
 	 *                                    query:  ------..---------
-	 *                                               ↑ ↑||↑ ↑
-	 * (head_chunk_query_end_pos - num_backsearch)  / / || \ \  (tail_chunk_query_start_pos + num_backsearch)
-	 *              min_head_bridge_query_start_pos  /  ||  \  max_tail_bridge_query_start_pos
-	 *                                              /   ||   \
-	 *                    head_chunk->end_pos_in_query  ||    tail_chunk->query_start_pos(min_tail_bridge_query_start_pos)
+	 *                                               ↑ ↑  ↑ ↑
+	 * (head_chunk_query_end_pos - num_backsearch)  / /    \ \  (tail_chunk_query_start_pos + num_backsearch)
+	 *              min_head_bridge_query_start_pos  /      \  max_tail_bridge_query_start_pos
+	 *                                              /        \
+	 *                    head_chunk->end_pos_in_query        tail_chunk->query_start_pos(min_tail_bridge_query_start_pos)
 	 *    (max_head_bridge_query_start_pos)
-	 *                                             cleft_length
 	 */
 
 
@@ -324,17 +323,17 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 				 * Assume num_backsearch = 2                  
 				 *                                  curr_head_bridge_ref_start_pos       
 				 *                                        \  min_intron_size   
-				 *                                         \    |ref_left_bound       min_intron_size     
-				 *                                          \   |   |    inner_chunk_length   |
-				 *                                           \  |   |ref_right_bound|        /  curr_tail_bridge_ref_end_pos
-				 *                                            \ |   |          \    |       /  /
-				 *                                             ↓←--→↓           ↓←------→↓←--→↓
-				 *                                      ref:  ----------------------------------
-				 *                               head_chunk → ||||||                 |||||||||||← tail_chunk
-				 *                                    query:  ------.................-----------
-				 *                                             ↑                              ↑
-				 *                                            /                               |
-				 *           curr_head_bridge_query_start_pos                 curr_tail_bridge_query_end_pos
+				 *                                         \      │  ref_left_bound        min_intron_size     
+				 *                                          \     │   |    inner_chunk_length  |
+				 *                                           \    │   | ref_right_bound│       /  curr_tail_bridge_ref_end_pos
+				 *                                            \   │   /          \     │      │   /
+				 *                                             ↓┌─┴─┐↓            ↓┌───┴───┐┌─┴─┐↓
+				 *                                      ref:  ------------------------------------
+				 *                               head_chunk → ||||||  ⋮⋮⋮⋮⋮⋮⋮⋮⋮     ||||||||||||||← tail_chunk
+				 *                                    query:  ------..---------.....--------------
+				 *                                             ↑      └───┬───┘                  ↑
+				 *                                            /     inner_chunk                  |
+				 *           curr_head_bridge_query_start_pos                             curr_tail_bridge_query_end_pos
 				 */
 
 				SeqString inner_chunk_seq = query.get_infix(curr_head_bridge_query_start_pos + 1, curr_tail_bridge_query_end_pos - 1);
