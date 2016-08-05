@@ -39,8 +39,11 @@ int main(int, char* argv[])
 
 	printf("number of bridge created: %lu\n", wordhit_group.wordhitschunkbridges.size());
 	printf("bridge info:\n");
+	wordhit_group.wordhitschunks.back()->display();
+	cout << endl;
 	for(WordHitsChunkBridgePtr bridge : wordhit_group.wordhitschunkbridges)
 	{
 		bridge->display();
+		cout << endl;
 	}
 }
