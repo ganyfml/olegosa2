@@ -298,8 +298,13 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 
 			SpliceType::Value tail_chunk_splice_type = splice_strand == Strand::forward ? SpliceType::splice_acceptor : SpliceType::splice_donor;
 
+			SeqString inner_chunk_head_ss = get_partner_splice_site(head_chunk_splice_type, static_cast<Strand::Value>(splice_strand));
+			SeqString inner_chunk_tail_ss = get_partner_splice_site(tail_chunk_splice_type, static_cast<Strand::Value>(splice_strand));
+			long ref_left_bound = curr_head_bridge_ref_start_pos + opt.min_intron_size;
+
 			long max_tail_bridge_ref_start_pos = tail_chunk->start_pos_in_ref + num_backSearch;
 			int max_tail_bridge_query_start_pos = tail_chunk->start_pos_in_query + num_backSearch;
+
 			for(long curr_tail_bridge_ref_end_pos = max_tail_bridge_ref_start_pos
 					, curr_tail_bridge_query_end_pos =  max_tail_bridge_query_start_pos
 					; curr_tail_bridge_ref_end_pos >= tail_chunk->start_pos_in_ref
@@ -332,12 +337,9 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 				 *           curr_head_bridge_query_start_pos                 curr_tail_bridge_query_end_pos
 				 */
 
-				SeqString inner_chunk_head_ss = get_partner_splice_site(head_chunk_splice_type, static_cast<Strand::Value>(splice_strand));
 				SeqString inner_chunk_seq = query.get_infix(curr_head_bridge_query_start_pos + 1, curr_tail_bridge_query_end_pos - 1);
-				SeqString inner_chunk_tail_ss = get_partner_splice_site(tail_chunk_splice_type, static_cast<Strand::Value>(splice_strand));
 				SeqString inner_chunk_and_ss = inner_chunk_head_ss + inner_chunk_seq + inner_chunk_tail_ss;
 				int inner_chunk_length = inner_chunk_seq.get_length();
-				long ref_left_bound = curr_head_bridge_ref_start_pos + opt.min_intron_size;
 				long ref_right_bound = curr_tail_bridge_ref_end_pos - opt.min_intron_size - inner_chunk_length;
 				list<long> inner_chunk_and_ss_hits_ref_list;
 
