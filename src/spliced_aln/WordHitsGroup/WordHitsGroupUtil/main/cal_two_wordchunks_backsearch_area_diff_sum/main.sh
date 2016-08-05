@@ -10,13 +10,13 @@ tail_chunk_start_pos_in_ref_and_query=(2 2)
 ./main.exe "$ref" "$query" "${head_chunk_end_pos_in_ref_and_query[@]}" "${tail_chunk_start_pos_in_ref_and_query[@]}"
 
 ref=TTGG
-query=TTGA
+query=TAGG
 head_chunk_end_pos_in_ref_and_query=(1 1)
 tail_chunk_start_pos_in_ref_and_query=(2 2)
 ./main.exe "$ref" "$query" "${head_chunk_end_pos_in_ref_and_query[@]}" "${tail_chunk_start_pos_in_ref_and_query[@]}"
 
 ref=TTGG
-query=ATGG
+query=TTAG
 head_chunk_end_pos_in_ref_and_query=(1 1)
 tail_chunk_start_pos_in_ref_and_query=(2 2)
 ./main.exe "$ref" "$query" "${head_chunk_end_pos_in_ref_and_query[@]}" "${tail_chunk_start_pos_in_ref_and_query[@]}"
