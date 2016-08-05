@@ -356,7 +356,7 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 					wordhitschunks.push_back(inner_chunk);
 
 					GapAndMM gap_mm;
-					int head_bridge_search_area_mm = (curr_head_bridge_ref_start_pos - head_chunk->end_pos_in_ref <= 0) ? head_chunk_search_area_mm[head_chunk->end_pos_in_ref - curr_head_bridge_ref_start_pos] : 0; //TODO double check
+					int head_bridge_search_area_mm = (curr_head_bridge_ref_start_pos - head_chunk->end_pos_in_ref <= 0) ? head_chunk_search_area_mm[head_chunk->end_pos_in_ref - curr_head_bridge_ref_start_pos] : 0;
 					WordHitsChunkBridgePtr head_bridge = make_shared<WordHitsChunkBridge>(
 							head_chunk, inner_chunk
 							, curr_head_bridge_ref_start_pos, inner_chunk->start_pos_in_ref
@@ -364,7 +364,7 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 							, splice_strand, gap_mm, head_bridge_search_area_mm);
 					wordhitschunkbridges.push_back(head_bridge);
 
-					int tail_bridge_search_area_mm = (curr_tail_bridge_ref_end_pos - tail_chunk->start_pos_in_ref >= 0) ? tail_chunk_search_area_mm[curr_tail_bridge_ref_end_pos - tail_chunk->start_pos_in_ref] : 0; //TODO double check
+					int tail_bridge_search_area_mm = (curr_tail_bridge_ref_end_pos - tail_chunk->start_pos_in_ref >= 0) ? tail_chunk_search_area_mm[curr_tail_bridge_ref_end_pos - tail_chunk->start_pos_in_ref] : 0;
 					WordHitsChunkBridgePtr tail_bridge = make_shared<WordHitsChunkBridge>(
 							inner_chunk, head_chunk
 							, inner_chunk->end_pos_in_ref, curr_tail_bridge_ref_end_pos
