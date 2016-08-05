@@ -29,6 +29,12 @@ struct WordHitsChunk
 		gapMM.display();
 	}
 
+	void display_pos()
+	{
+		std::cout << "Ref   Start Pos: " << start_pos_in_ref   << ", Ref   End Pos: " << end_pos_in_ref << std::endl;
+		std::cout << "Query Start Pos: " << start_pos_in_query << ", Query End Pos: " << end_pos_in_query << std::endl;
+	}
+
 	GapAndMM gapMM;
 	int id;
 	Strand::Value strand;
