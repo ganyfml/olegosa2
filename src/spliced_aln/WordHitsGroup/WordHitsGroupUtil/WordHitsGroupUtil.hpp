@@ -30,3 +30,4 @@ SeqString get_partner_splice_site(SpliceType::Value splice_type, Strand::Value s
 bool is_donor_splice_site(const SeqSuffixArray& ref, long ref_pos, bool revcomp);
 bool is_acceptor_splice_site(const SeqSuffixArray& ref, long ref_pos, bool revcomp);
 void cal_two_wordchunks_backsearch_area_diff(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, std::vector<int>& head_chunk_adjust_diff, std::vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch);
+int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
