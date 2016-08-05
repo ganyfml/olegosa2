@@ -17,13 +17,13 @@ int main(int, char* argv[])
 	WordHitsChunkPtr head_chunk = make_shared<WordHitsChunk>(head_chunk_id);
 	head_chunk->end_pos_in_ref = atoi(argv[3]);
 	head_chunk->end_pos_in_query = atoi(argv[4]);
-	printf("head_chunk: end pos in ref: %ld, end pos in query: %ld\n", head_chunk->end_pos_in_ref, head_chunk->end_pos_in_query);
+	printf("head_chunk: end pos in ref: %ld, end pos in query: %d\n", head_chunk->end_pos_in_ref, head_chunk->end_pos_in_query);
 
 	int tail_chunk_id = 0;
 	WordHitsChunkPtr tail_chunk = make_shared<WordHitsChunk>(tail_chunk_id);
 	tail_chunk->start_pos_in_ref = atoi(argv[5]);
 	tail_chunk->start_pos_in_query = atoi(argv[6]);
-	printf("tail_chunk: start pos in ref: %ld, start pos in query: %ld\n", tail_chunk->start_pos_in_ref, tail_chunk->start_pos_in_query);
+	printf("tail_chunk: start pos in ref: %ld, start pos in query: %d\n", tail_chunk->start_pos_in_ref, tail_chunk->start_pos_in_query);
 
 	int num_backSearch = 1;
 	int diff_sum = cal_two_wordchunks_backsearch_area_diff_sum(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);

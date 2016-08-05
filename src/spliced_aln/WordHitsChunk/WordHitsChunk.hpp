@@ -20,6 +20,14 @@ struct WordHitsChunk
 		id(id), strand(Strand::none_decide) , hit_refPosNonDec(false), coverage(0)
 		, start_pos_in_ref(-1), end_pos_in_ref(-1) , start_pos_in_query(-1), end_pos_in_query(-1) {}
 
+	WordHitsChunk(
+			Strand::Value strand
+			, long start_pos_in_ref, long end_pos_in_ref
+			, int start_pos_in_query, int end_pos_in_query) :
+		id(-1), strand(strand) , hit_refPosNonDec(true), coverage(1)
+		, start_pos_in_ref(start_pos_in_ref), end_pos_in_ref(end_pos_in_ref)
+		, start_pos_in_query(start_pos_in_query), end_pos_in_query(end_pos_in_query) {}
+
 	void display()
 	{
 		std::cout << "WordChunk ID: " << id << ", with strand: " << strand << ", containing " << wordHitList.size() << " wordHits" << std::endl;
@@ -44,8 +52,8 @@ struct WordHitsChunk
 	double coverage;
 	long start_pos_in_ref;
 	long end_pos_in_ref;
-	long start_pos_in_query;
-	long end_pos_in_query;
+	int start_pos_in_query;
+	int end_pos_in_query;
 	std::list<WordHitPtr> wordHitList;
 
 	void evaluate(int word_size, Strand::Value hit_strand);

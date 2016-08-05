@@ -17,7 +17,7 @@ int main()
 	chunk->start_pos_in_query = 1;
 
 	bool stop_atNegativeScore = false;
-	printf("before extend, ref_pos: %ld, query_pos: %ld\n", chunk->start_pos_in_ref, chunk->start_pos_in_query);
+	printf("before extend, ref_pos: %ld, query_pos: %d\n", chunk->start_pos_in_ref, chunk->start_pos_in_query);
 	chunk->extend_inexact_left(query, ref_SAIndex, stop_atNegativeScore);
-	printf("after extend, ref_pos: %ld, query_pos: %ld\n", chunk->start_pos_in_ref, chunk->start_pos_in_query);
+	printf("after extend, ref_pos: %ld, query_pos: %d\n", chunk->start_pos_in_ref, chunk->start_pos_in_query);
 }
