@@ -320,7 +320,7 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 				 *                                  curr_head_bridge_ref_start_pos       
 				 *                                        \  min_intron_size   
 				 *                                         \    |ref_left_bound       min_intron_size     
-				 *																          \   |   |    inner_chunk_length   |
+				 *                                          \   |   |    inner_chunk_length   |
 				 *                                           \  |   |ref_right_bound|        /  curr_tail_bridge_ref_end_pos
 				 *                                            \ |   |          \    |       /  /
 				 *                                             ↓←--→↓           ↓←------→↓←--→↓
