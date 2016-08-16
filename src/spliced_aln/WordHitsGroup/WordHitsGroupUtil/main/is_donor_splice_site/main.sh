@@ -8,17 +8,7 @@ ref_pos=1
 revcomp=0
 ./main.exe "$ref" "$ref_pos" "$revcomp"
 
-ref=AGT
-ref_pos=1
-revcomp=1
-./main.exe "$ref" "$ref_pos" "$revcomp"
-
 ref=ACT
 ref_pos=1
 revcomp=1
-./main.exe "$ref" "$ref_pos" "$revcomp"
-
-ref=ACT
-ref_pos=1
-revcomp=0
 ./main.exe "$ref" "$ref_pos" "$revcomp"

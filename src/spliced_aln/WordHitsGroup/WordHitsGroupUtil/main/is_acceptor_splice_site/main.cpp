@@ -10,6 +10,6 @@ int main(int, char* argv[])
 	SeqString ref(argv[1]);
 	SeqSuffixArray ref_SAIndex(ref);
 	long ref_pos = atoi(argv[2]);
-	bool revcomp = atoi(argv[3]);
-	cout << is_acceptor_splice_site(ref_SAIndex, ref_pos, revcomp) << endl;
+	cout << "forward: " << is_acceptor_splice_site_forward(ref_SAIndex, ref_pos) << endl;
+	cout << "reverse: " << is_acceptor_splice_site_reverse(ref_SAIndex, ref_pos) << endl;
 }

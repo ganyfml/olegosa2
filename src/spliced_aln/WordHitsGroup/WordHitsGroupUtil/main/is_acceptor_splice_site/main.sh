@@ -5,20 +5,8 @@ set -v
 
 ref=AAG
 ref_pos=1
-revcomp=0
-./main.exe "$ref" "$ref_pos" "$revcomp"
-
-ref=AAG
-ref_pos=1
-revcomp=1
-./main.exe "$ref" "$ref_pos" "$revcomp"
+./main.exe "$ref" "$ref_pos"
 
 ref=AAC
 ref_pos=1
-revcomp=1
-./main.exe "$ref" "$ref_pos" "$revcomp"
-
-ref=AAC
-ref_pos=1
-revcomp=0
-./main.exe "$ref" "$ref_pos" "$revcomp"
+./main.exe "$ref" "$ref_pos"

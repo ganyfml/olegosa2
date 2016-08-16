@@ -27,7 +27,9 @@ bool is_splice_site_by_refPos(const SeqSuffixArray& ref, long ref_pos, SpliceTyp
 SeqString get_partner_splice_site(SpliceType::Value splice_type, Strand::Value splice_strand);
 
 //In hpp due to debug
-bool is_donor_splice_site(const SeqSuffixArray& ref, long ref_pos, bool revcomp);
-bool is_acceptor_splice_site(const SeqSuffixArray& ref, long ref_pos, bool revcomp);
+bool is_donor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos);
+bool is_donor_splice_site_reverse(const SeqSuffixArray& ref, long ref_pos);
+bool is_acceptor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos);
+bool is_acceptor_splice_site_reverse(const SeqSuffixArray& ref, long ref_pos);
 void cal_two_wordchunks_backsearch_area_mm(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, std::vector<int>& head_chunk_adjust_diff, std::vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch);
 int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
