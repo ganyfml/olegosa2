@@ -398,6 +398,24 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 	return num_alignment;
 }
 
+void update_aln_list(list<SplicedAlnResultPtr>& results, vector<bool>& destroy_flag, int& aln_length)
+{
+	auto aln_iter = results.begin();
+	for (int i = 0; i < aln_length; ++i)
+	{
+		if(destroy_flag[i])
+		{
+			aln_iter = results.erase(aln_iter);
+		}
+		else
+		{
+			++aln_iter;
+		}
+	}
+	aln_length = results.size();
+	destroy_flag.resize(aln_length, false);
+}
+
 void cal_two_wordchunks_backsearch_area_mm(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_search_area_diff, vector<int>& tail_chunk_search_area_mm, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
 {
 	head_chunk_search_area_diff = vector<int>(num_backSearch + 1);
@@ -422,4 +440,84 @@ void cal_two_wordchunks_backsearch_area_mm(const WordHitsChunkPtr head_chunk, co
 		}
 		tail_chunk_search_area_mm[i] = tail_chunk_diff;
 	}
+}
+
+void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, list<SplicedAlnResultPtr>& results, int query_length, bool global)
+{
+	if(wordhitschunkbridges.size() == 0)
+		return;
+
+	wordhitschunkbridges.sort(compare_wordHitsChunkBridgeByRefAndStrand);
+	SplicedAlnResultPtr init = make_shared<SplicedAlnResult>();
+	init->bridges.push_back(wordhitschunkbridges.front());
+	results.push_back(init);
+
+	auto curr_bridge_iter = ++wordhitschunkbridges.begin();
+	for(WordHitsChunkBridgePtr begin_bridge_iter = wordhitschunkbridges.front(); curr_bridge_iter != wordhitschunkbridges.end(); ++curr_bridge_iter)
+	{
+		if((*curr_bridge_iter)->head_chunk == begin_bridge_iter->head_chunk && (*curr_bridge_iter)->spliced_strand == begin_bridge_iter->spliced_strand)
+		{
+			SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+			r->bridges.push_back(*curr_bridge_iter);
+			results.push_back(r);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	int prev_aln_length = results.size();
+	vector<bool>destroy_flag(prev_aln_length, false);
+
+	bool need_to_update_aln_list = false;
+	auto prev_bridge_iter = curr_bridge_iter;
+	prev_bridge_iter--;
+	for(; curr_bridge_iter != wordhitschunkbridges.end(); ++prev_bridge_iter, ++curr_bridge_iter)
+	{
+		WordHitsChunkBridgePtr prev_bridge = *prev_bridge_iter;
+		WordHitsChunkBridgePtr curr_bridge = *curr_bridge_iter;
+
+		if(curr_bridge->head_chunk != prev_bridge->head_chunk && need_to_update_aln_list)
+		{
+			update_aln_list(results, destroy_flag, prev_aln_length);
+			need_to_update_aln_list = false;
+		}
+
+		bool curr_bridge_extended = false;
+
+		auto aln_iter = results.begin();
+		int aln_index = 0;
+		for(; aln_index < prev_aln_length; aln_iter++, aln_index++)
+		{
+			WordHitsChunkBridgePtr aln_last_bridge = (*aln_iter)->bridges.back();
+			if (aln_last_bridge->tail_chunk == curr_bridge->head_chunk && aln_last_bridge->spliced_strand == curr_bridge->spliced_strand && aln_last_bridge->start_pos_in_query < curr_bridge->start_pos_in_query)
+			{
+				SplicedAlnResultPtr extended_result = make_shared<SplicedAlnResult>();
+				extended_result->bridges = list<WordHitsChunkBridgePtr>((*aln_iter)->bridges.begin(), (*aln_iter)->bridges.end());
+				extended_result->bridges.push_back(curr_bridge);
+				results.push_back(extended_result);
+				need_to_update_aln_list = true;
+				curr_bridge_extended = true;
+				if(aln_last_bridge->tail_chunk->end_pos_in_query != query_length - 1)
+				{
+					destroy_flag[aln_index] = true;
+				}
+			}
+		}
+
+		if(!curr_bridge_extended || curr_bridge->head_chunk->start_pos_in_query == 0)
+		{
+			SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+			r->bridges.push_back(curr_bridge);
+			results.push_back(r);
+			need_to_update_aln_list = true;
+		}
+	}
+
+	if(need_to_update_aln_list)
+	{
+		update_aln_list(results, destroy_flag, prev_aln_length);
+	}
+	evaluate_SplicedAlnResults(results, query_length, global);
 }

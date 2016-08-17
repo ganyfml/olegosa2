@@ -41,3 +41,5 @@ struct WordHitsChunkBridge
 };
 
 typedef std::shared_ptr<WordHitsChunkBridge> WordHitsChunkBridgePtr;
+
+bool compare_wordHitsChunkBridgeByRefAndStrand(const WordHitsChunkBridgePtr bridge1, const WordHitsChunkBridgePtr& bridge2);
