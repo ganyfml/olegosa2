@@ -1,4 +1,4 @@
-#include <../../../../WordHitsGroupUtil.hpp>
+#include "../../../../WordHitsGroupUtil.hpp"
 #include <list>
 
 using namespace std;
@@ -87,7 +87,7 @@ int main()
 	group->wordhitschunkbridges.push_back(first_bridge);
 	group->wordhitschunkbridges.push_back(second_bridge);
 
-	list<SplicedAlnResultPtr> results;
+	list<WordHitsChunkBridgeChainPtr> results;
 	int query_length = 100;
 	bool global = false;
 	concat_bridges(group->wordhitschunkbridges, results, query_length, global);
@@ -95,5 +95,6 @@ int main()
 	for(auto iter = results.begin(); iter != results.end(); ++iter)
 	{
 		(*iter)->display();
+		printf("\n");
 	}
 }

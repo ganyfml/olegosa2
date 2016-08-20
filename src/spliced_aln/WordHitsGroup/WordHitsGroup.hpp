@@ -31,6 +31,7 @@ struct WordHitsGroup
 	std::list<WordHitsChunkPtr> wordhitschunks;
 	std::list<WordHitsChunkBridgePtr> wordhitschunkbridges;
 	void group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_words);
+	void pair_wordHitsChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 };
 
 typedef std::shared_ptr<WordHitsGroup> WordHitsGroupPtr;

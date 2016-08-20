@@ -41,3 +41,38 @@ void WordHitsGroup::group_wordHits_wordChunks(const AlnSpliceOpt& opt, int num_w
 		prev_hit_diag = curr_hit_diag;
 	}
 }
+
+bool can_pair(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, const AlnSpliceOpt& opt)
+{
+	if(!(head_chunk->hit_refPosNonDec) || !(tail_chunk->hit_refPosNonDec)) return false;
+	if(head_chunk->gapMM.sum() > opt.wordChunk_max_diff || tail_chunk->gapMM.sum() > opt.wordChunk_max_diff) return false;
+	if(head_chunk->strand != tail_chunk->strand) return false;
+	if(head_chunk->wordHitList.back()->word_id >= tail_chunk->wordHitList.front()->word_id) return false;
+	if(head_chunk->end_pos_in_ref >= tail_chunk->start_pos_in_ref) return false;
+	return true;
+}
+
+void WordHitsGroup::pair_wordHitsChunks(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	for(auto head_chunk_iter = wordhitschunks.begin(); head_chunk_iter != wordhitschunks.end(); ++head_chunk_iter)
+	{
+		WordHitsChunkPtr head_chunk = *head_chunk_iter;
+
+		for(auto tail_chunk_iter = next(head_chunk_iter); tail_chunk_iter != wordhitschunks.end(); ++tail_chunk_iter)
+		{
+			WordHitsChunkPtr tail_chunk = *tail_chunk_iter;
+			if(!can_pair(head_chunk, tail_chunk, opt))
+			{
+				continue;
+			}
+
+			/***************** If annotation exist, use annotation search first ***************/
+			/* For annotation search
+			 *          int wordID_diff = tail_chunk->get_wordList().front()->id - head_chunk->get_wordList().back()->id;
+			 *                   int gap_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1;
+			 *                            */
+
+			locate_bridge_two_chunks(head_chunk, tail_chunk, wordhitschunkbridges, query, ref_SAIndex, opt);
+		}
+	}
+}
