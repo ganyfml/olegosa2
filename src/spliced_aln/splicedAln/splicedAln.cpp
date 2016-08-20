@@ -13,6 +13,7 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
   //Generate Word
   vector<WordPtr> wordsVector;
   generate_words(query, wordsVector, opt);
+  cout << "Word generated\n" << endl;
 
   //Generate WordHit
   list<WordHitPtr> wordHitsList;
@@ -22,8 +23,8 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
   bool rev_comp = false;
   collect_wordHits(wordsVector, wordHitsList, ref_SAIndex, rev_comp, word_search_opt);
   wordHitsList.sort(compare_wordHitsByRefPos);
+  cout << "Word hits collected and sorted\n" << endl;
 
-  printf("id\tref_pos\tquery_pos\n");
   for(WordHitPtr hit : wordHitsList)
   {
 	 cout << hit->word_id << "\t" << wordsVector[hit->word_id]->seq << "\t" << hit->ref_pos << "\t" << hit->query_pos << endl;
@@ -32,6 +33,7 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
   //Use WordHits to form WordHitsGroup
   list<WordHitsGroupPtr> wordHitsGroupList;
   group_wordHits_wordHitsGroup(wordHitsList, wordHitsGroupList, opt.max_intron_size);
+  cout << "Word hit group created\n" << endl;
 
   //for(WordHitsGroupPtr group : wordHitsGroupList)
   //{
@@ -49,11 +51,13 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
   {
 	 (*iter)->wordhits.sort(compare_wordHitsByHitDiagonal);
 	 (*iter)->group_wordHits_wordChunks(opt, wordsVector.size());
+	 cout << "Word hit chunk created\n" << endl;
 	 for(auto chunk_iter = (*iter)->wordhitschunks.begin(); chunk_iter != (*iter)->wordhitschunks.end(); ++chunk_iter)
 	 {
 		bool stop_atNegativeScore = false;
 		(*chunk_iter)->extend_inexact(query, ref_SAIndex, stop_atNegativeScore, ExtendDirection::both);
 	 }
+	 cout << "Word hit chunk extended\n" << endl;
 
 	 //for(auto chunk_iter = (*iter)->wordhitschunks.begin(); chunk_iter != (*iter)->wordhitschunks.end(); ++chunk_iter)
 	 //{

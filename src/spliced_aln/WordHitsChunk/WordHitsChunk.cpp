@@ -39,10 +39,18 @@ void WordHitsChunk::extend_inexact(const SeqString& query, const SeqSuffixArray&
 		extend_inexact_left(query, ref_SAIndex, stop_atNegativeScore);
 	}
 
+	//DEBUG
+	printf("extended left\n");
+	//END
+
 	if(direction & ExtendDirection::left)
 	{
 		extend_inexact_right(query, ref_SAIndex, stop_atNegativeScore);
 	}
+
+	//DEBUG
+	printf("extended right\n");
+	//END
 }
 
 void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
@@ -90,7 +98,7 @@ void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffix
 
 	int offset_at_max_score = 0, diff_at_max_score = 0;
 	int curr_score = 0, diff = 0, max_score = 0;
-	for(int i = 0; i < (query.get_length() - end_pos_in_query) && i < (ref_SAIndex.seq_length() - end_pos_in_ref); ++i)
+	for(int i = 0; (i + end_pos_in_query) < query.get_length() && (i + end_pos_in_ref) < ref_SAIndex.seq_length(); ++i)
 	{
 		if(query[end_pos_in_query + i] == ref_SAIndex.char_at(end_pos_in_ref + i))
 		{
