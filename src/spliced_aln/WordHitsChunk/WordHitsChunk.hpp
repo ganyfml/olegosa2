@@ -56,7 +56,7 @@ struct WordHitsChunk
 	int end_pos_in_query;
 	std::list<WordHitPtr> wordHitList;
 
-	void evaluate(int word_size, Strand::Value hit_strand);
+	void summarize(int word_size, Strand::Value hit_strand);
 	void extend_inexact(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore, ExtendDirection::Value direction);
 	void extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore);
 	void extend_inexact_right(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore);

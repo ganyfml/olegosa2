@@ -6,7 +6,7 @@
 #include <seqan_api/SeqSuffixArray.hpp>
 #include <spliced_aln/WordHitsChunk.hpp>
 #include <spliced_aln/WordHitsGroup.hpp>
-#include <spliced_aln/SplicedAlnResult.hpp>
+#include <spliced_aln/WordHitsChunkBridgeChain.hpp>
 #include <spliced_aln/Util.hpp>
 #include <nonspliced_aln/alnNonspliceOpt.hpp>
 
@@ -29,7 +29,7 @@ SeqString get_partner_splice_site(SpliceType::Value splice_type, Strand::Value s
 
 int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
 
-void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<SplicedAlnResultPtr>& results, int query_length, bool global);
+void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkBridgeChainPtr>& results, int query_length, bool global);
 
 //In hpp due to debug
 bool is_donor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos);
@@ -37,3 +37,4 @@ bool is_donor_splice_site_reverse(const SeqSuffixArray& ref, long ref_pos);
 bool is_acceptor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos);
 bool is_acceptor_splice_site_reverse(const SeqSuffixArray& ref, long ref_pos);
 void cal_two_wordchunks_backsearch_area_mm(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, std::vector<int>& head_chunk_adjust_diff, std::vector<int>& tail_chunk_adjust_diff, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch);
+void update_aln_list(std::list<WordHitsChunkBridgeChainPtr>& results, std::vector<bool> destroy_flag, int aln_length);

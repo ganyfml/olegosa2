@@ -57,9 +57,12 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	 */
 
 	int original_gapMM_sum = cal_two_wordchunks_backsearch_area_diff_sum(head_chunk, tail_chunk, query, ref_SAIndex, num_backSearch);
-	long cleft_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1;
+	int cleft_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1;
+	if(cleft_length + 2 * num_backSearch <= 0) return 0;
+	if((tail_chunk->start_pos_in_ref - head_chunk->end_pos_in_ref - 1) < (tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1)) return 0;
+
 	long min_bridge_ref_start_pos = head_chunk->end_pos_in_ref - num_backSearch;
-	long max_bridge_ref_start_pos = head_chunk->end_pos_in_ref + cleft_length + num_backSearch;
+	long max_bridge_ref_start_pos = head_chunk->end_pos_in_ref + cleft_length + num_backSearch + 1;
 	long min_bridge_query_start_pos = head_chunk->end_pos_in_query - num_backSearch;
 	long max_bridge_query_end_pos = head_chunk->end_pos_in_query + cleft_length + num_backSearch + 1;
 	SeqString search_query = query.get_infix(min_bridge_query_start_pos + 1, max_bridge_query_end_pos - 1);
@@ -67,7 +70,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	for(long curr_bridge_ref_start_pos = min_bridge_ref_start_pos
 			, curr_bridge_ref_end_pos = tail_chunk->start_pos_in_ref - num_backSearch - cleft_length
 			, curr_bridge_query_start_pos = min_bridge_query_start_pos
-			; curr_bridge_ref_start_pos <= max_bridge_ref_start_pos
+			; curr_bridge_ref_start_pos < max_bridge_ref_start_pos
 			; ++curr_bridge_ref_start_pos
 			, ++curr_bridge_ref_end_pos
 			, ++curr_bridge_query_start_pos)
@@ -398,10 +401,10 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 	return num_alignment;
 }
 
-void update_aln_list(list<SplicedAlnResultPtr>& results, vector<bool>& destroy_flag, int& aln_length)
+void update_aln_list(list<WordHitsChunkBridgeChainPtr>& results, vector<bool> destroy_flag, int aln_length)
 {
 	auto aln_iter = results.begin();
-	for (int i = 0; i < aln_length; ++i)
+	for(int i = 0; i < aln_length; ++i)
 	{
 		if(destroy_flag[i])
 		{
@@ -412,8 +415,6 @@ void update_aln_list(list<SplicedAlnResultPtr>& results, vector<bool>& destroy_f
 			++aln_iter;
 		}
 	}
-	aln_length = results.size();
-	destroy_flag.resize(aln_length, false);
 }
 
 void cal_two_wordchunks_backsearch_area_mm(const WordHitsChunkPtr head_chunk, const WordHitsChunkPtr tail_chunk, vector<int>& head_chunk_search_area_diff, vector<int>& tail_chunk_search_area_mm, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
@@ -442,22 +443,39 @@ void cal_two_wordchunks_backsearch_area_mm(const WordHitsChunkPtr head_chunk, co
 	}
 }
 
-void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, list<SplicedAlnResultPtr>& results, int query_length, bool global)
+void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, list<WordHitsChunkBridgeChainPtr>& results, int query_length, bool global)
 {
 	if(wordhitschunkbridges.size() == 0)
 		return;
 
 	wordhitschunkbridges.sort(compare_wordHitsChunkBridgeByRefAndStrand);
-	SplicedAlnResultPtr init = make_shared<SplicedAlnResult>();
-	init->bridges.push_back(wordhitschunkbridges.front());
-	results.push_back(init);
+	WordHitsChunkBridgeChainPtr init_chunk = make_shared<WordHitsChunkBridgeChain>();
+	init_chunk->bridges.push_back(wordhitschunkbridges.front());
+	results.push_back(init_chunk);
+
+	/*
+	 * ====..........====..............(init_chunk) ┐
+	 *    └──────────┘                              │
+	 *                                              │
+	 * ====.............====...........             │
+	 *    └─────────────┘                           ├─ push to results (bridges which has the same head_chunk with init_chunk)
+	 *                                              │
+	 * ====................====........             │
+	 *    └────────────────┘                        ┘
+	 *
+	 * .....====..............====...
+	 *         └──────────────┘
+	 *
+	 * .....====................====...
+	 *         └────────────────┘
+	 */
 
 	auto curr_bridge_iter = ++wordhitschunkbridges.begin();
 	for(WordHitsChunkBridgePtr begin_bridge_iter = wordhitschunkbridges.front(); curr_bridge_iter != wordhitschunkbridges.end(); ++curr_bridge_iter)
 	{
 		if((*curr_bridge_iter)->head_chunk == begin_bridge_iter->head_chunk && (*curr_bridge_iter)->spliced_strand == begin_bridge_iter->spliced_strand)
 		{
-			SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+			WordHitsChunkBridgeChainPtr r = make_shared<WordHitsChunkBridgeChain>();
 			r->bridges.push_back(*curr_bridge_iter);
 			results.push_back(r);
 		}
@@ -481,34 +499,82 @@ void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, lis
 		if(curr_bridge->head_chunk != prev_bridge->head_chunk && need_to_update_aln_list)
 		{
 			update_aln_list(results, destroy_flag, prev_aln_length);
+			prev_aln_length = results.size();
+			destroy_flag.resize(prev_aln_length, false);
 			need_to_update_aln_list = false;
 		}
 
+		/*
+		 * ..........====..........====....(curr_bridge_iter)
+		 *              └──────────┘ 
+		 *
+		 * --------------------------------------------------
+		 *
+		 * ====.............====...........     ┐
+		 *    └─────────────┘                   │
+		 *                                      │
+		 * ====......====..................(#)  │
+		 *    └──────┘                          │
+		 *                                      ├─ results
+		 * ====...........====...               │
+		 *    └───────────┘                     │
+		 *                                      │
+		 * ====................====...          │
+		 *    └────────────────┘                ┘
+		 *
+		 * Iter all results to find the one can be extened with curr_bridge_iter, for example,
+		 * (#) can be extended with curr_bridge_iter
+		 */
+
 		bool curr_bridge_extended = false;
 
-		auto aln_iter = results.begin();
-		int aln_index = 0;
-		for(; aln_index < prev_aln_length; aln_iter++, aln_index++)
 		{
-			WordHitsChunkBridgePtr aln_last_bridge = (*aln_iter)->bridges.back();
-			if (aln_last_bridge->tail_chunk == curr_bridge->head_chunk && aln_last_bridge->spliced_strand == curr_bridge->spliced_strand && aln_last_bridge->start_pos_in_query < curr_bridge->start_pos_in_query)
+			auto aln_iter = results.begin();
+			int aln_index = 0;
+			for(; aln_index < prev_aln_length; ++aln_iter, ++aln_index)
 			{
-				SplicedAlnResultPtr extended_result = make_shared<SplicedAlnResult>();
-				extended_result->bridges = list<WordHitsChunkBridgePtr>((*aln_iter)->bridges.begin(), (*aln_iter)->bridges.end());
-				extended_result->bridges.push_back(curr_bridge);
-				results.push_back(extended_result);
-				need_to_update_aln_list = true;
-				curr_bridge_extended = true;
-				if(aln_last_bridge->tail_chunk->end_pos_in_query != query_length - 1)
+				WordHitsChunkBridgePtr aln_last_bridge = (*aln_iter)->bridges.back();
+				if(aln_last_bridge->tail_chunk == curr_bridge->head_chunk && aln_last_bridge->spliced_strand == curr_bridge->spliced_strand && aln_last_bridge->start_pos_in_query < curr_bridge->start_pos_in_query)
 				{
-					destroy_flag[aln_index] = true;
+
+					/*
+					 *            head_chunk     tail_chunk
+					 * ..............====..........====
+					 *                  └────┬─────┘
+					 *                    curr_bridge
+					 *
+					 * head_chunk    tail_chunk
+					 * ====..........====..............
+					 *    └────┬─────┘
+					 *      aln_iter
+					 *
+					 * ↓
+					 *
+					 * extended_result:
+					 *
+					 * ===...........====..........====
+					 *   └─────┬─────┘  └────┬─────┘
+					 *   aln_last_bridge curr_bridge
+					 */
+
+					WordHitsChunkBridgeChainPtr extended_result = make_shared<WordHitsChunkBridgeChain>();
+					extended_result->bridges = list<WordHitsChunkBridgePtr>((*aln_iter)->bridges.begin(), (*aln_iter)->bridges.end());
+					extended_result->bridges.push_back(curr_bridge);
+					results.push_back(extended_result);
+					need_to_update_aln_list = true;
+					curr_bridge_extended = true;
+					//FIXME this if may not be useful
+					if(aln_last_bridge->tail_chunk->end_pos_in_query != query_length - 1)
+					{
+						destroy_flag[aln_index] = true;
+					}
 				}
 			}
 		}
 
 		if(!curr_bridge_extended || curr_bridge->head_chunk->start_pos_in_query == 0)
 		{
-			SplicedAlnResultPtr r = make_shared<SplicedAlnResult>();
+			WordHitsChunkBridgeChainPtr r = make_shared<WordHitsChunkBridgeChain>();
 			r->bridges.push_back(curr_bridge);
 			results.push_back(r);
 			need_to_update_aln_list = true;
@@ -518,6 +584,8 @@ void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, lis
 	if(need_to_update_aln_list)
 	{
 		update_aln_list(results, destroy_flag, prev_aln_length);
+		prev_aln_length = results.size();
+		destroy_flag.resize(prev_aln_length, false);
 	}
-	evaluate_SplicedAlnResults(results, query_length, global);
+	summarize_WordHitsChunkBridgeChains(results, query_length, global);
 }

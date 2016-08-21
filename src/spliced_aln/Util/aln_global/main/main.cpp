@@ -1,6 +1,6 @@
 // vim: set noexpandtab tabstop=3:
 
-#include <../aln_global.hpp>
+#include "../aln_global.hpp"
 #include <string>
 
 using namespace std;

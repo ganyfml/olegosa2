@@ -15,7 +15,7 @@ bool compare_wordHitsChunkByRefPos(const WordHitsChunkPtr chunk1, const WordHits
 	}
 }
 
-void WordHitsChunk::evaluate(int word_size, Strand::Value hit_strand)
+void WordHitsChunk::summarize(int word_size, Strand::Value hit_strand)
 {
 	wordHitList.sort(compare_wordHitsByQueryPos);
 	hit_refPosNonDec = is_refPos_nondecreasing(wordHitList);

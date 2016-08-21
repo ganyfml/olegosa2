@@ -6,7 +6,7 @@
 #include <spliced_aln/WordHitsChunkBridge.hpp>
 #include <list>
 
-struct SplicedAlnResult
+struct WordHitsChunkBridgeChain
 {
 	int strand;
 	int spliced_strand;
@@ -21,22 +21,19 @@ struct SplicedAlnResult
 	long end_pos_in_query;
 	std::list<WordHitsChunkBridgePtr> bridges;
 
-	void evaluate(bool global, int query_length);
+	void summarize(bool global, int query_length);
 
 	void display()
 	{
-		printf("Strand: %d, Sense Strand: %d, logistic prob: %f\n", strand, spliced_strand, logistic_prob);
+		printf("Chunk Strand: %d, Spliced Strand: %d\n", strand, spliced_strand);
 		printf("Location:\n");
 		printf("Ref   Start: %ld, Ref   End: %ld\n", start_pos_in_ref, end_pos_in_ref);
 		printf("Query Start: %ld, Query End: %ld\n", start_pos_in_query, end_pos_in_query);
-		printf("Gap And MM:\n");
-		printf("num diff: %d\n", num_diff);
-		gap_mm.display();
 	}
 };
 
-typedef std::shared_ptr<SplicedAlnResult> SplicedAlnResultPtr;
+typedef std::shared_ptr<WordHitsChunkBridgeChain> WordHitsChunkBridgeChainPtr;
 
-bool is_identical(const SplicedAlnResultPtr& first, const SplicedAlnResultPtr& second);
+bool is_identical(const WordHitsChunkBridgeChainPtr& first, const WordHitsChunkBridgeChainPtr& second);
 
-void evaluate_SplicedAlnResults(std::list<SplicedAlnResultPtr>& results, int query_length, bool global);
+void summarize_WordHitsChunkBridgeChains(std::list<WordHitsChunkBridgeChainPtr>& results, int query_length, bool global);

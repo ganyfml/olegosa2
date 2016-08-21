@@ -1,7 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <iostream>
-#include "../../WordHitsChunk.hpp"
+#include "../../../WordHitsChunk.hpp"
 
 using namespace std;
 
@@ -19,14 +19,14 @@ int main()
 
 	int chunk1_id = 0;
 	WordHitsChunkPtr chunk = make_shared<WordHitsChunk>(chunk1_id);
-	chunk->wordHitList.push_back(hit1);
 	chunk->wordHitList.push_back(hit2);
+	chunk->wordHitList.push_back(hit1);
 
-	printf("before evaluate: \n");
+	printf("before summarize: \n");
 	chunk->display();
 	int word_size = 5;
 	Strand::Value hit_strand = Strand::forward;
-	chunk->evaluate(word_size, hit_strand);
-	printf("\nAfter evaluate: \n");
+	chunk->summarize(word_size, hit_strand);
+	printf("\nAfter summarize: \n");
 	chunk->display();
 }
