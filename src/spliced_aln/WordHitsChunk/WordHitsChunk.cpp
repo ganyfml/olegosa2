@@ -26,9 +26,9 @@ void WordHitsChunk::summarize(int word_size, Strand::Value hit_strand)
 	WordHitPtr last_hit = wordHitList.back();
 
 	start_pos_in_ref = first_hit->ref_pos;
-	end_pos_in_ref = last_hit->ref_pos + word_size;
+	end_pos_in_ref = last_hit->ref_pos + word_size - 1;
 	start_pos_in_query = first_hit->query_pos;
-	end_pos_in_query = last_hit->query_pos + word_size;
+	end_pos_in_query = last_hit->query_pos + word_size - 1;
 	strand = hit_strand;
 }
 
@@ -100,7 +100,8 @@ void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffix
 	int curr_score = 0, diff = 0, max_score = 0;
 	for(int i = 0; (i + end_pos_in_query) < query.get_length() && (i + end_pos_in_ref) < ref_SAIndex.seq_length(); ++i)
 	{
-		if(query[end_pos_in_query + i] == ref_SAIndex.char_at(end_pos_in_ref + i))
+		printf("%ld, %ld, %d, %ld\n", query.get_length(), ref_SAIndex.seq_length(), i + end_pos_in_query, i + end_pos_in_ref);
+		if(query[i + end_pos_in_query] == ref_SAIndex.char_at(i + end_pos_in_ref))
 		{
 			curr_score += match_score;
 		}

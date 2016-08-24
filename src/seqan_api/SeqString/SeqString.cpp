@@ -3,6 +3,7 @@
 #include <seqan_api/SeqString.hpp>
 #include <seqan/seq_io.h>
 #include <seqan/modifier.h>
+#include <seqan_api/ThrowRuntimeError.hpp>
 #include <iostream>
 
 /* FIXME
@@ -95,6 +96,53 @@ SeqString operator+(SeqString lhs, const SeqString& rhs)
 	*constVoid2localType<T>(lhs.get_pointer()) += *constVoid2localType<T>(rhs.get_pointer());
 	return lhs;
 }
+
+void load_seq(std::string seqFilePath, SeqString& seq, CharString& id)
+{
+	seqan::SeqFileIn seqFileIn;
+	if (!open(seqFileIn, seqan::toCString(seqFilePath)))
+	{
+		THROW_RUNTIME_ERROR_MSG("ERROR: Could not open the file.\n");
+	}
+
+	seqan::CharString* seqan_id_pointer = new seqan::CharString();
+	seqan::Dna5String* seqan_seq_pointer = new seqan::Dna5String();
+	try
+	{
+		readRecord(*seqan_id_pointer, *seqan_seq_pointer, seqFileIn);
+	}
+	catch (seqan::Exception const & e)
+	{
+		THROW_RUNTIME_ERROR_MSG("ERROR: Could not read the seq.\n");
+	}
+	seq.set_pointer(seqan_seq_pointer);
+	id.set_pointer(seqan_id_pointer);
+}
+
+void load_seq_with_qual(std::string seqFilePath, SeqString& seq, CharString& id, CharString& qual)
+{
+	seqan::SeqFileIn seqFileIn;
+	if (!open(seqFileIn, seqan::toCString(seqFilePath)))
+	{
+		THROW_RUNTIME_ERROR_MSG("ERROR: Could not open the file.\n");
+	}
+
+	seqan::CharString* seqan_id_pointer = new seqan::CharString();
+	seqan::Dna5String* seqan_seq_pointer = new seqan::Dna5String();
+	seqan::CharString* seqan_qual_pointer = new seqan::CharString();
+	try
+	{
+		readRecord(*seqan_id_pointer, *seqan_seq_pointer, *seqan_qual_pointer, seqFileIn);
+	}
+	catch (seqan::Exception const & e)
+	{
+		THROW_RUNTIME_ERROR_MSG("ERROR: Could not read the seq.\n");
+	}
+	seq.set_pointer(seqan_seq_pointer);
+	id.set_pointer(seqan_id_pointer);
+	qual.set_pointer(seqan_qual_pointer);
+}
+
 #if 0
 // FIXME
 // Seems not useful for now

@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <string>
+#include <seqan_api/CharString.hpp>
 
 /* FIXME
  * Seems not useful for now
@@ -49,5 +50,8 @@ class SeqString
 };
 
 std::ostream& operator<<(std::ostream& os, const SeqString& obj);
+
+void load_seq(std::string seqFilePath, SeqString& seq, CharString& id);
+void load_seq_with_qual(std::string seqFilePath, SeqString& seq, CharString& id, CharString& qual);
 
 typedef std::shared_ptr<SeqString> SeqStringPtr;
