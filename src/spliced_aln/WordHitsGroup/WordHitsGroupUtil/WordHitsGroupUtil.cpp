@@ -3,7 +3,7 @@
 #include <spliced_aln/WordHitsGroupUtil.hpp>
 #include <spliced_aln/aln_global.hpp>
 #include <nonspliced_aln/nonsplicedAln.hpp>
-#include <queue>
+#include <list>
 
 using namespace std;
 
@@ -159,12 +159,12 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 
 void collect_anchor_hits_within_bound(const SeqString& inner_chunk_and_ss, list<long>& anchor_hit_list, const SeqSuffixArray& ref_SAIndex, long hit_left_bound, long hit_right_bound, const alnNonspliceOpt& anchor_search_opt)
 {
-	std::queue<AlnResult> anchor_hit_result;
+	std::list<AlnResult> anchor_hit_result;
 	nonsplicedAln(inner_chunk_and_ss, anchor_hit_result, ref_SAIndex, anchor_search_opt);
 	while(!anchor_hit_result.empty())
 	{
 		AlnResult a = anchor_hit_result.front();
-		anchor_hit_result.pop();
+		anchor_hit_result.pop_front();
 		for(unsigned long i = a.SA_index_low; i < a.SA_index_high; ++i)
 		{
 			long ref_hit_pos =  ref_SAIndex.SAIndex2SeqPos(i);

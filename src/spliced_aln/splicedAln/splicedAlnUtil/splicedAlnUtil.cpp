@@ -26,12 +26,12 @@ void collect_wordHits(const std::vector<WordPtr>& words, std::list<WordHitPtr>& 
 {
 	for(auto word_iter = words.begin(); word_iter != words.end(); ++word_iter)
 	{
-		std::queue<AlnResult> word_hit_result;
+		std::list<AlnResult> word_hit_result;
 		nonsplicedAln((*word_iter)->seq, word_hit_result, ref_SAIndex, word_search_opt);
 		while(!word_hit_result.empty())
 		{
 			AlnResult a = word_hit_result.front();
-			word_hit_result.pop();
+			word_hit_result.pop_front();
 			(*word_iter)->num_occ += a.SA_index_high - a.SA_index_low;
 			for(unsigned long i = a.SA_index_low; i < a.SA_index_high; ++i)
 			{

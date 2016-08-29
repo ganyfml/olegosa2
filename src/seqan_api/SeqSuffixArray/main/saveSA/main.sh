@@ -3,4 +3,5 @@
 
 tmpdir=$(mktemp -d)
 ./main.exe "$tmpdir/SA"
+echo "$tmpdir"
 ls "$tmpdir"

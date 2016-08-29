@@ -16,3 +16,4 @@ gtest-1.7.0/
 cxx-prettyprint/
 include/*
 note.mkd
+test_data/

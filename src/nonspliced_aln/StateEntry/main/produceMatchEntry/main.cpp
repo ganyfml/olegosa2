@@ -1,7 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <iostream>
-#include <queue>
+#include <list>
 #include "../../StateEntry.hpp"
 
 using namespace seqan;

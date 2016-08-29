@@ -1,7 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <iostream>
-#include <queue>
+#include <list>
 #include "../../genmu.hpp"
 
 using namespace seqan;
@@ -27,17 +27,17 @@ int main(int, char* argv[])
 
 	alnNonspliceOpt opt;
 	opt.max_mismatch = 1;
-	std::queue<StateEntry> mutation_queue;
+	std::list<StateEntry> mutation_list;
 	char next_char = argv[3][0];
 
-	produceMatchAndMismatch(test, mutation_queue, opt, next_char);
+	produceMatchAndMismatch(test, mutation_list, opt, next_char);
 
-	int queue_size = mutation_queue.size();
-	cout << "\n\n\nNum of new Entry: " << queue_size << endl;
-	for(int i = 0; i < queue_size; ++i)
+	int list_size = mutation_list.size();
+	cout << "\n\n\nNum of new Entry: " << list_size << endl;
+	for(int i = 0; i < list_size; ++i)
 	{
-		mutation_queue.front().display();	
-		mutation_queue.pop();
+		mutation_list.front().display();	
+		mutation_list.pop_front();
 		printf("\n\n");
 	}
 }

@@ -4,6 +4,7 @@
 
 #include <seqan_api/SeqString.hpp>
 #include <seqan_api/SeqSuffixArray.hpp>
+#include <util/GapAndMM.hpp>
 #include <iostream>
 
 struct AlnResult
@@ -12,6 +13,7 @@ struct AlnResult
 	unsigned long SA_index_low;
 	long num_hits;
 	int seq_length;
+	GapAndMM gap_mm;
 
 	void display(const SeqSuffixArray& seq_SA) const
 	{
@@ -23,7 +25,7 @@ struct AlnResult
 		}
 		printf("\n");
 		std::cout << std::endl << "Seq: " << seq_SA.getSeq_bySAIndex(SA_index_low, seq_length) << std::endl;
+		gap_mm.display();
+		printf("\n");
 	}
 };
-
-

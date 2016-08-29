@@ -14,26 +14,25 @@ class SeqSAIter
 
 	public:
 	SeqSAIter(SeqanSA& seqan_sa)
-		: seqan_sa_iter_(new SeqanSAIter(seqan_sa)), extra_steps_(0) {}
+		: seqan_sa_iter_(SeqanSAIter(seqan_sa)), extra_steps_(0) {}
 	SeqSAIter()
-		: seqan_sa_iter_(new SeqanSAIter()), extra_steps_(0), occ_index_(0) {}
+		: seqan_sa_iter_(SeqanSAIter()), extra_steps_(0), occ_index_(0) {}
 	SeqSAIter(const SeqSAIter& other)
-		: seqan_sa_iter_(new SeqanSAIter(*other.seqan_sa_iter_)), extra_steps_(other.extra_steps_), occ_index_(0) {}
+		: seqan_sa_iter_(SeqanSAIter(other.seqan_sa_iter_)), extra_steps_(other.extra_steps_), occ_index_(0) {}
 	SeqSAIter& operator=(const SeqSAIter& other)
 	{
 		extra_steps_ = other.extra_steps_;
-		seqan_sa_iter_ = new SeqanSAIter(*other.seqan_sa_iter_);
+		seqan_sa_iter_ =  other.seqan_sa_iter_;
 		return *this;
 	}
 
-	~SeqSAIter();
 	bool godown_char(const char x);
 	SeqString get_prefix() const;
 
-	seqan::Pair<unsigned> get_SArange() { return range(*seqan_sa_iter_); }
-	long num_occ() { return countOccurrences(*seqan_sa_iter_); }
-	long next_occ_pos() { return getOccurrences(*seqan_sa_iter_)[occ_index_++]; }
-	int get_repLength() { return repLength(*seqan_sa_iter_) - extra_steps_; }
+	seqan::Pair<unsigned> get_SArange() const { return range(seqan_sa_iter_); }
+	long num_occ() const { return countOccurrences(seqan_sa_iter_); } 
+	long next_occ_pos() { return getOccurrences(seqan_sa_iter_)[occ_index_++]; }
+	int get_repLength() const { return repLength(seqan_sa_iter_) - extra_steps_; }
 
 	void display()
 	{
@@ -42,7 +41,7 @@ class SeqSAIter
 	}
 
 	private:
-	SeqanSAIter* seqan_sa_iter_;
+	SeqanSAIter seqan_sa_iter_;
 	int extra_steps_;
 	long occ_index_;
 };

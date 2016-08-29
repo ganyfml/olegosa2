@@ -4,25 +4,20 @@
 
 using namespace seqan;
 
-SeqSAIter::~SeqSAIter()
-{
-	delete seqan_sa_iter_;
-}
-
 bool SeqSAIter::godown_char(const char x)
 {
-	int original_length = length(representative(*seqan_sa_iter_));
+	int original_length = length(representative(seqan_sa_iter_));
 	if(this->extra_steps_ == 0)
 	{
-		if(goDown(*seqan_sa_iter_, x))
+		if(goDown(seqan_sa_iter_, x))
 		{
-			this->extra_steps_ = length(representative(*seqan_sa_iter_)) - original_length - 1;
+			this->extra_steps_ = length(representative(seqan_sa_iter_)) - original_length - 1;
 			return true;
 		}
 	}
 	else
 	{
-		if(representative(*seqan_sa_iter_)[original_length - this->extra_steps_] == x)
+		if(representative(seqan_sa_iter_)[original_length - this->extra_steps_] == x)
 		{
 			--this->extra_steps_;
 			return true;
@@ -33,7 +28,7 @@ bool SeqSAIter::godown_char(const char x)
 
 SeqString SeqSAIter::get_prefix() const
 {
-	SeqanString original_seq = representative(*seqan_sa_iter_);
+	SeqanString original_seq = representative(seqan_sa_iter_);
 	SeqString ret;
 	ret.set_pointer(new SeqanString(prefix(original_seq, (length(original_seq) - this->extra_steps_))));
 	return ret;

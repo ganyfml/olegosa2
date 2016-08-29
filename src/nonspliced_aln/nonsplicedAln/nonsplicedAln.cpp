@@ -11,26 +11,25 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
+void nonsplicedAln(const SeqString& query, std::list<AlnResult>& result_list, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
 {
 	//Change query and ref_SAIndex back to seqan type
-	SeqanSA sa_ref = *conv_back(ref_SAIndex);
-	SeqSAIter init_iter(sa_ref);
+	SeqSAIter init_iter(*conv_back(ref_SAIndex));
 
 	//Init start
 	StateEntry init_state_entry(init_iter);
-	std::queue<StateEntry> se_queue;
-	se_queue.emplace(init_state_entry);
+	std::list<StateEntry> se_list;
+	se_list.push_front(init_state_entry);
 
-	while(!se_queue.empty())
+	while(!se_list.empty())
 	{
-		StateEntry entry = se_queue.front();
-		se_queue.pop();
+		StateEntry entry = se_list.front();
+		se_list.pop_front();
 		//If the potential has been found
 		if(entry.query_pos == query.get_length())
 		{
 			//DEBUG
-			if(entry.get_seq().get_length() == 0) continue;
+			//if(entry.get_seq().get_length() == 0) continue;
 
 			AlnResult r;
 			r.num_hits = entry.num_hits();
@@ -38,7 +37,8 @@ void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, 
 			r.SA_index_high = sa_range.i2;
 			r.SA_index_low = sa_range.i1;
 			r.seq_length = entry.seq_length();
-			result_queue.emplace(r);
+			r.gap_mm = entry.gap_mm;
+			result_list.push_front(r);
 			//END
 		}
 		else
@@ -48,20 +48,23 @@ void nonsplicedAln(const SeqString& query, std::queue<AlnResult>& result_queue, 
 			{
 				if(entry.query_pos != 0)
 				{
-					produceMatchAndMismatch(entry, se_queue, opt, query[entry.query_pos]);
-					produceInsertionFromI(entry, se_queue, opt);
+					produceMatchAndMismatch(entry, se_list, opt, query[entry.query_pos]);
+					produceInsertionFromI(entry, se_list, opt);
 				}
 			}
 			else if(entry.state == StateEntry::State::STATE_D)
 			{
-				produceMatchAndMismatch(entry, se_queue, opt, query[entry.query_pos]);
-				produceDeletionFromD(entry, se_queue, opt);
+				produceMatchAndMismatch(entry, se_list, opt, query[entry.query_pos]);
+				produceDeletionFromD(entry, se_list, opt);
 			}
 			else
 			{
-				produceMatchAndMismatch(entry, se_queue, opt, query[entry.query_pos]);
-				produceInsertionFromM(entry, se_queue, opt);
-				produceDeletionFromM(entry, se_queue, opt);
+				produceMatchAndMismatch(entry, se_list, opt, query[entry.query_pos]);
+				if(entry.query_pos != 0)
+				{
+					produceInsertionFromM(entry, se_list, opt);
+					produceDeletionFromM(entry, se_list, opt);
+				}
 			}
 		}
 	}
