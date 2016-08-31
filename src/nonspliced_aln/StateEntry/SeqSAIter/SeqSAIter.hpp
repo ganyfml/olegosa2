@@ -27,6 +27,13 @@ class SeqSAIter
 	}
 
 	bool godown_char(const char x);
+	void reset()
+	{
+		goRoot(seqan_sa_iter_);
+		extra_steps_ = 0;
+		occ_index_ = 0;
+	}
+
 	SeqString get_prefix() const;
 
 	seqan::Pair<unsigned> get_SArange() const { return range(seqan_sa_iter_); }

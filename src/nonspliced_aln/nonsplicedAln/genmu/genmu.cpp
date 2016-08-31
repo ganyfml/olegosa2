@@ -9,23 +9,7 @@ typedef seqan::Dna5String SeqanString;
 typedef seqan::Index<SeqanString, seqan::IndexEsa<>> SeqanSA;
 typedef seqan::Iterator<SeqanSA, seqan::TopDown<seqan::ParentLinks<>>>::Type SeqanSAIter;
 
-void add_to_processing_list(const StateEntry& to_add, std::list<StateEntry>& se_list)
-{
-	if(to_add.gap_mm.sum())
-	{
-		for(auto iter = se_list.begin(); iter != se_list.end(); ++iter)
-		{
-			if(to_add.ref_iter.get_SArange() == (*iter).ref_iter.get_SArange())
-			{
-				return;
-			}
-		}
-	}
-	se_list.push_front(to_add);
-}
-
-
-void produceInsertionFromI(const StateEntry& origin, std::list<StateEntry>& se_list, const alnNonspliceOpt& opt)
+void produceInsertionFromI(const StateEntry& origin, priority_StateEntry_array& se_array, const alnNonspliceOpt& opt)
 {
 	for(char insert_char: {'A', 'T', 'C', 'G'})
 	{
@@ -35,13 +19,13 @@ void produceInsertionFromI(const StateEntry& origin, std::list<StateEntry>& se_l
 			++se.gap_mm.num_gapExtRef;
 			if(se.appendChar(insert_char))
 			{
-				add_to_processing_list(se, se_list);
+				se_array.push(se, opt);
 			}
 		}
 	}
 }
 
-void produceInsertionFromM(const StateEntry& origin, std::list<StateEntry>& se_list, const alnNonspliceOpt& opt)
+void produceInsertionFromM(const StateEntry& origin, priority_StateEntry_array& se_array, const alnNonspliceOpt& opt)
 {
 	for(char insert_char: {'A', 'T', 'C', 'G'})
 	{
@@ -52,24 +36,24 @@ void produceInsertionFromM(const StateEntry& origin, std::list<StateEntry>& se_l
 			++se.gap_mm.num_gapOpenRef;
 			if(se.appendChar(insert_char))
 			{
-				add_to_processing_list(se, se_list);
+				se_array.push(se, opt);
 			}
 		}
 	}
 }
 
-void produceDeletionFromD(const StateEntry& origin, std::list<StateEntry>& se_list, const alnNonspliceOpt& opt)
+void produceDeletionFromD(const StateEntry& origin, priority_StateEntry_array& se_array, const alnNonspliceOpt& opt)
 {
 	if(origin.gap_mm.num_gapExt() < opt.max_gapExt)
 	{
 		StateEntry se = origin;
 		++se.query_pos;
 		++se.gap_mm.num_gapExtQuery;
-		add_to_processing_list(se, se_list);
+		se_array.push(se, opt);
 	}
 }
 
-void produceDeletionFromM(const StateEntry& origin, std::list<StateEntry>& se_list, const alnNonspliceOpt& opt)
+void produceDeletionFromM(const StateEntry& origin, priority_StateEntry_array& se_array, const alnNonspliceOpt& opt)
 {
 	if(origin.gap_mm.num_gapOpen() < opt.max_gapOpen)
 	{
@@ -77,32 +61,36 @@ void produceDeletionFromM(const StateEntry& origin, std::list<StateEntry>& se_li
 		se.state = StateEntry::State::STATE_D;
 		++se.query_pos;
 		++se.gap_mm.num_gapOpenQuery;
-		add_to_processing_list(se, se_list);
+		se_array.push(se, opt);
 	}
 }
 
-void produceMatchAndMismatch(const StateEntry& origin, std::list<StateEntry>& se_list, const alnNonspliceOpt& opt, char next_char)
+void produceMatchAndMismatch(const StateEntry& origin, priority_StateEntry_array& se_array, const alnNonspliceOpt& opt, char next_char, bool allow_mismatch)
 {
 	for(char insert_char: {'A', 'T', 'C', 'G'})
 	{
-		StateEntry se;
-		if(insert_char!= next_char)
+		if(insert_char!= next_char && allow_mismatch)
 		{
 			if(origin.gap_mm.num_mismatch < opt.max_mismatch)
 			{
-				origin.produceMismatchEntry(se);
+				StateEntry se = origin;
 				if(se.appendChar(insert_char))
 				{
-					add_to_processing_list(se, se_list);
+					se.state = StateEntry::State::STATE_M;
+					++se.query_pos;
+					++se.gap_mm.num_mismatch;
+					se_array.push(se, opt);
 				}
 			}
 		}
 		else
 		{
-			origin.produceMatchEntry(se);
+			StateEntry se = origin;
 			if(se.appendChar(insert_char))
 			{
-				add_to_processing_list(se, se_list);
+				se.state = StateEntry::State::STATE_M;
+				++se.query_pos;
+				se_array.push(se, opt);
 			}
 		}
 	}

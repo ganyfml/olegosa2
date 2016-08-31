@@ -41,12 +41,19 @@ struct StateEntry
 
 	int seq_length() { return ref_iter.get_repLength(); }
 
-	void display()
+	void display() const
 	{
 		const char* stateName[] = {"STATE_M", "STATE_I", "STATE_D"};
 		printf("State Entry state: %s with query_pos %lu\n", stateName[state], query_pos);
 		std::cout << "Seq: " << ref_iter.get_prefix() << std::endl;
 		gap_mm.display();
+	}
+
+	int get_score(const alnNonspliceOpt& opt) const
+	{
+		return gap_mm.num_gapOpen() * opt.score_gapOpen
+			+ gap_mm.num_gapExt() * opt.score_gapExt
+			+ gap_mm.num_mismatch * opt.score_mismatch;
 	}
 
 	void produceMatchEntry(StateEntry& new_entry) const;
