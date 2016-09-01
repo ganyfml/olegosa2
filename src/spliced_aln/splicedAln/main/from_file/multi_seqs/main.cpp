@@ -6,32 +6,27 @@
 
 using namespace std;
 
-int main()
+int main(int, char* argv[])
 {
-	string queryFileName("./querys.fa");
+	string queryFileName(argv[1]);
 	SeqStringSet query_seqs;
 	CharStringSet query_ids;
-	load_seqs(queryFileName, query_seqs, query_ids);
+	CharStringSet query_quals;
+	load_seqs_with_qual(queryFileName, query_seqs, query_ids, query_quals);
 
-	string refFileName("./refs.fq");
-	SeqStringSet ref_seqs;
-	CharStringSet ref_ids;
-	load_seqs(refFileName, ref_seqs, ref_ids);
+	//Construct ref_SA
+	std::string ref_in(argv[2]);
+	SeqSuffixArray ref_SA(ref_in);
 
-	for(int i = 0; i < ref_seqs.get_length(); ++i)
+	cout << "loading complete!" << endl;
+	AlnSpliceOpt opt;
+	for(int j = 0; j < query_seqs.get_length(); ++j)
 	{
-		//Construct ref_SA
-		SeqString ref_seq = ref_seqs[i];
-		SeqSuffixArray ref_SA(ref_seq);
-		for(int j = 0; j < query_seqs.get_length(); ++j)
-		{
-			SeqString query_seq = query_seqs[j];
-			AlnSpliceOpt opt;
-			opt.word_length = 5;
-			opt.word_max_overlap = 0;
-			opt.min_anchor_size = 3;
+		SeqString query_seq = query_seqs[j];
+		opt.word_length = 5;
+		opt.word_max_overlap = 0;
+		opt.min_anchor_size = 3;
 
-			splicedAln(query_seq, ref_SA, opt);
-		}
+		splicedAln(query_seq, ref_SA, opt);
 	}
 }

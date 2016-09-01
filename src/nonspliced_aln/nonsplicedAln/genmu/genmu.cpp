@@ -69,7 +69,7 @@ void produceMatchAndMismatch(const StateEntry& origin, priority_StateEntry_array
 {
 	for(char insert_char: {'A', 'T', 'C', 'G'})
 	{
-		if(insert_char!= next_char && allow_mismatch)
+		if(insert_char != next_char && allow_mismatch)
 		{
 			if(origin.gap_mm.num_mismatch < opt.max_mismatch)
 			{
@@ -83,7 +83,7 @@ void produceMatchAndMismatch(const StateEntry& origin, priority_StateEntry_array
 				}
 			}
 		}
-		else
+		else if(insert_char == next_char)
 		{
 			StateEntry se = origin;
 			if(se.appendChar(insert_char))

@@ -8,4 +8,6 @@
 #./main_aln.exe "/Users/gany/test_data/seqs/query_1000.fq" "../../test_data/index"
 #valgrind --tool=callgrind --instr-atstart=no ./main_aln.exe "/Users/gany/test_data/seqs/query_1000.fq" "../../test_data/index"
 #valgrind --tool=callgrind --instr-atstart=no ./main_aln.exe "/Users/gany/test_data/seqs/query_1000.fq" "../../test_data/index"
-./main_aln.exe "/Users/gany/test_data/seqs/query_100.fq" "../../test_data/index"
+#./main_aln.exe "/Users/gany/test_data/seqs/query_100.fq" "../../test_data/index"
+valgrind --tool=callgrind --instr-atstart=no ./main_aln.exe "/Users/gany/test_data/seqs/query_single.fq" "../../test_data/index"
+#./main_aln.exe "/Users/gany/test_data/seqs/query.fastq" "../../test_data/index"

@@ -20,8 +20,10 @@ int main(int, char* argv[])
   std::string ref_in(argv[2]);
   SeqSuffixArray ref_SAIndex(ref_in);
   alnNonspliceOpt opt;
-  opt.max_gapOpen = 2;
-  opt.max_gapExt = 2;
+  opt.max_gapOpen = 1;
+  opt.max_gapExt = 6;
+  opt.max_mutation = 4;
+  opt.max_mismatch = 4;
   std::cout << "loading complete" << std::endl;
 
   SAMWritter sam_file;
@@ -39,23 +41,23 @@ int main(int, char* argv[])
 	 std::list<AlnResult> result_list;
 	 nonsplicedAln(query, result_list, ref_SAIndex, opt);
 	 printf("%ld\n", result_list.size());
-	 //if(!result_list.empty())
-	 //{
-	 //  std::cout << result_list.size() << std::endl;
-	 //  while(!result_list.empty())
-	 //  {
-	 //    AlnResult result = result_list.front();
-	 //    result_list.pop_front();
-	 //    for(unsigned long position = result.SA_index_low; position < result.SA_index_high; ++position)
-	 //    {
-	 //  	 sam_file.write_record(query, position, result.seq_length, ref_SAIndex, ids[i], quals[i]);
-	 //    }
-	 //  }
-	 //}
-	 //else
-	 //{
-	 //  sam_file.write_record_with_no_hit(query, ids[i], quals[i]);
-	 //}
+	 if(!result_list.empty())
+	 {
+		std::cout << result_list.size() << std::endl;
+		while(!result_list.empty())
+		{
+		  AlnResult result = result_list.front();
+		  result_list.pop_front();
+		  for(unsigned long position = result.SA_index_low; position < result.SA_index_high; ++position)
+		  {
+			 sam_file.write_record(query, position, result.seq_length, ref_SAIndex, ids[i], quals[i]);
+		  }
+		}
+	 }
+	 else
+	 {
+		sam_file.write_record_with_no_hit(query, ids[i], quals[i]);
+	 }
   }
   //Debug
   std::cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
