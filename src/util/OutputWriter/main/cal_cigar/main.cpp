@@ -34,7 +34,7 @@ int main(int, char* argv[])
 		for(unsigned long i = result.SA_index_low; i < result.SA_index_high; ++i)
 		{
 			seqan::String<seqan::CigarElement<> > cigar;
-			sam_file.write_record(query_seq, i, result.seq_length, ref_index, ref_name, query_qual);
+			sam_file.write_record(query_seq, i, result.seq_length, ref_index, ref_name, false, query_qual);
 		}
 	}
 }

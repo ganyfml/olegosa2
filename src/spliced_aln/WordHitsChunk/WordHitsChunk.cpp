@@ -1,6 +1,7 @@
 // vim: set noexpandtab tabstop=2:
 
 #include <spliced_aln/WordHitsChunk.hpp>
+#include <spliced_aln/aln_global.hpp>
 
 bool compare_wordHitsChunkByRefPos(const WordHitsChunkPtr chunk1, const WordHitsChunkPtr chunk2)
 {
@@ -10,7 +11,6 @@ bool compare_wordHitsChunkByRefPos(const WordHitsChunkPtr chunk1, const WordHits
 	}
 	else
 	{
-		std::cout << "Get here!\n";
 		return chunk1->hit_refPosNonDec > chunk2->hit_refPosNonDec;
 	}
 }
@@ -47,7 +47,7 @@ void WordHitsChunk::extend_inexact(const SeqString& query, const SeqSuffixArray&
 
 void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
 {
-	const int match_score = 3, mismatch_score = -1, max_diff = 2;
+	const int match_score = 1, mismatch_score = -3, max_diff = 2;
 
 	int offset_at_max_score = 0, diff_at_max_score = 0;
 	int curr_score = 0, diff = 0, max_score = 0;
@@ -86,7 +86,7 @@ void WordHitsChunk::extend_inexact_left(const SeqString& query, const SeqSuffixA
 
 void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore)
 {
-	const int match_score = 3, mismatch_score = -1, max_diff = 2;
+	const int match_score = 1, mismatch_score = -3, max_diff = 2;
 
 	int offset_at_max_score = 0, diff_at_max_score = 0;
 	int curr_score = 0, diff = 0, max_score = 0;
@@ -122,4 +122,45 @@ void WordHitsChunk::extend_inexact_right(const SeqString& query, const SeqSuffix
 	end_pos_in_query += offset_at_max_score;
 	end_pos_in_ref += offset_at_max_score;
 	gapMM.num_mismatch += diff_at_max_score;
+}
+
+
+void WordHitsChunk::align_cleft(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	if(wordHitList.size() < 2) return;
+
+	for(auto first = wordHitList.begin(), second = ++wordHitList.begin(); second != wordHitList.end(); ++first, ++second)
+	{
+		long ref_cleft_start = (*first)->ref_pos + opt.word_length;
+		long ref_cleft_len = (*second)->ref_pos - ref_cleft_start;
+
+		long query_cleft_start = (*first)->query_pos + opt.word_length;
+		long query_cleft_len = (*second)->query_pos - query_cleft_start;
+
+		if (ref_cleft_len <= 0 && query_cleft_len <= 0 && query_cleft_len == ref_cleft_len )
+		{
+			continue;
+		}
+		else if (ref_cleft_len <= 0 && query_cleft_len > ref_cleft_len )
+		{
+			this->gapMM.num_gapOpenRef += 1;
+			this->gapMM.num_gapExtRef += (query_cleft_len - ref_cleft_len - 1);
+			continue;
+		}
+		else if (query_cleft_len <= 0 && ref_cleft_len > query_cleft_len)
+		{
+			this->gapMM.num_gapOpenQuery += 1;
+			this->gapMM.num_gapExtQuery += (ref_cleft_len- query_cleft_len - 1);
+			continue;
+		}
+
+		SeqString query_part = query.get_infix(query_cleft_start, query_cleft_start + query_cleft_len - 1);
+		SeqString ref_part = ref_SAIndex.get_infixSeq(ref_cleft_start, ref_cleft_start + ref_cleft_len - 1);
+		std::cout << "cleft: " << std::endl;
+		std::cout << "query: " << query_part << std::endl;
+		std::cout << "ref: " << ref_part << std::endl;
+		GapAndMM gap_mm;
+		aln_global(ref_part, query_part, gap_mm);
+		this->gapMM += gap_mm;
+	}
 }

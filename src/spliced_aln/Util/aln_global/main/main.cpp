@@ -14,5 +14,4 @@ int main(int, char* argv[])
 	gap_mm.display();
 	aln_global(ref_part, query_part, gap_mm);
 	gap_mm.display();
-	aln_global_cigar(ref_part, query_part);
 }

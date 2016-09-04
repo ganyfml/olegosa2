@@ -1,5 +1,9 @@
 // vim: set noexpandtab tabstop=2:
 
+//Debug
+#include <valgrind/callgrind.h>
+//End
+
 #include "../../../splicedAln.hpp"
 #include <seqan_api/SeqStringSet.hpp>
 #include <seqan_api/CharStringSet.hpp>
@@ -20,13 +24,25 @@ int main(int, char* argv[])
 
 	cout << "loading complete!" << endl;
 	AlnSpliceOpt opt;
+	CALLGRIND_TOGGLE_COLLECT;
+	//Debug
+#include <ctime>
+	std::clock_t    start;
+	start = std::clock();
+	//End
 	for(int j = 0; j < query_seqs.get_length(); ++j)
 	{
 		SeqString query_seq = query_seqs[j];
-		opt.word_length = 5;
+		opt.word_length = 15;
 		opt.word_max_overlap = 0;
-		opt.min_anchor_size = 3;
+		opt.min_anchor_size = 8;
 
 		splicedAln(query_seq, ref_SA, opt);
+		exit(0);
 	}
+	//Debug
+	std::cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
+	//End
+	CALLGRIND_TOGGLE_COLLECT;
+	CALLGRIND_DUMP_STATS;
 }

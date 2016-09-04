@@ -1,0 +1,261 @@
+exactmatchaln.cpp:8:66: warning: unused parameter 'result_list' [-Wunused-parameter]
+void exactMatchAln(const SeqString& query, std::list<AlnResult>& result_list, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
+                                                                 ^
+exactmatchaln.cpp:8:137: warning: unused parameter 'opt' [-Wunused-parameter]
+void exactMatchAln(const SeqString& query, std::list<AlnResult>& result_list, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
+                                                                                                                                        ^
+In file included from exactmatchaln.cpp:4:
+In file included from /users/gany/olego_approve/olegosa2/include/seqan_api/SeqSuffixArray_conv.hpp:5:
+In file included from /Users/gany/Development/include/seqan/index.h:41:
+In file included from /Users/gany/Development/include/seqan/sequence.h:74:
+In file included from /Users/gany/Development/include/seqan/basic.h:71:
+In file included from /Users/gany/Development/include/seqan/basic/basic_container.h:47:
+In file included from /Users/gany/Development/include/seqan/basic/basic_alphabet.h:84:
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:646:41: error: invalid operands to binary expression ('typename Convert<Index<String<SimpleType<unsigned char, Dna5_>, Alloc<void> >, IndexEsa<void> >, SimpleType<unsigned char, Dna5_> >::Type' (aka 'seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >') and 'typename Convert<Index<String<SimpleType<unsigned char, Dna5_>, Alloc<void> >, IndexEsa<void> >, Index<String<SimpleType<unsigned char, Dna5_>, Alloc<void> >, IndexEsa<void> > >::Type' (aka 'seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >'))
+    return convert<TCompareType>(left_) == convert<TCompareType>(right_);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/gany/Development/include/seqan/index/index_esa_stree.h:1399:76: note: in instantiation of function template specialization 'seqan::operator==<unsigned char, seqan::Dna5_, seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> > >' requested here
+        if (posAddAndCheck(pos, _lcp, text) && (textAt(pos, container(it)) == c))
+                                                                           ^
+/Users/gany/Development/include/seqan/index/index_esa_stree.h:1896:13: note: in instantiation of function template specialization 'seqan::_getNodeByChar<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, void, seqan::TopDown<seqan::ParentLinks<seqan::Preorder> >, seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> > >' requested here
+        if (_getNodeByChar(it, c, nodeDesc)) {
+            ^
+/Users/gany/Development/include/seqan/index/index_esa_stree.h:1963:16: note: in instantiation of function template specialization 'seqan::_goDownChar<seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >, seqan::ParentLinks<seqan::Preorder>, seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> > >' requested here
+        return _goDownChar(it, obj);
+               ^
+/Users/gany/Development/include/seqan/index/index_esa_stree.h:1985:16: note: in instantiation of function template specialization 'seqan::_goDownObject<seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >, seqan::ParentLinks<seqan::Preorder>, seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> > >' requested here
+        return _goDownObject(it, obj, typename IsSequence<TObject>::Type());
+               ^
+exactmatchaln.cpp:15:2: note: in instantiation of function template specialization 'seqan::goDown<seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >, seqan::ParentLinks<seqan::Preorder>, seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> > >' requested here
+        goDown(seqan_sa_iter, *conv_back(query));
+        ^
+/Users/gany/Development/include/seqan/align/global_alignment_hirschberg_impl.h:225:1: note: candidate function not viable: no known conversion from 'typename Convert<Index<String<SimpleType<unsigned char, Dna5_>, Alloc<void> >, IndexEsa<void> >, SimpleType<unsigned char, Dna5_> >::Type' (aka 'seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >') to 'const seqan::HirschbergSet_' for 1st argument
+operator==(HirschbergSet_ const & lhs,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:641:1: note: candidate template ignored: could not match 'SimpleType' against 'Index'
+operator==(SimpleType<TValue, TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:651:1: note: candidate template ignored: could not match 'SimpleType' against 'Index'
+operator==(TLeft const & left_,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:661:1: note: candidate template ignored: could not match 'SimpleType' against 'Index'
+operator==(SimpleType<TLeftValue, TLeftSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:672:1: note: candidate template ignored: could not match 'SimpleType' against 'Index'
+operator==(SimpleType<TValue, TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:680:1: note: candidate template ignored: could not match 'Proxy' against 'Index'
+operator==(Proxy<TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_simple_type.h:691:1: note: candidate template ignored: could not match 'SimpleType' against 'Index'
+operator==(SimpleType<TValue, TSpec2> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/alphabet_profile.h:226:1: note: candidate template ignored: could not match 'ProfileChar' against 'Index'
+operator==(ProfileChar<TValue, TCount, TSpec> const & lhs,
+^
+/Users/gany/Development/include/seqan/basic/math_log_space_value.h:394:1: note: candidate template ignored: could not match 'LogProb' against 'Index'
+operator==(LogProb<TValue, TSpec> const & lhs,
+^
+/Users/gany/Development/include/seqan/basic/iterator_counting.h:194:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TIncrementable, CountingIteratorImpl_<TSpec> > const & left,
+^
+/Users/gany/Development/include/seqan/basic/iterator_adaptor.h:454:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TContainer, AdaptorIterator<TIterator, TSpec> > const & left,
+^
+/Users/gany/Development/include/seqan/basic/iterator_adaptor.h:472:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TContainer, AdaptorIterator<TIterator, TSpec> > const & left,
+^
+/Users/gany/Development/include/seqan/basic/iterator_adaptor.h:490:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(TIterator const & left,
+^
+/Users/gany/Development/include/seqan/basic/iterator_adapt_std.h:379:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TContainer, StdIteratorAdaptor> const & left,
+^
+/Users/gany/Development/include/seqan/basic/proxy_base.h:160:1: note: candidate template ignored: could not match 'Proxy' against 'Index'
+operator==(Proxy<TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/proxy_base.h:170:1: note: candidate template ignored: could not match 'Proxy' against 'Index'
+operator==(TLeft const & left_,
+^
+/Users/gany/Development/include/seqan/basic/proxy_base.h:180:1: note: candidate template ignored: could not match 'Proxy' against 'Index'
+operator==(Proxy<TLeftSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/proxy_base.h:191:1: note: candidate template ignored: could not match 'Proxy' against 'Index'
+operator==(Proxy<TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/basic/iterator_zip.h:529:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<std::tuple<TIteratorPackL...>, ZipIterator> const & lhs,
+^
+/Users/gany/Development/include/seqan/basic/pair_base.h:425:1: note: candidate template ignored: could not match 'Pair' against 'Index'
+operator==(Pair<L1, L2, LPack> const & _left,
+^
+/Users/gany/Development/include/seqan/basic/triple_base.h:498:1: note: candidate template ignored: could not match 'Triple' against 'Index'
+operator==(Triple<L1, L2, L3, LPack> const & _left,
+^
+/Users/gany/Development/include/seqan/basic/tuple_base.h:482:1: note: candidate template ignored: could not match 'Tuple' against 'Index'
+operator==(Tuple<TValue, SIZE, TSpecL> const & left,
+^
+/Users/gany/Development/include/seqan/basic/tuple_bit_compressed.h:517:13: note: candidate template ignored: could not match 'Tuple' against 'Index'
+inline bool operator==(Tuple<TValue, SIZE, BitPacked<> > const & left,
+            ^
+/Users/gany/Development/include/seqan/basic/tuple_bit_compressed.h:524:13: note: candidate template ignored: could not match 'Tuple' against 'Index'
+inline bool operator==(Tuple<TValue, SIZE, BitPacked<> > & left,
+            ^
+/Users/gany/Development/include/seqan/sequence/segment_base.h:721:1: note: candidate template ignored: could not match 'Segment' against 'Index'
+operator == (Segment<TLeftHost, TLeftSpec> const & left,
+^
+/Users/gany/Development/include/seqan/sequence/string_base.h:1823:1: note: candidate template ignored: could not match 'String' against 'Index'
+operator==(String<TLeftValue, TLeftSpec> const & left,
+^
+/Users/gany/Development/include/seqan/sequence/string_base.h:1832:1: note: candidate template ignored: could not match 'TLeftValue *' against 'typename Convert<Index<String<SimpleType<unsigned char, Dna5_>, Alloc<void> >, IndexEsa<void> >, SimpleType<unsigned char, Dna5_> >::Type' (aka 'seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >')
+operator==(TLeftValue * left,
+^
+/Users/gany/Development/include/seqan/sequence/string_packed.h:1530:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TPackedString, Packed<THostspec> > const & left,
+^
+/Users/gany/Development/include/seqan/sequence/iter_concat_virtual.h:438:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(
+^
+/Users/gany/Development/include/seqan/sequence/string_set_base.h:1773:1: note: candidate template ignored: could not match 'StringSet' against 'Index'
+operator==(StringSet<TLeftString, TLeftSpec> const & left,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:132:1: note: candidate template ignored: could not match 'ModifiedAlphabet' against 'Index'
+operator==(ModifiedAlphabet<THost, TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:142:1: note: candidate template ignored: could not match 'ModifiedAlphabet' against 'Index'
+operator==(TLeft const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:152:1: note: candidate template ignored: could not match 'ModifiedAlphabet' against 'Index'
+operator==(ModifiedAlphabet<TLeftHost, TLeftSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:163:1: note: candidate template ignored: could not match 'ModifiedAlphabet' against 'Index'
+operator==(ModifiedAlphabet<THost, TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:173:1: note: candidate template ignored: could not match 'SimpleType' against 'Index'
+operator==(SimpleType<TValue, TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:183:1: note: candidate template ignored: could not match 'ModifiedAlphabet' against 'Index'
+operator==(ModifiedAlphabet<THost, TSpec2> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:196:1: note: candidate template ignored: could not match 'Proxy' against 'Index'
+operator==(Proxy<TSpec> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_alphabet.h:206:1: note: candidate template ignored: could not match 'ModifiedAlphabet' against 'Index'
+operator==(ModifiedAlphabet<THost, TSpec2> const & left_,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_iterator.h:547:1: note: candidate template ignored: could not match 'ModifiedIterator' against 'Index'
+operator == (ModifiedIterator<THost, TSpec> const & a, ModifiedIterator<THost, TSpec> const & b)
+^
+/Users/gany/Development/include/seqan/modifier/modifier_string.h:674:1: note: candidate template ignored: could not match 'ModifiedString' against 'Index'
+operator==(ModifiedString<THost, TSpec> const & left,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_string.h:683:1: note: candidate template ignored: could not match 'TLeftValue *' against 'typename Convert<Index<String<SimpleType<unsigned char, Dna5_>, Alloc<void> >, IndexEsa<void> >, SimpleType<unsigned char, Dna5_> >::Type' (aka 'seqan::Index<seqan::String<seqan::SimpleType<unsigned char, seqan::Dna5_>, seqan::Alloc<void> >, seqan::IndexEsa<void> >')
+operator==(TLeftValue * left,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_reverse.h:355:1: note: candidate template ignored: could not match 'ModifiedIterator' against 'Index'
+operator==(ModifiedIterator<THost, ModReverse> const & a,
+^
+/Users/gany/Development/include/seqan/modifier/modifier_cyclic_shape.h:639:5: note: candidate template ignored: could not match 'ModifiedIterator' against 'Index'
+    operator == (ModifiedIterator<THost, ModCyclicShape<CyclicShape<TSpec> > > const & a,
+    ^
+/Users/gany/Development/include/seqan/modifier/modifier_padding.h:395:1: note: candidate template ignored: could not match 'ModifiedIterator' against 'Index'
+operator == (ModifiedIterator<THost, ModPadding> const & a, ModifiedIterator<THost, ModPadding> const & b)
+^
+/Users/gany/Development/include/seqan/pipe/pipe_iterator.h:117:10: note: candidate template ignored: could not match 'IPipeIterator' against 'Index'
+    bool operator==(const IPipeIterator<TInput>& _Left, const IPipeIterator<TInput>& Right_)
+         ^
+/Users/gany/Development/include/seqan/pipe/pipe_iterator.h:197:10: note: candidate template ignored: could not match 'OPipeIterator' against 'Index'
+    bool operator==(const OPipeIterator<TOutput>& _Left, const OPipeIterator<TOutput>& Right_)
+         ^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_vertex.h:327:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<TGraph, GraphIterator<InternalVertexIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_outedge.h:951:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<Graph<Directed<TCargo, TGraphSpec> >, GraphIterator<InternalOutEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_outedge.h:962:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<Graph<Hmm<TAlphabet, TCargo, TGraphSpec> >, GraphIterator<InternalOutEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_outedge.h:973:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<Graph<Tree<TCargo, TGraphSpec> >, GraphIterator<InternalOutEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_outedge.h:984:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<Graph<Undirected<TCargo, TGraphSpec> >, GraphIterator<InternalOutEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_outedge.h:995:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<Graph<Automaton<TAlphabet, TCargo, TGraphSpec> >, GraphIterator<InternalOutEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_adjacency.h:320:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<TGraph, GraphIterator<InternalAdjacencyIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_edge.h:416:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<TGraph, GraphIterator<InternalEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_bfs.h:278:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<TGraph, GraphIterator<InternalBfsIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/graph_types/graph_iterator_dfs.h:282:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<TGraph, GraphIterator<InternalDfsIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/map/map_vector.h:388:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TSet, VectorSetIterator> const &a,
+^
+/Users/gany/Development/include/seqan/map/map_skiplist.h:1104:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator == (Iter<TSkiplist, SkiplistIterator> const & left,
+^
+/Users/gany/Development/include/seqan/map/map_adapter_stl.h:347:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator == (Iter<TStlMap, StlMapIterator> const & left,
+^
+/Users/gany/Development/include/seqan/map/map_adapter_stl.h:529:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator == (Iter<TStlMap, StlSetIterator> const & left,
+^
+/Users/gany/Development/include/seqan/misc/set.h:320:5: note: candidate template ignored: could not match 'Iter' against 'Index'
+    operator==(Iter<TSet, VectorSetIterator__> const &a, Iter<TSet, VectorSetIterator__> const &b) {
+    ^
+/Users/gany/Development/include/seqan/index/index_esa_base.h:227:17: note: candidate template ignored: could not match 'VertexEsa' against 'Index'
+    inline bool operator==(VertexEsa<TSize> const &a, VertexEsa<TSize> const &b)
+                ^
+/Users/gany/Development/include/seqan/index/index_esa_algs.h:983:5: note: candidate template ignored: could not match 'Iter' against 'Index'
+    operator == (
+    ^
+/Users/gany/Development/include/seqan/align/fragment.h:175:1: note: candidate template ignored: could not match 'Fragment' against 'Index'
+operator==(Fragment<TSize, ExactFragment<TSpec> > const & left,
+^
+/Users/gany/Development/include/seqan/align/fragment.h:259:1: note: candidate template ignored: could not match 'Fragment' against 'Index'
+operator==(Fragment<TSize, ExactReversableFragment<TSpec> > const & left,
+^
+/Users/gany/Development/include/seqan/graph_align/graph_impl_align_adapt.h:219:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator ==(Iter<Graph<Alignment<TStringSet, TCargo, TGraphSpec> >, GraphIterator<InternalOutEdgeIterator<TSpec> > >& it1,
+^
+/Users/gany/Development/include/seqan/align/matrix_base.h:907:1: note: candidate template ignored: could not match 'Matrix' against 'Index'
+operator == (Matrix<TValue, DIMENSION1> const & matrix1, Matrix<TValue, DIMENSION2> const & matrix2)
+^
+/Users/gany/Development/include/seqan/align/gaps_base.h:1205:13: note: candidate template ignored: could not match 'Gaps' against 'Index'
+inline bool operator==(Gaps<TSequence, TSpec> const & lhs,
+            ^
+/Users/gany/Development/include/seqan/align/gaps_base.h:1213:13: note: candidate template ignored: could not match 'Gaps' against 'Index'
+inline bool operator==(Gaps<TSequence, TSpec> const & lhs,
+            ^
+/Users/gany/Development/include/seqan/align/gaps_iterator_array.h:695:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator==(Iter<TGaps, GapsIterator<ArrayGaps> > const & _lhs,
+^
+/Users/gany/Development/include/seqan/align/gaps_iterator_anchor.h:378:1: note: candidate template ignored: could not match 'Iter' against 'Index'
+operator == (
+^
+/Users/gany/Development/include/seqan/align/align_cols.h:421:1: note: candidate template ignored: could not match 'AlignCols' against 'Index'
+operator==(AlignCols<TAlign> const & left,
+^
+/Users/gany/Development/include/seqan/align/align_base.h:713:13: note: candidate template ignored: could not match 'Align' against 'Index'
+inline bool operator==(Align<TSource, TSpec> const & lhs,
+            ^
+/Users/gany/Development/include/seqan/align/dp_trace_segment.h:283:13: note: candidate template ignored: could not match 'TraceSegment_' against 'Index'
+inline bool operator==(TraceSegment_<TPosition, TSize> const & left, TraceSegment_<TPosition, TSize> const & right)
+            ^
+/Users/gany/Development/include/seqan/bam_io/cigar.h:137:13: note: candidate template ignored: could not match 'CigarElement' against 'Index'
+inline bool operator==(CigarElement<TOperation, TCount> const & lhs,
+            ^
+/Users/gany/Development/include/seqan/store/store_align_intervals.h:56:1: note: candidate template ignored: could not match 'Interval' against 'Index'
+operator == (Interval<TValue> const & interval1, Interval<TValue> const & interval2)
+^
+2 warnings and 1 error generated.
+makepp: error: Failed to build target `/users/gany/olego_approve/olegosa2/src/nonspliced_aln/exactmatchaln/exactmatchaln.o' [1]

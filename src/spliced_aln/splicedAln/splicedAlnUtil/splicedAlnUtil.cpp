@@ -2,6 +2,7 @@
 
 #include <spliced_aln/splicedAlnUtil.hpp>
 #include <nonspliced_aln/nonsplicedAln.hpp>
+#include <nonspliced_aln/exactMatchAln.hpp>
 #include <util/AlnResult.hpp>
 #include <queue>
 
@@ -27,7 +28,9 @@ void collect_wordHits(const std::vector<WordPtr>& words, std::list<WordHitPtr>& 
 	for(auto word_iter = words.begin(); word_iter != words.end(); ++word_iter)
 	{
 		std::list<AlnResult> word_hit_result;
-		nonsplicedAln((*word_iter)->seq, word_hit_result, ref_SAIndex, word_search_opt);
+		//nonsplicedAln((*word_iter)->seq, word_hit_result, ref_SAIndex, word_search_opt);
+		SeqString search_query_seq = revcomp ? (*word_iter)->r_seq : (*word_iter)->seq;
+		exactMatchAln(search_query_seq, word_hit_result, ref_SAIndex, word_search_opt);
 		while(!word_hit_result.empty())
 		{
 			AlnResult a = word_hit_result.front();

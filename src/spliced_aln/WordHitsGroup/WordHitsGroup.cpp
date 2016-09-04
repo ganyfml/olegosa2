@@ -2,7 +2,7 @@
 
 #include <spliced_aln/WordHitsGroup.hpp>
 #include <spliced_aln/WordHitsGroupUtil.hpp>
-#include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -75,4 +75,27 @@ void WordHitsGroup::pair_wordHitsChunks(const SeqString& query, const SeqSuffixA
 			locate_bridge_two_chunks(head_chunk, tail_chunk, wordhitschunkbridges, query, ref_SAIndex, opt);
 		}
 	}
+}
+
+double calculate_wordhitsChunk_score(const WordHitsGroupPtr group, const vector<WordPtr>& words, long ref_length, int num_words)
+{
+	double log_occ = 0;
+	vector<bool>word_exist(num_words, false);
+	int num_wordHits_uniq = 0;
+
+	for (auto iter = group->wordhits.begin(); iter != group->wordhits.end(); ++iter)
+	{
+		int word_id = (*iter)->word_id;
+		if (word_exist[word_id])
+		{
+			continue;
+		}
+		else
+		{
+			word_exist[word_id] = true;
+			++num_wordHits_uniq;
+			log_occ += log10((double)words[word_id]->num_occ);
+		}
+	}
+	return log_occ - (num_wordHits_uniq - 1) * log10((double)ref_length);
 }

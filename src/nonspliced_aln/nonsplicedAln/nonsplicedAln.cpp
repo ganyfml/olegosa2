@@ -28,6 +28,7 @@ bool position_already_in_result(const StateEntry entry, const std::list<AlnResul
 
 void nonsplicedAln(const SeqString& query, std::list<AlnResult>& result_list, const SeqSuffixArray& ref_SAIndex, const alnNonspliceOpt& opt)
 {
+	std::list<AlnResult> local_result;
 	//Change query and ref_SAIndex back to seqan type
 	SeqSAIter init_iter(*conv_back(ref_SAIndex));
 	std::vector<MutationTrack> mutation_track = gen_query_mutationTracks(query, ref_SAIndex);
@@ -55,7 +56,7 @@ void nonsplicedAln(const SeqString& query, std::list<AlnResult>& result_list, co
 			r.SA_index_low = sa_range.i1;
 			r.seq_length = entry.seq_length();
 			r.gap_mm = entry.gap_mm;
-			result_list.push_front(r);
+			local_result.push_front(r);
 			max_score = entry.get_score(opt);
 			//END
 		}
@@ -74,7 +75,7 @@ void nonsplicedAln(const SeqString& query, std::list<AlnResult>& result_list, co
 				allow_mismatch = false;
 			}
 
-			if(!position_already_in_result(entry, result_list))
+			if(!position_already_in_result(entry, local_result))
 			{
 				if(allow_gap_open_and_ext)
 				{
@@ -104,4 +105,5 @@ void nonsplicedAln(const SeqString& query, std::list<AlnResult>& result_list, co
 			}
 		}
 	}
+	result_list.splice(result_list.end(), local_result);
 }

@@ -20,8 +20,6 @@ void cal_cigar(const SeqString& query_original, seqan::String<seqan::CigarElemen
 	globalAlignment(query_gap, ref_gap, seqan::Score<int, seqan::Simple>(2, -1, -2, -1)
 			, seqan::AlignConfig<false, false, false, false>());
 
-	std::cout << "ref seq: " << query_original << '\n' << query_hit_seq << std::endl;
-
 	seqan::getCigarString(cigar, ref_gap, query_gap, query_hit_length);
 }
 
@@ -81,17 +79,24 @@ class SAMWritter
 		writeRecord(samFileOut, record);
 	}
 
-	void write_record(const SeqString& query_original, unsigned long query_hit_SAIndex, int query_hit_length, const SeqSuffixArray& refSA, const CharString& seq_name, const CharString& query_qual)
+	void write_record(const SeqString& query_original, unsigned long query_hit_SAIndex, int query_hit_length, const SeqSuffixArray& refSA, const CharString& seq_name, bool rev, const CharString& query_qual)
 	{
 		seqan::BamAlignmentRecord record;
-		record.flag = 4;
+		if(rev)
+		{
+			record.flag = 4;
+		}
+		else
+		{
+			record.flag = 0;
+		}
 		record.qName = *conv_back(seq_name);
 		record.seq = *conv_back(query_original);
 		record.qual = *conv_back(query_qual);
 		record.beginPos = refSA.SAIndex2SeqPos(query_hit_SAIndex);
 
 		seqan::BamTagsDict tagsDict(record.tags);
-		seqan::setTagValue(tagsDict, "NM", 2);
+		//seqan::setTagValue(tagsDict, "NM", 2);
 
 		//Write Cigar to SAM
 		seqan::String<seqan::CigarElement<> > cigar;

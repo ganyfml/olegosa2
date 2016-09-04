@@ -9,6 +9,7 @@
 #include <spliced_aln/AlnSpliceOpt.hpp>
 #include <iostream>
 #include <list>
+#include <vector>
 
 struct WordHitsGroup
 {
@@ -38,3 +39,5 @@ typedef std::shared_ptr<WordHitsGroup> WordHitsGroupPtr;
 
 bool compare_wordHitsGroupByScore(const WordHitsGroupPtr group1, const WordHitsGroupPtr group2);
 int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
+
+double calculate_wordhitsChunk_score(const WordHitsGroupPtr group, const std::vector<WordPtr>& words, long ref_length, int num_words);

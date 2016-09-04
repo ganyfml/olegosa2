@@ -30,6 +30,36 @@ int cal_two_wordchunks_backsearch_area_diff_sum(const WordHitsChunkPtr head_chun
 	return head_chunk_diff + tail_chunk_diff;
 }
 
+void cal_one_wordchunk_backsearch_area_diff_downstream(const WordHitsChunkPtr chunk, vector<int>& chunk_search_area_mm, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
+{
+	int chunk_diff = 0;
+	for(int i = 0; i <= num_backSearch; ++i)
+	{
+		long chunk_queryEnd = chunk->end_pos_in_query - i;
+		long chunk_refEnd = chunk->end_pos_in_ref - i;
+		if(query[chunk_queryEnd] != ref_SAIndex.char_at(chunk_refEnd))
+		{
+			++chunk_diff;
+		}
+		chunk_search_area_mm[i] = chunk_diff;
+	}
+}
+
+void cal_one_wordchunk_backsearch_area_diff_upstream(const WordHitsChunkPtr chunk, vector<int>& chunk_search_area_mm, const SeqString query, const SeqSuffixArray& ref_SAIndex, int num_backSearch)
+{
+	int chunk_diff = 0;
+	for(int i = 0; i <= num_backSearch; ++i)
+	{
+		long chunk_queryEnd = chunk->start_pos_in_query + i;
+		long chunk_refEnd = chunk->start_pos_in_ref + i;
+		if(query[chunk_queryEnd] != ref_SAIndex.char_at(chunk_refEnd))
+		{
+			++chunk_diff;
+		}
+		chunk_search_area_mm[i] = chunk_diff;
+	}
+}
+
 int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
 	WordHitsChunkBridgePtr bridge_to_be_added;
@@ -588,6 +618,153 @@ void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, lis
 		destroy_flag.resize(prev_aln_length, false);
 	}
 	summarize_WordHitsChunkBridgeChains(results, query_length, global);
+}
+
+int locate_bridge_by_one_chunk_denovo_downstream(WordHitsChunkPtr& head_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	if(query.get_length() - head_chunk->end_pos_in_query - 1 + num_backSearch < opt.min_anchor_size
+			&& query.get_length() - head_chunk->end_pos_in_query - 1 >= 2 * opt.word_length)
+		return 0;
+
+	vector<int> chunk_search_area_mm(num_backSearch + 1, 0);
+	SeqString query_adjust_strand = query;
+	if(head_chunk->strand == Strand::reverse)
+		query_adjust_strand.make_revcomp();
+
+	cal_one_wordchunk_backsearch_area_diff_downstream(head_chunk, chunk_search_area_mm, query_adjust_strand, ref_SAIndex, num_backSearch);
+
+	int num_alignment = 0;
+
+	long min_bridge_ref_start_pos = head_chunk->end_pos_in_ref - num_backSearch;
+	long max_bridge_ref_start_pos = head_chunk->end_pos_in_ref;
+	int min_bridge_query_start_pos = head_chunk->end_pos_in_query - num_backSearch;
+
+	for(Strand::Value splice_strand : list<Strand::Value>{Strand::forward, Strand::reverse})
+	{
+		//if((!(opt.strand_mode & Strand_mode::reverse)) && splice_strand != head_chunk->strand) continue;
+		//if((!(opt.strand_mode & Strand_mode::forward)) && splice_strand == head_chunk->strand) continue;
+
+		SpliceType::Value chunk_splice_type = splice_strand == Strand::forward ? SpliceType::splice_donor : SpliceType::splice_acceptor;
+
+		{
+			long curr_bridge_ref_start_pos = min_bridge_ref_start_pos;
+			int curr_bridge_query_start_pos = min_bridge_query_start_pos;
+			for (; curr_bridge_query_start_pos <= max_bridge_ref_start_pos; ++curr_bridge_ref_start_pos, ++curr_bridge_query_start_pos)
+			{
+				if(query.get_length() - curr_bridge_query_start_pos - 1 < opt.min_anchor_size) break;
+
+				if(!is_splice_site_by_refPos(ref_SAIndex, curr_bridge_ref_start_pos + 1, chunk_splice_type, splice_strand))
+					continue;
+
+				SeqString tail_chunk_ss = get_partner_splice_site(chunk_splice_type, splice_strand);
+				SeqString tail_chunk_query_seq = query.get_infix(curr_bridge_ref_start_pos + 1, query.get_length() - 1);
+				SeqString tail_chunk_seq = tail_chunk_ss + tail_chunk_query_seq;
+				long ref_left_bound = curr_bridge_ref_start_pos + opt.min_intron_size;
+				long ref_right_bound = curr_bridge_ref_start_pos + opt.max_intron_size;
+				list<long> anchor_hits_ref_list;
+
+				alnNonspliceOpt opt;
+				collect_anchor_hits_within_bound(tail_chunk_seq, anchor_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt);
+
+				for(long ref_hit_pos : anchor_hits_ref_list)
+				{
+					head_chunk->is_last_in_bridge = false;
+
+					WordHitsChunkPtr tail_chunk = make_shared<WordHitsChunk>(
+							head_chunk->strand
+							, ref_hit_pos + 2, ref_hit_pos + (query.get_length() - curr_bridge_query_start_pos)
+							, curr_bridge_query_start_pos + 1, query.get_length() - 1);
+					wordhitschunks.push_back(tail_chunk);
+
+					int bridge_search_area_mm = (curr_bridge_ref_start_pos - head_chunk->end_pos_in_ref <= 0) ? chunk_search_area_mm[head_chunk->end_pos_in_ref - curr_bridge_ref_start_pos] : 0;
+
+					WordHitsChunkBridgePtr bridge = make_shared<WordHitsChunkBridge>(
+							head_chunk, tail_chunk
+							, curr_bridge_ref_start_pos, tail_chunk->start_pos_in_ref
+							, curr_bridge_query_start_pos, curr_bridge_query_start_pos + 1
+							, splice_strand, bridge_search_area_mm);
+					wordhitschunkbridges.push_back(bridge);
+
+					++num_alignment;
+				}
+			}
+		}
+	}
+	return num_alignment;
+}
+
+int locate_bridge_by_one_chunk_denovo_upstream(WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	if(tail_chunk->start_pos_in_query + num_backSearch < opt.min_anchor_size
+			&& tail_chunk->start_pos_in_query < 2 * opt.word_length)
+		return 0;
+
+	vector<int> chunk_search_area_mm(num_backSearch + 1, 0);
+	SeqString query_adjust_strand = query;
+	if(tail_chunk->strand == Strand::reverse)
+		query_adjust_strand.make_revcomp();
+
+	cal_one_wordchunk_backsearch_area_diff_upstream(tail_chunk, chunk_search_area_mm, query_adjust_strand, ref_SAIndex, num_backSearch);
+
+	int num_alignment = 0;
+
+	long max_bridge_ref_end_pos = tail_chunk->start_pos_in_ref + num_backSearch;
+	long min_bridge_ref_end_pos = tail_chunk->start_pos_in_ref;
+	int max_bridge_query_end_pos = tail_chunk->start_pos_in_query + num_backSearch;
+
+	for(Strand::Value splice_strand : list<Strand::Value>{Strand::forward, Strand::reverse})
+	{
+		//if((!(opt.strand_mode & Strand_mode::reverse)) && splice_strand != head_chunk->strand) continue;
+		//if((!(opt.strand_mode & Strand_mode::forward)) && splice_strand == head_chunk->strand) continue;
+
+		SpliceType::Value chunk_splice_type = splice_strand == Strand::forward ? SpliceType::splice_acceptor : SpliceType::splice_donor;
+
+		{
+			long curr_bridge_ref_end_pos = max_bridge_ref_end_pos;
+			int curr_bridge_query_end_pos = max_bridge_query_end_pos;
+			for (; curr_bridge_ref_end_pos >= min_bridge_ref_end_pos; --curr_bridge_ref_end_pos, --curr_bridge_query_end_pos)
+			{
+				if(curr_bridge_query_end_pos < opt.min_anchor_size) break;
+
+				if(!is_splice_site_by_refPos(ref_SAIndex, curr_bridge_ref_end_pos - 1, chunk_splice_type, splice_strand))
+					continue;
+
+				SeqString head_chunk_ss = get_partner_splice_site(chunk_splice_type, splice_strand);
+				SeqString head_chunk_query_seq = query.get_infix(0, curr_bridge_query_end_pos - 1);
+				SeqString head_chunk_seq = head_chunk_query_seq + head_chunk_ss; 
+				long ref_left_bound = curr_bridge_ref_end_pos - opt.max_intron_size - curr_bridge_query_end_pos;
+				long ref_right_bound = curr_bridge_ref_end_pos - opt.min_intron_size - curr_bridge_query_end_pos;
+				list<long> anchor_hits_ref_list;
+				std::cout << head_chunk_seq << std::endl;
+
+				alnNonspliceOpt opt;
+				collect_anchor_hits_within_bound(head_chunk_seq, anchor_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt);
+
+				for(long ref_hit_pos : anchor_hits_ref_list)
+				{
+					tail_chunk->is_first_in_bridge = false;
+
+					WordHitsChunkPtr head_chunk = make_shared<WordHitsChunk>(
+							tail_chunk->strand
+							, ref_hit_pos, ref_hit_pos + curr_bridge_query_end_pos - 1
+							, 0, curr_bridge_query_end_pos - 1);
+					wordhitschunks.push_back(head_chunk);
+
+					int bridge_search_area_mm = (curr_bridge_ref_end_pos - tail_chunk->start_pos_in_ref) ? chunk_search_area_mm[curr_bridge_ref_end_pos - tail_chunk->start_pos_in_ref] : 0;
+
+					WordHitsChunkBridgePtr bridge = make_shared<WordHitsChunkBridge>(
+							head_chunk, tail_chunk
+							, ref_hit_pos + curr_bridge_query_end_pos - 1, curr_bridge_ref_end_pos
+							, curr_bridge_query_end_pos - 1, curr_bridge_query_end_pos
+							, splice_strand, bridge_search_area_mm);
+					wordhitschunkbridges.push_back(bridge);
+
+					++num_alignment;
+				}
+			}
+		}
+	}
+	return num_alignment;
 }
 
 void locate_bridge_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, list<WordHitsChunkBridgePtr>& wordhitschunkbridges, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)

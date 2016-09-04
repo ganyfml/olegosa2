@@ -2,6 +2,7 @@
 
 //Debug
 #include <valgrind/callgrind.h>
+#include <nonspliced_aln/exactMatchAln.hpp>
 //End
 #include <nonspliced_aln/nonsplicedAln.hpp>
 #include <seqan_api/SeqStringSet.hpp>
@@ -41,8 +42,8 @@ int main(int, char* argv[])
 	 SeqString query_rev(query);
 	 query_rev.make_revcomp();
 	 std::list<AlnResult> result_list;
-	 nonsplicedAln(query, result_list, ref_SAIndex, opt);
-	 nonsplicedAln(query_rev, result_list, ref_SAIndex, opt);
+	 exactMatchAln(query, result_list, ref_SAIndex, opt);
+	 exactMatchAln(query_rev, result_list, ref_SAIndex, opt);
 	 if(!result_list.empty())
 	 {
 		while(!result_list.empty())
