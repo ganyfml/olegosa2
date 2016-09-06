@@ -1,0 +1,243 @@
+creating size: 20
+0
+Extra step: 0
+Prefix: 
+num_mutation_allowed: 1, entry_query_pos: 0 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: A
+num_mutation_allowed: 1, entry_query_pos: 1 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AG
+num_mutation_allowed: 1, entry_query_pos: 2 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGG
+num_mutation_allowed: 1, entry_query_pos: 3 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGC
+num_mutation_allowed: 1, entry_query_pos: 4 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCG
+num_mutation_allowed: 1, entry_query_pos: 5 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCGT
+num_mutation_allowed: 1, entry_query_pos: 6 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCGTC
+num_mutation_allowed: 1, entry_query_pos: 7 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCGTCC
+num_mutation_allowed: 1, entry_query_pos: 8 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCGTCCT
+num_mutation_allowed: 1, entry_query_pos: 9 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCGTCCTG
+num_mutation_allowed: 1, entry_query_pos: 10 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: AGGCGTCCTGT
+num_mutation_allowed: 1, entry_query_pos: 11 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360548
+Prefix: AGGCGTCCTGTC
+num_mutation_allowed: 1, entry_query_pos: 12 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360547
+Prefix: AGGCGTCCTGTCG
+num_mutation_allowed: 1, entry_query_pos: 13 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360546
+Prefix: AGGCGTCCTGTCGG
+num_mutation_allowed: 1, entry_query_pos: 14 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360545
+Prefix: AGGCGTCCTGTCGGC
+num_mutation_allowed: 1, entry_query_pos: 15 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360544
+Prefix: AGGCGTCCTGTCGGCT
+num_mutation_allowed: 1, entry_query_pos: 16 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360543
+Prefix: AGGCGTCCTGTCGGCTC
+num_mutation_allowed: 1, entry_query_pos: 17 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 14360542
+Prefix: AGGCGTCCTGTCGGCTCA
+num_mutation_allowed: 1, entry_query_pos: 18 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 1, allow mismatch: 1
+0
+Extra step: 14360541
+Prefix: AGGCGTCCTGTCGGCTCAC
+num_mutation_allowed: 1, entry_query_pos: 19 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 308282000
+allow_gap_open: 0, allow mismatch: 1
+creating size: 20
+0
+Extra step: 0
+Prefix: 
+num_mutation_allowed: 1, entry_query_pos: 0 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: C
+num_mutation_allowed: 1, entry_query_pos: 1 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CG
+num_mutation_allowed: 1, entry_query_pos: 2 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGT
+num_mutation_allowed: 1, entry_query_pos: 3 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTG
+num_mutation_allowed: 1, entry_query_pos: 4 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGA
+num_mutation_allowed: 1, entry_query_pos: 5 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGAG
+num_mutation_allowed: 1, entry_query_pos: 6 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGAGC
+num_mutation_allowed: 1, entry_query_pos: 7 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGAGCC
+num_mutation_allowed: 1, entry_query_pos: 8 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGAGCCG
+num_mutation_allowed: 1, entry_query_pos: 9 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 1
+allow_gap_open: 0, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGAGCCGA
+num_mutation_allowed: 1, entry_query_pos: 10 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 1, allow mismatch: 1
+0
+Extra step: 0
+Prefix: CGTGAGCCGAC
+num_mutation_allowed: 1, entry_query_pos: 11 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 1, allow mismatch: 1
+1
+Extra step: 0
+Prefix: CGTGAGCCGACC
+num_mutation_allowed: 0, entry_query_pos: 12 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 163264873
+Prefix: CGTGAGCCGACT
+num_mutation_allowed: 0, entry_query_pos: 12 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 0
+Prefix: CGTGAGCCGAG
+num_mutation_allowed: 0, entry_query_pos: 11 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 0
+Prefix: CGTGAGCCGAGA
+num_mutation_allowed: 0, entry_query_pos: 12 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 58430253
+Prefix: CGTGAGCCGAGAG
+num_mutation_allowed: 0, entry_query_pos: 13 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 0
+Prefix: CGTGAGCCGAT
+num_mutation_allowed: 0, entry_query_pos: 11 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 0
+Prefix: CGTGAGCCGAA
+num_mutation_allowed: 0, entry_query_pos: 11 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+1
+Extra step: 28091688
+Prefix: CGTGAGCCGAAA
+num_mutation_allowed: 0, entry_query_pos: 12 
+mutation_track[entry_query_pos + 1].num_mutation_needed: 0
+allow_gap_open: 0, allow mismatch: 1
+HWI-D00312:90:C7H21ANXX:2:1101:1344:1893 1:N:0:NACCGAGA	4	*	0	255	*	*	0	0	AGGCGTCCTGTCGGCTCACG	#<<ABGGGGGGGGGGGGGGG	NM:i:2

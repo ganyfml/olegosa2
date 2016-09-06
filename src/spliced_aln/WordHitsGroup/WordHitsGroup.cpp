@@ -72,7 +72,21 @@ void WordHitsGroup::pair_wordHitsChunks(const SeqString& query, const SeqSuffixA
 			 *                   int gap_length = tail_chunk->start_pos_in_query - head_chunk->end_pos_in_query - 1;
 			 *                            */
 
-			locate_bridge_two_chunks(head_chunk, tail_chunk, wordhitschunkbridges, query, ref_SAIndex, opt);
+			locate_bridge_two_chunks(head_chunk, tail_chunk, wordhitschunkbridges, wordhitschunks, query, ref_SAIndex, opt);
+		}
+	}
+
+	if(opt.single_anchor_search)
+	{
+		for(auto chunk_iter = wordhitschunks.begin(); chunk_iter != wordhitschunks.end(); ++chunk_iter)
+		{
+			if((*chunk_iter)->is_first_in_bridge || (*chunk_iter)->is_last_in_bridge)
+			{
+				//Debug
+				printf("Try one anchor search\n");
+				//End
+				locate_bridge_one_chunk((*chunk_iter), wordhitschunkbridges, wordhitschunks, query, ref_SAIndex, opt);	
+			}
 		}
 	}
 }

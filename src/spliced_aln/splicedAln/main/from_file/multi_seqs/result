@@ -1,0 +1,215 @@
+loading complete!
+Word ID: 2
+query_pos: 35, ref_pos: 53979653
+Word ID: 1
+query_pos: 17, ref_pos: 99719511
+Word ID: 2
+query_pos: 35, ref_pos: 99719529
+Word hit group created
+
+Group ID: 0, score: 0.30103
+Including Hit: 2, query: 35, ref: 53979653
+
+Group ID: 1, score: -7.99387
+Including Hit: 1, query: 17, ref: 99719511
+2, query: 35, ref: 99719529
+
+after sorted
+cluster size: 2
+Group ID: 1, score: -7.99387
+Including Hit: 1, query: 17, ref: 99719511
+2, query: 35, ref: 99719529
+
+Group ID: 0, score: 0.30103
+Including Hit: 2, query: 35, ref: 53979653
+
+compare_wordHitsByHitDiagonal
+1, 
+2, 
+
+Word hit chunk created
+
+Word hit chunk size1
+WordChunk ID: 0, with strand: 1, containing 2 wordHits
+Ref   Start Pos: 99719511, Ref   End Pos: 99719543
+Query Start Pos: 17, Query End Pos: 49
+Hit refPos Non-Dec: 1, Coverage: 1
+is_first: 1, is_last: 1
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+extended
+WordChunk ID: 0, with strand: 1, containing 2 wordHits
+Ref   Start Pos: 99719511, Ref   End Pos: 99719543
+Query Start Pos: 17, Query End Pos: 49
+Hit refPos Non-Dec: 1, Coverage: 1
+is_first: 1, is_last: 1
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+cleft: 
+query: AGT
+ref: AGT
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+word chunk sorted
+
+WordChunk ID: 0, with strand: 1, containing 2 wordHits
+Ref   Start Pos: 99719511, Ref   End Pos: 99719543
+Query Start Pos: 17, Query End Pos: 49
+Hit refPos Non-Dec: 1, Coverage: 1
+is_first: 1, is_last: 1
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+Try one anchor search
+Try downstream
+ref: 99719537, query: 43
+ref: 99719537, query: 43
+downstream finshed
+Try upstream
+search Seq: CGCCGCTGCTTCCCTTTCCT
+0 results founded!
+upstream finished
+bridges created: 0
+bridge concated, num result: 0
+compare_wordHitsByHitDiagonal
+2, 
+
+Word hit chunk created
+
+Word hit chunk size1
+WordChunk ID: 0, with strand: 1, containing 1 wordHits
+Ref   Start Pos: 53979653, Ref   End Pos: 53979667
+Query Start Pos: 35, Query End Pos: 49
+Hit refPos Non-Dec: 1, Coverage: 1
+is_first: 1, is_last: 1
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+extended
+WordChunk ID: 0, with strand: 1, containing 1 wordHits
+Ref   Start Pos: 53979653, Ref   End Pos: 53979667
+Query Start Pos: 35, Query End Pos: 49
+Hit refPos Non-Dec: 1, Coverage: 1
+is_first: 1, is_last: 1
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+word chunk sorted
+
+WordChunk ID: 0, with strand: 1, containing 1 wordHits
+Ref   Start Pos: 53979653, Ref   End Pos: 53979667
+Query Start Pos: 35, Query End Pos: 49
+Hit refPos Non-Dec: 1, Coverage: 1
+is_first: 1, is_last: 1
+Mismatch: 0
+ Ref  Open: 0, Ext: 0
+Query Open: 0, Ext: 0
+Try one anchor search
+Try downstream
+ref: 53979661, query: 43
+ref: 53979661, query: 43
+downstream finshed
+Try upstream
+search Seq: CGCCGCTGCTTCCCTTTCCTCGGAGTCTTCCCAGTACCT
+0 results founded!
+upstream finished
+bridges created: 0
+bridge concated, num result: 0
+1
+2
+1
+2
+exonic finished!
+search_exonic_aln, num result: 0
+CGCCGCTGCTTCCCTTTCCTCGGAGTCTTCCCAGTACTCTTCCAGAACTC
+Time: 1.188 ms
+@SQ	SN:chr1	LN:197195432
+@PG	ID:OLego	VN:1.1.5	CL:/Users/gany/olego/olego /Users/gany/test_data/mm9_chr1.fa /Users/gany/test_data/seqs/splicing/error.fasta 
+word_size: 3
+pos_q: 35, pos_t: 53979653
+pos_q: 17, pos_t: 99719511
+pos_q: 35, pos_t: 99719529
+clusters size: 2
+cluster:
+score: 0.301030
+pos_q: 35, pos_t: 53979653
+
+cluster:
+score: -7.993867
+pos_q: 17, pos_t: 99719511
+pos_q: 35, pos_t: 99719529
+
+after sorted:
+clusters size: 2
+cluster:
+score: -7.993867
+pos_q: 17, pos_t: 99719511
+pos_q: 35, pos_t: 99719529
+
+cluster:
+score: 0.301030
+pos_q: 35, pos_t: 53979653
+
+jigsaw_sort_word_hits_by_diagonal
+1, 2, 
+exon created
+exon size: 1
+exon hit size: 2
+query: 17, 49
+ref: 99719511, 99719543
+exon extend with stop_if_neg_score: 0, extend_exact: 0
+exon size: 1
+query: 17, 49
+ref: 99719511, 99719543
+exon hit diff: 0
+ref seq: 
+023
+query seq: 
+023
+after refined
+mm: 0
+gap open: ref: 0, query: 0
+gap ext: ref: 0, query: 0
+exons sorted
+query: 17, 49
+ref: 99719511, 99719543
+is_first: 1, is_last: 1
+num of juns created by two anchors: 0
+num of junc find in upstream: 1
+num of junctions created: 1
+start_t: 99718564, end_t: 99719512
+start_q: 17, end_q: 18
+junctions after concated: 1
+jigsaw_sort_word_hits_by_diagonal
+2, 
+exon created
+exon size: 1
+exon hit size: 1
+query: 35, 49
+ref: 53979653, 53979667
+exon extend with stop_if_neg_score: 0, extend_exact: 0
+exon size: 1
+query: 35, 49
+ref: 53979653, 53979667
+exon hit diff: 0
+after refined
+mm: 0
+gap open: ref: 0, query: 0
+gap ext: ref: 0, query: 0
+exons sorted
+query: 35, 49
+ref: 53979653, 53979667
+is_first: 1, is_last: 1
+num of juns created by two anchors: 0
+num of junctions created: 0
+junctions after concated: 0
+aln size before exonic_aln: 1
+aln size: 1
+ref start: 99718547
+cha1	0	chr1	99718548	37	18M947N32M	*	0	0	CGCCGCTGCTTCCCTTTCCTCGGAGTCTTCCCAGTACTCTTCCAGAACTC	*	XT:A:U	NM:i:1	XS:A:-	X0:i:1	X1:i:0	XM:i:0	XO:i:0	XG:i:0	MD:Z:0A17,32

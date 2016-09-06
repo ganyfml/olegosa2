@@ -34,6 +34,7 @@ struct WordHitsChunk
 		std::cout << "Ref   Start Pos: " << start_pos_in_ref   << ", Ref   End Pos: " << end_pos_in_ref << std::endl;
 		std::cout << "Query Start Pos: " << start_pos_in_query << ", Query End Pos: " << end_pos_in_query << std::endl;
 		std::cout << "Hit refPos Non-Dec: " << hit_refPosNonDec << ", Coverage: " << coverage << std::endl;
+		std::cout << "is_first: " << is_first_in_bridge << ", is_last: " << is_last_in_bridge << std::endl;
 		gapMM.display();
 	}
 

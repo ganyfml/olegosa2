@@ -30,6 +30,8 @@ void WordHitsChunk::summarize(int word_size, Strand::Value hit_strand)
 	start_pos_in_query = first_hit->query_pos;
 	end_pos_in_query = last_hit->query_pos + word_size - 1;
 	strand = hit_strand;
+	is_first_in_bridge = true;
+	is_last_in_bridge = true;
 }
 
 void WordHitsChunk::extend_inexact(const SeqString& query, const SeqSuffixArray& ref_SAIndex, bool stop_atNegativeScore, ExtendDirection::Value direction)

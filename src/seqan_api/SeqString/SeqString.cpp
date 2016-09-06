@@ -72,7 +72,7 @@ std::ostream& operator<<(std::ostream& os, const SeqString& obj)
 	return os << *constVoid2localType<T>(obj.get_pointer());
 }
 
-SeqString SeqString::get_infix(int begin_pos, int end_pos) const
+SeqString SeqString::get_infix(long begin_pos, long end_pos) const
 {
 	SeqString ret;
 	ret.set_pointer(new T(seqan::infix(*voidPtr2TPtr(impl_), begin_pos, end_pos + 1))); //chaneg [) to []

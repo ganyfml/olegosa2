@@ -54,6 +54,7 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
   //2. Extend and refine those wordHitsChunks
   //3. pair those wordHitsChunks and form wordHitsBridge
 
+  list<WordHitsChunkBridgeChainPtr> results;
   for(auto iter = wordHitsGroupList.begin(); iter != wordHitsGroupList.end(); ++iter)
   {
 	 (*iter)->wordhits.sort(compare_wordHitsByHitDiagonal);
@@ -68,11 +69,11 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
 	 cout << "Word hit chunk size" << (*iter)->wordhitschunks.size() << endl;
 	 for(auto chunk_iter = (*iter)->wordhitschunks.begin(); chunk_iter != (*iter)->wordhitschunks.end(); ++chunk_iter)
 	 {
-		bool stop_atNegativeScore = false;
 		(*chunk_iter)->summarize(opt.word_length, Strand::forward);
 		(*chunk_iter)->display();
-		cout << "extended" << endl;
+		bool stop_atNegativeScore = false;
 		(*chunk_iter)->extend_inexact(query, ref_SAIndex, stop_atNegativeScore, ExtendDirection::both);
+		cout << "extended" << endl;
 		(*chunk_iter)->display();
 	 }
 	 for(auto chunk_iter = (*iter)->wordhitschunks.begin(); chunk_iter != (*iter)->wordhitschunks.end(); ++chunk_iter)
@@ -86,24 +87,29 @@ void splicedAln(const SeqString& query, const SeqSuffixArray& ref_SAIndex, const
 	 {
 		(*chunk_iter)->display();
 	 }
-	 //
-	 //		(*iter)->pair_wordHitsChunks(query, ref_SAIndex, opt);
-	 //		//printf("Word hit chunk paired, %ld bridges created\n", (*iter)->wordhitschunkbridges.size());
-	 //
-	 //		/*
-	 //		for(auto bridge_iter = (*iter)->wordhitschunkbridges.begin(); bridge_iter != (*iter)->wordhitschunkbridges.end(); ++bridge_iter)
-	 //		{
-	 //			(*bridge_iter)->display();
-	 //		}*/
-	 //
-	 //		list<WordHitsChunkBridgeChainPtr> results;
-	 //		printf("num of chunks: %d\n", (*iter)->wordhitschunks.size());
-	 //		concat_bridges((*iter)->wordhitschunkbridges, results, query.get_length(), true);
-	 //		printf("\nbridge concated, %ld chain creaded\n", results.size());
-	 //		/*
-	 //		for(auto chain_iter = results.begin(); chain_iter != results.end(); ++chain_iter)
-	 //		{
-	 //			(*chain_iter)->display();
-	 //		}*/
+
+	 (*iter)->pair_wordHitsChunks(query, ref_SAIndex, opt);
+	 cout << "bridges created: " << (*iter)->wordhitschunkbridges.size() << endl;
+
+	 for(auto bridge_iter = (*iter)->wordhitschunkbridges.begin(); bridge_iter != (*iter)->wordhitschunkbridges.end(); ++bridge_iter)
+	 {
+		(*bridge_iter)->display();
+	 }
+
+	 concat_bridges((*iter)->wordhitschunkbridges, results, query.get_length(), true);
+	 printf("bridge concated, num result: %lu\n", results.size());
+  }
+
+  for(auto iter = wordHitsGroupList.begin(); iter != wordHitsGroupList.end(); ++iter)
+  {
+	 search_exonic_aln((*iter)->wordhitschunks, query, results);
+  }
+
+  printf("exonic finished!\n");
+  printf("search_exonic_aln, num result: %lu\n", results.size());
+  std::cout << query << std::endl;
+  for(auto iter = results.begin(); iter != results.end(); ++iter)
+  {
+	 printf("ref begin: %ld\n", (*iter)->start_pos_in_ref);
   }
 }

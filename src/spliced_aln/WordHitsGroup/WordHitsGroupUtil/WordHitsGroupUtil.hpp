@@ -35,7 +35,9 @@ int locate_bridge_by_one_chunk_denovo_upstream(WordHitsChunkPtr& tail_chunk, std
 
 void concat_bridges(std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkBridgeChainPtr>& results, int query_length, bool global);
 
-void locate_bridge_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
+void locate_bridge_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
+void locate_bridge_one_chunk(WordHitsChunkPtr& chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
+void search_exonic_aln(const std::list<WordHitsChunkPtr>& wordhitschunks, const SeqString query, std::list<WordHitsChunkBridgeChainPtr>& results);
 
 //In hpp due to debug
 bool is_donor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos);

@@ -38,7 +38,6 @@ int main(int, char* argv[])
 		opt.min_anchor_size = 8;
 
 		splicedAln(query_seq, ref_SA, opt);
-		exit(0);
 	}
 	//Debug
 	std::cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;

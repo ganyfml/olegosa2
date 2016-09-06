@@ -26,7 +26,7 @@ class SeqString
 		void set_pointer(void* ptr) { impl_ = ptr; }
 		void erase_back();
 
-		SeqString get_infix(int begin_pos, int end_pos) const;
+		SeqString get_infix(long begin_pos, long end_pos) const;
 		void make_revcomp();
 		SeqString get_revcomp() const;
 

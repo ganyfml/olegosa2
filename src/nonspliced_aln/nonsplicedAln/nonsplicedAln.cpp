@@ -69,7 +69,7 @@ void nonsplicedAln(const SeqString& query, std::list<AlnResult>& result_list, co
 			{
 				allow_gap_open_and_ext = false;
 			}
-			else if(mutation_track[entry_query_pos + 1].num_mutation_needed == num_mutation_allowed - 1
+			if(mutation_track[entry_query_pos + 1].num_mutation_needed == num_mutation_allowed - 1
 					&& mutation_track[entry_query_pos].num_mutation_needed == num_mutation_allowed - 1 && mutation_track[entry_query_pos - 1].occ == mutation_track[entry_query_pos].occ)
 			{
 				allow_mismatch = false;

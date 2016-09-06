@@ -3,6 +3,7 @@
 #include <spliced_aln/WordHitsGroupUtil.hpp>
 #include <spliced_aln/aln_global.hpp>
 #include <nonspliced_aln/nonsplicedAln.hpp>
+#include <nonspliced_aln/exactMatchAln.hpp>
 #include <list>
 
 using namespace std;
@@ -97,6 +98,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	long max_bridge_query_end_pos = head_chunk->end_pos_in_query + cleft_length + num_backSearch + 1;
 	SeqString search_query = query.get_infix(min_bridge_query_start_pos + 1, max_bridge_query_end_pos - 1);
 
+	printf("doing the two chunks denovo search, min_bridge_ref_start_pos %ld, max_bridge_ref_start_pos %ld, min_bridge_query_start_pos %d, max_bridge_query_end_pos %d ", min_bridge_ref_start_pos, max_bridge_ref_start_pos, min_bridge_query_start_pos, max_bridge_query_end_pos);
 	for(long curr_bridge_ref_start_pos = min_bridge_ref_start_pos
 			, curr_bridge_ref_end_pos = tail_chunk->start_pos_in_ref - num_backSearch - cleft_length
 			, curr_bridge_query_start_pos = min_bridge_query_start_pos
@@ -107,6 +109,7 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 	{
 		if(curr_bridge_query_start_pos + 1 < opt.min_anchor_size || (query.get_length() - curr_bridge_query_start_pos - 1) < opt.min_anchor_size) continue;
 
+		printf("checking two chunks: %ld, %ld\n", curr_bridge_ref_start_pos, curr_bridge_ref_end_pos);
 		Strand::Value splice_strand = determin_strand_by_canonical_spliceSite(
 				ref_SAIndex
 				, curr_bridge_ref_start_pos + 1 // splice_site_donor_pos
@@ -190,7 +193,12 @@ int locate_bridge_within_two_chunks_denovo(WordHitsChunkPtr& head_chunk, WordHit
 void collect_anchor_hits_within_bound(const SeqString& inner_chunk_and_ss, list<long>& anchor_hit_list, const SeqSuffixArray& ref_SAIndex, long hit_left_bound, long hit_right_bound, const alnNonspliceOpt& anchor_search_opt)
 {
 	std::list<AlnResult> anchor_hit_result;
+	SeqString rev_inner_chunk_and_ss(inner_chunk_and_ss);
+	rev_inner_chunk_and_ss.make_revcomp();
+	std::cout << "search Seq: " << inner_chunk_and_ss << std::endl;
 	nonsplicedAln(inner_chunk_and_ss, anchor_hit_result, ref_SAIndex, anchor_search_opt);
+	nonsplicedAln(rev_inner_chunk_and_ss, anchor_hit_result, ref_SAIndex, anchor_search_opt);
+	printf("%lu results founded!\n", anchor_hit_result.size());
 	while(!anchor_hit_result.empty())
 	{
 		AlnResult a = anchor_hit_result.front();
@@ -214,7 +222,7 @@ inline bool is_donor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos
 
 inline bool is_donor_splice_site_reverse(const SeqSuffixArray& ref, long ref_pos)
 {
-	return ref.char_at(ref_pos) == 'C' && ref.char_at(ref_pos + 1) == 'T';
+	return ref.char_at(ref_pos) == 'A' && ref.char_at(ref_pos + 1) == 'C';
 }
 
 inline bool is_acceptor_splice_site_forward(const SeqSuffixArray& ref, long ref_pos)
@@ -224,7 +232,7 @@ inline bool is_acceptor_splice_site_forward(const SeqSuffixArray& ref, long ref_
 
 inline bool is_acceptor_splice_site_reverse(const SeqSuffixArray& ref, long ref_pos)
 {
-	return ref.char_at(ref_pos) == 'A' && ref.char_at(ref_pos + 1) == 'C';
+	return ref.char_at(ref_pos) == 'C' && ref.char_at(ref_pos + 1) == 'T';
 }
 
 inline bool is_splice_site(const SeqSuffixArray& ref, long ref_pos, int splice_type, bool forward_strand)
@@ -241,7 +249,12 @@ inline bool is_splice_site(const SeqSuffixArray& ref, long ref_pos, int splice_t
 		if(forward_strand)
 			return is_acceptor_splice_site_forward(ref, ref_pos);
 		else
+		{
+			//Debug
+			printf("checking %ld\n", ref_pos);
+			//End
 			return is_acceptor_splice_site_reverse(ref, ref_pos);
+		}
 	}
 	else
 		return false;
@@ -249,11 +262,12 @@ inline bool is_splice_site(const SeqSuffixArray& ref, long ref_pos, int splice_t
 
 Strand::Value determin_strand_by_canonical_spliceSite(const SeqSuffixArray& ref_SAIndex, long donor_pos, long acceptor_pos)
 {
+	printf("low level checking: %ld, %ld\n", donor_pos, acceptor_pos);
 	if(is_donor_splice_site_forward(ref_SAIndex, donor_pos) && is_acceptor_splice_site_forward(ref_SAIndex, acceptor_pos - 1))
 	{
 		return Strand::forward;
 	}
-	if(is_donor_splice_site_reverse(ref_SAIndex, donor_pos) && is_acceptor_splice_site_reverse(ref_SAIndex, acceptor_pos - 1))
+	if(is_acceptor_splice_site_reverse(ref_SAIndex, donor_pos) && is_donor_splice_site_reverse(ref_SAIndex, acceptor_pos - 1))
 	{
 		return Strand::reverse;
 	}
@@ -394,6 +408,8 @@ int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& hea
 				list<long> inner_chunk_and_ss_hits_ref_list;
 
 				alnNonspliceOpt opt;
+				opt.max_mismatch = 1;
+				opt.max_mutation = 1;
 				collect_anchor_hits_within_bound(inner_chunk_and_ss, inner_chunk_and_ss_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt);
 
 				for(long ref_hit_pos : inner_chunk_and_ss_hits_ref_list)
@@ -649,21 +665,30 @@ int locate_bridge_by_one_chunk_denovo_downstream(WordHitsChunkPtr& head_chunk, s
 		{
 			long curr_bridge_ref_start_pos = min_bridge_ref_start_pos;
 			int curr_bridge_query_start_pos = min_bridge_query_start_pos;
-			for (; curr_bridge_query_start_pos <= max_bridge_ref_start_pos; ++curr_bridge_ref_start_pos, ++curr_bridge_query_start_pos)
+			for (; curr_bridge_ref_start_pos <= max_bridge_ref_start_pos; ++curr_bridge_ref_start_pos, ++curr_bridge_query_start_pos)
 			{
+				printf("ref: %ld, query: %ld\n", curr_bridge_ref_start_pos, curr_bridge_query_start_pos);
 				if(query.get_length() - curr_bridge_query_start_pos - 1 < opt.min_anchor_size) break;
+
+				printf("Check splice site for \n");
+				std::cout << chunk_splice_type << ", " << splice_strand << std::endl;
 
 				if(!is_splice_site_by_refPos(ref_SAIndex, curr_bridge_ref_start_pos + 1, chunk_splice_type, splice_strand))
 					continue;
 
+				printf("first spliced site sat\n");
+
 				SeqString tail_chunk_ss = get_partner_splice_site(chunk_splice_type, splice_strand);
-				SeqString tail_chunk_query_seq = query.get_infix(curr_bridge_ref_start_pos + 1, query.get_length() - 1);
+				SeqString tail_chunk_query_seq = query.get_infix(curr_bridge_query_start_pos + 1, query.get_length() - 1);
 				SeqString tail_chunk_seq = tail_chunk_ss + tail_chunk_query_seq;
 				long ref_left_bound = curr_bridge_ref_start_pos + opt.min_intron_size;
 				long ref_right_bound = curr_bridge_ref_start_pos + opt.max_intron_size;
+				printf("ref_left_bound: %ld, ref_right_bound: %ld\n", ref_left_bound, ref_right_bound);
 				list<long> anchor_hits_ref_list;
 
 				alnNonspliceOpt opt;
+				opt.max_mutation = 1;
+				opt.max_mismatch = 1;
 				collect_anchor_hits_within_bound(tail_chunk_seq, anchor_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt);
 
 				for(long ref_hit_pos : anchor_hits_ref_list)
@@ -735,7 +760,6 @@ int locate_bridge_by_one_chunk_denovo_upstream(WordHitsChunkPtr& tail_chunk, std
 				long ref_left_bound = curr_bridge_ref_end_pos - opt.max_intron_size - curr_bridge_query_end_pos;
 				long ref_right_bound = curr_bridge_ref_end_pos - opt.min_intron_size - curr_bridge_query_end_pos;
 				list<long> anchor_hits_ref_list;
-				std::cout << head_chunk_seq << std::endl;
 
 				alnNonspliceOpt opt;
 				collect_anchor_hits_within_bound(head_chunk_seq, anchor_hits_ref_list, ref_SAIndex, ref_left_bound, ref_right_bound, opt);
@@ -767,7 +791,7 @@ int locate_bridge_by_one_chunk_denovo_upstream(WordHitsChunkPtr& tail_chunk, std
 	return num_alignment;
 }
 
-void locate_bridge_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, list<WordHitsChunkBridgePtr>& wordhitschunkbridges, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+void locate_bridge_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, list<WordHitsChunkBridgePtr>& wordhitschunkbridges, list<WordHitsChunkPtr>& wordhitschunks, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
 {
 	//Determin Number of BackSearch
 	int num_backSearch = opt.max_overhang;
@@ -785,6 +809,75 @@ void locate_bridge_two_chunks(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& ta
 		locate_bridge_within_two_chunks_denovo(head_chunk, tail_chunk, wordhitschunkbridges, num_backSearch, query, ref_SAIndex, opt);
 	}
 
-	//	int locate_bridge_within_two_chunks_with_inner_exon_denovo(WordHitsChunkPtr& head_chunk, WordHitsChunkPtr& tail_chunk, std::list<WordHitsChunkBridgePtr>& wordhitschunkbridges, std::list<WordHitsChunkPtr>& wordhitschunks, int num_backSearch, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt);
+	locate_bridge_within_two_chunks_with_inner_exon_denovo(head_chunk, tail_chunk, wordhitschunkbridges, wordhitschunks, num_backSearch, query, ref_SAIndex, opt);
+}
 
+void locate_bridge_one_chunk(WordHitsChunkPtr& chunk, list<WordHitsChunkBridgePtr>& wordhitschunkbridges, list<WordHitsChunkPtr>& wordhitschunks, const SeqString& query, const SeqSuffixArray& ref_SAIndex, const AlnSpliceOpt& opt)
+{
+	int num_backSearch = opt.max_overhang;
+
+	if(chunk->is_first_in_bridge)
+	{
+		int num_junc_found_denovo = 0;
+
+		if(opt.denovo_search)
+		{
+			//Debug
+			printf("Try downstream\n");
+			//End
+			num_junc_found_denovo = locate_bridge_by_one_chunk_denovo_downstream(chunk, wordhitschunkbridges, wordhitschunks, num_backSearch, query, ref_SAIndex, opt);
+			printf("downstream finshed\n");
+		}
+	}
+	if(chunk->is_last_in_bridge)	
+	{
+		int num_junc_found_denovo = 0;
+		if(opt.denovo_search)
+		{
+			//Debug
+			printf("Try upstream\n");
+			//End
+			num_junc_found_denovo = locate_bridge_by_one_chunk_denovo_upstream(chunk, wordhitschunkbridges, wordhitschunks, num_backSearch, query, ref_SAIndex, opt);
+			printf("upstream finished\n");
+		}
+	}
+	return;
+}
+
+void search_exonic_aln(const std::list<WordHitsChunkPtr>& wordhitschunks, const SeqString query, list<WordHitsChunkBridgeChainPtr>& results)
+{
+	printf("1\n");
+	for(auto wordChunk_iter = wordhitschunks.begin(); wordChunk_iter != wordhitschunks.end(); ++wordChunk_iter)
+	{
+		printf("2\n");
+		if((*wordChunk_iter)->start_pos_in_query == 0 && (*wordChunk_iter)->end_pos_in_query == query.get_length() - 1)
+		{
+			bool chain_exist = false;
+			for (auto chain_iter = results.begin(); chain_iter != results.end(); ++chain_iter)
+			{
+				printf("3\n");
+				if ((*chain_iter)->bridges.size() == 0 && (*chain_iter)->start_pos_in_query == (*wordChunk_iter)->start_pos_in_query)
+				{
+					chain_exist = true;
+					break;
+				}
+			}
+			printf("4\n");
+			if(!chain_exist)
+			{
+				printf("5\n");
+				// make a new exonic alignment, use the same data structure, but no junctions
+				WordHitsChunkBridgeChainPtr new_chain = make_shared<WordHitsChunkBridgeChain>();
+				new_chain->strand = (*wordChunk_iter)->strand;
+				new_chain->spliced_strand = Strand::none_decide;
+				new_chain->start_pos_in_ref = (*wordChunk_iter)->start_pos_in_ref;
+				new_chain->end_pos_in_ref = (*wordChunk_iter)->end_pos_in_ref;
+				new_chain->start_pos_in_query = (*wordChunk_iter)->start_pos_in_query;
+				new_chain->end_pos_in_query= (*wordChunk_iter)->end_pos_in_query;
+				new_chain->gap_mm = (*wordChunk_iter)->gapMM;
+				new_chain->logistic_prob = 1.0;
+				results.push_back(new_chain);
+			}
+		}
+	}
 }

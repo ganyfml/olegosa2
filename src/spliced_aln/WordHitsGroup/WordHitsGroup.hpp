@@ -22,6 +22,7 @@ struct WordHitsGroup
 		for(auto iter = wordhits.begin(); iter != wordhits.end(); ++iter)
 		{
 			printf("%d, ", (*iter)->word_id);
+			printf("query: %d, ref: %ld\n", (*iter)->query_pos, (*iter)->ref_pos);
 		}
 		printf("\n");
 	}
